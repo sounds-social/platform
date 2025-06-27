@@ -35,7 +35,7 @@ const Profile = () => {
 
       const userSounds = Sounds.find({ userId: currentUser._id }).fetch();
       const userPlaylists = Playlists.find({ userId: currentUser._id }).fetch();
-      const userComments = Comments.find({ userId: currentUser._id }).fetch();
+      const userComments = Comments.find({ userId: currentUser._id }).fetch().reverse();
       const commentsWithSoundTitle = userComments.map(comment => {
         const sound = Sounds.findOne(comment.soundId);
         return {
@@ -56,7 +56,7 @@ const Profile = () => {
       if (!handle.ready()) return noDataAvailable;
       currentUser = Meteor.users.findOne({ 'profile.slug': slug });
       if (!currentUser) return noDataAvailable
-      const soundsHandle = Meteor.subscribe('sounds.userPublic', currentUser._id);
+      const soundsHandle = Meteor.subscribe('sounds.public', currentUser._id);
       const playlistsHandle = Meteor.subscribe('playlists.public', currentUser._id);
       const commentsHandle = Meteor.subscribe('comments.byUser', currentUser._id);
       const groupsHandle = Meteor.subscribe('groups.byUser', currentUser._id);
@@ -68,9 +68,10 @@ const Profile = () => {
 
       const userSounds = Sounds.find({ userId: currentUser._id, isPrivate: false }).fetch();
       const userPlaylists = Playlists.find({ userId: currentUser._id, isPublic: true }).fetch();
-      const otherUserComments = Comments.find({ userId: currentUser._id }).fetch();
+      const otherUserComments = Comments.find({ userId: currentUser._id }).fetch().reverse();;
       const otherCommentsWithSoundTitle = otherUserComments.map(comment => {
         const sound = Sounds.findOne(comment.soundId);
+
         return {
           ...comment,
           soundTitle: sound ? sound.title : 'Unknown Sound',
@@ -209,7 +210,7 @@ const Profile = () => {
               <div key={comment._id} className="bg-white rounded-lg shadow-md p-4">
                 <p className="text-gray-800">{comment.content}</p>
                 <p className="text-gray-500 text-sm mt-2">On sound: <Link to={`/sound/${comment.soundId}`} className="text-blue-500 hover:underline">{comment.soundTitle || 'Unknown Sound'}</Link></p>
-                <p className="text-gray-500 text-xs">Created at: {new Date(comment.createdAt).toLocaleDateString()}</p>
+                <p className="text-gray-500 text-xs">Created at: {new Date(comment.createdAt).toString()}</p>
               </div>
             ))}
           </div>

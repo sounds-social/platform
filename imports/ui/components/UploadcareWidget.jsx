@@ -6,7 +6,6 @@ const UploadcareWidget = ({ onUpload }) => {
   const handleChange = (info) => {
     // info contains file information, including the CDN URL
     if (info?.allEntries && info?.allEntries[0].cdnUrl) {
-      console.log(info.allEntries[0].cdnUrl)
       onUpload(info.allEntries[0].cdnUrl);
     }
   };

@@ -29,7 +29,7 @@ const Sound = () => {
         ...comment,
         userName: commentUser ? commentUser.profile.displayName : 'Anonymous',
       };
-    });
+    }).reverse();
 
     if (fetchedSound) {
       const soundUser = Meteor.users.findOne(fetchedSound.userId);
@@ -72,6 +72,14 @@ const Sound = () => {
 
   return (
     <div className="py-8">
+      {sound.backgroundImage && (
+        <div
+          className="relative w-full h-64 bg-cover bg-center rounded-lg shadow-md mb-8"
+          style={{ backgroundImage: `url(${sound.backgroundImage})` }}
+        >
+          <div className="absolute inset-0 bg-black opacity-40 rounded-lg"></div>
+        </div>
+      )}
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 flex flex-col md:flex-row">
         <div className="md:flex-shrink-0">
           <img
@@ -160,7 +168,7 @@ const Sound = () => {
               <div key={comment._id} className="bg-gray-50 p-4 rounded-lg shadow-sm">
                 <div className="flex items-center mb-2">
                   <p className="font-semibold text-gray-800">{comment.userName}</p>
-                  <span className="ml-auto text-sm text-gray-500">{new Date(comment.createdAt).toLocaleDateString()}</span>
+                  <span className="ml-auto text-sm text-gray-500">{new Date(comment.createdAt).toString()}</span>
                 </div>
                 <p className="text-gray-700">{comment.content}</p>
               </div>

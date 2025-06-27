@@ -82,7 +82,7 @@ const ProfileSettings = () => {
             </div>
 
             <div>
-              <label htmlFor="slug" className="block text-sm font-medium text-gray-700">Profile Slug</label>
+              <label htmlFor="slug" className="block text-sm font-medium text-gray-700">Profile Slug (e.g. /profile/<span className="font-bold">my-awesome-slug</span>)</label>
               <div className="mt-1">
                 <input
                   id="slug"
