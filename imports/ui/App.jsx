@@ -1,55 +1,54 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Meteor } from 'meteor/meteor';
+import { useTracker } from 'meteor/react-meteor-data';
 
-const Home = function () {
-  return <h2 className="text-3xl font-bold underline">Home</h2>;
-}
+// Import pages
+import About from './pages/About';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import ForgotPassword from './pages/ForgotPassword';
+import Profile from './pages/Profile';
+import ProfileSettings from './pages/ProfileSettings';
+import GoPro from './pages/GoPro';
+import Sound from './pages/Sound';
+import SoundAdd from './pages/SoundAdd';
+import SoundEdit from './pages/SoundEdit';
+import Playlist from './pages/Playlist';
+import Group from './pages/Group';
+import GroupSettings from './pages/GroupSettings';
+import Home from './pages/Home';
+import Hot from './pages/Hot';
+import Explore from './pages/Explore';
 
-const About = function () {
-  return <h2 className="text-3xl font-bold underline">About</h2>;
-}
+// Import components
+import Navbar from './components/Navbar';
 
-const Users = function () {
-  return <h2 className="text-3xl font-bold underline">Users</h2>;
-}
+export const App = () => {
+  const user = useTracker(() => Meteor.user());
 
-export const App = function () {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/users">Users</Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/users">
-            <Users />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
+      <Navbar user={user} />
+      <Switch>
+        <Route exact path="/" component={user ? Home : About} />
+        <Route path="/about" component={About} />
+        <Route path="/sign-in" component={SignIn} />
+        <Route path="/sign-up" component={SignUp} />
+        <Route path="/forgot-password" component={ForgotPassword} />
+        <Route path="/profile/settings" component={ProfileSettings} />
+        <Route path="/profile/:slug?" component={Profile} />
+        <Route path="/go-pro" component={GoPro} />
+        <Route path="/sound/add" component={SoundAdd} />
+        <Route path="/sound/edit/:soundId" component={SoundEdit} />
+        <Route path="/sound/:soundId" component={Sound} />
+        <Route path="/playlist/:playlistId" component={Playlist} />
+        <Route path="/likes" component={Playlist} />
+        <Route path="/group/settings/:groupId" component={GroupSettings} />
+        <Route path="/group/:slug" component={Group} />
+        <Route path="/hot" component={Hot} />
+        <Route path="/explore" component={Explore} />
+      </Switch>
     </Router>
   );
-}
+};
