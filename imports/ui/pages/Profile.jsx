@@ -87,6 +87,7 @@ const Profile = () => {
   }
 
   const isCurrentUser = Meteor.userId() === user._id;
+  const isFollowing = Meteor.user()?.profile?.follows?.includes(user._id);
 
   const handleSupportClick = () => {
     setShowSupportModal(true);
@@ -95,6 +96,20 @@ const Profile = () => {
   const handleCloseSupportModal = () => {
     setShowSupportModal(false);
   };
+
+  const handleFollowToggle = async () => {
+    try {
+      if (isFollowing) {
+        await Meteor.callAsync('users.unfollow', user._id);
+      } else {
+        await Meteor.callAsync('users.follow', user._id);
+      }
+    } catch (error) {
+      console.error('Failed to toggle follow status:', error);
+    }
+  };
+
+  console.log({ user })
 
   return (
     <div className="py-8">
@@ -109,7 +124,7 @@ const Profile = () => {
           <p className="text-gray-600 text-lg">@{user.profile.slug}</p>
           <div className="flex justify-center md:justify-start space-x-6 mt-4">
             <div>
-              <p className="text-gray-800 font-semibold">{user.profile.follows?.length || 0}</p>
+              <p className="text-gray-800 font-semibold">{user.profile.followers?.length || 0}</p>
               <p className="text-gray-500 text-sm">Followers</p>
             </div>
             <div>
@@ -123,8 +138,11 @@ const Profile = () => {
           </div>
           {!isCurrentUser && Meteor.userId() && (
             <div className="mt-6 flex justify-center md:justify-start space-x-4">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">
-                Follow
+              <button
+                onClick={handleFollowToggle}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
+              >
+                {isFollowing ? 'Unfollow' : 'Follow'}
               </button>
               <button
                 onClick={handleSupportClick}

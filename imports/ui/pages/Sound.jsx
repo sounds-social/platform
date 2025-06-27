@@ -21,13 +21,21 @@ const Sound = () => {
     const fetchedSound = Sounds.findOne(soundId);
     const fetchedComments = Comments.find({ soundId: soundId }, { sort: { createdAt: 1 } }).fetch();
 
+    const commentsWithUserData = fetchedComments.map(comment => {
+      const commentUser = Meteor.users.findOne(comment.userId);
+      return {
+        ...comment,
+        userName: commentUser ? commentUser.profile.displayName : 'Anonymous',
+      };
+    });
+
     if (fetchedSound) {
       const soundUser = Meteor.users.findOne(fetchedSound.userId);
       fetchedSound.userName = soundUser ? soundUser.profile.displayName : 'Unknown';
       fetchedSound.userSlug = soundUser ? soundUser.profile.slug : 'unknown';
     }
 
-    return { sound: fetchedSound, comments: fetchedComments, loading: !ready };
+    return { sound: fetchedSound, comments: commentsWithUserData, loading: !ready };
   }, [soundId]);
 
   const handlePlay = () => {
@@ -143,10 +151,7 @@ const Sound = () => {
             {comments.map(comment => (
               <div key={comment._id} className="bg-gray-50 p-4 rounded-lg shadow-sm">
                 <div className="flex items-center mb-2">
-                  <p className="font-semibold text-gray-800">{comment.userName || 'Anonymous'}</p>
-                  {comment.timestamp && (
-                    <span className="ml-3 text-sm text-gray-500">({comment.timestamp})</span>
-                  )}
+                  <p className="font-semibold text-gray-800">{comment.userName}</p>
                   <span className="ml-auto text-sm text-gray-500">{new Date(comment.createdAt).toLocaleDateString()}</span>
                 </div>
                 <p className="text-gray-700">{comment.content}</p>

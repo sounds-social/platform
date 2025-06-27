@@ -27,6 +27,13 @@ const UserProfileSchema = new SimpleSchema({
   'supports.$': {
     type: String,
   },
+  followers: {
+    type: Array,
+    defaultValue: [],
+  },
+  'followers.$': {
+    type: String,
+  },
 });
 
 const UserSchema = new SimpleSchema({

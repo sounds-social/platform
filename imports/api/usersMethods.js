@@ -44,8 +44,12 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
-    return await Meteor.users.updateAsync(this.userId, {
+    await Meteor.users.updateAsync(this.userId, {
       $pull: { 'profile.follows': userIdToUnfollow },
+    });
+
+    return await Meteor.users.updateAsync(userIdToUnfollow, {
+      $pull: { 'profile.followers': this.userId },
     });
   },
 

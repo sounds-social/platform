@@ -39,6 +39,9 @@ Meteor.publish('users.public', function () {
       'profile.displayName': 1,
       'profile.slug': 1,
       'profile.avatar': 1,
+      'profile.follows': 1,
+      'profile.supports': 1,
+      'profile.followers': 1,
     }
   });
 });
