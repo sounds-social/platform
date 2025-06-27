@@ -29,7 +29,7 @@ const Navbar = ({ user }) => {
       </button>
       {isOpen && (
         <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5">
-          <Link to="/go-pro" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Go PRO</Link>
+          
           <Link to="/support-overview" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support Overview</Link>
           <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</Link>
           <a href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Donate</a>
@@ -53,7 +53,10 @@ const Navbar = ({ user }) => {
               </div>
             </div>
           </div>
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center">
+            {user && (
+              <Link to="/go-pro" className="text-blue-500 font-bold px-3 py-2 rounded-md text-sm mr-4">Go PRO</Link>
+            )}
             {userMenu}
           </div>
           <div className="-mr-2 flex md:hidden">
@@ -73,9 +76,7 @@ const Navbar = ({ user }) => {
           {user && (
             <div className="pt-4 pb-3 border-t border-gray-200">
               <div className="px-2 space-y-1">
-                <Link to="/go-pro" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Go PRO</Link>
                 <Link to="/sound/add" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Upload</Link>
-                <Link to="/support-overview" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Support Overview</Link>
                 <Link to={`/profile/${user.profile.slug}`} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Profile</Link>
                 <a href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Donate</a>
                 <a href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Github</a>
