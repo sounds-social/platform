@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
+import UploadcareWidget from '../components/UploadcareWidget';
 
 const SoundAdd = () => {
   const history = useHistory();
@@ -89,46 +90,18 @@ const SoundAdd = () => {
             </div>
 
             <div>
-              <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">Cover Image URL</label>
-              <div className="mt-1">
-                <input
-                  id="coverImage"
-                  name="coverImage"
-                  type="text"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={coverImage}
-                  onChange={(e) => setCoverImage(e.target.value)}
-                />
-              </div>
+              <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">Cover Image</label>
+              <UploadcareWidget onUpload={setCoverImage} />
             </div>
 
             <div>
-              <label htmlFor="backgroundImage" className="block text-sm font-medium text-gray-700">Background Image URL (Optional)</label>
-              <div className="mt-1">
-                <input
-                  id="backgroundImage"
-                  name="backgroundImage"
-                  type="text"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={backgroundImage}
-                  onChange={(e) => setBackgroundImage(e.target.value)}
-                />
-              </div>
+              <label htmlFor="backgroundImage" className="block text-sm font-medium text-gray-700">Background Image (Optional)</label>
+              <UploadcareWidget onUpload={setBackgroundImage} />
             </div>
 
             <div>
-              <label htmlFor="audioFile" className="block text-sm font-medium text-gray-700">Audio File URL</label>
-              <div className="mt-1">
-                <input
-                  id="audioFile"
-                  name="audioFile"
-                  type="text"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={audioFile}
-                  onChange={(e) => setAudioFile(e.target.value)}
-                />
-              </div>
+              <label htmlFor="audioFile" className="block text-sm font-medium text-gray-700">Audio File</label>
+              <UploadcareWidget onUpload={setAudioFile} />
             </div>
 
             <div className="flex items-center">

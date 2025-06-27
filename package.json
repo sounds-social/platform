@@ -10,8 +10,10 @@
   "dependencies": {
     "@babel/runtime": "^7.20.7",
     "@tailwindcss/postcss": "^4.1.11",
+    "@uploadcare/react-uploader": "^1.8.1",
     "autoprefixer": "^10.4.21",
     "bcrypt": "^6.0.0",
+    "buffer": "^6.0.3",
     "jquery": "^3.7.1",
     "meteor-node-stubs": "^1.2.5",
     "postcss": "^8.5.6",

@@ -28,14 +28,14 @@ Meteor.methods({
     });
   },
 
-  async 'sounds.update'(soundId, title, description, tags, coverImage, isPrivate, backgroundImage) {
+  async 'sounds.update'(soundId, title, description, tags, coverImage, isPrivate, backgroundImageCid) {
     check(soundId, String);
     check(title, String);
     check(description, String);
     check(tags, Array);
     check(coverImage, String);
     check(isPrivate, Boolean);
-    check(backgroundImage, String);
+    check(backgroundImageCid, String);
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
