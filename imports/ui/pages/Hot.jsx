@@ -8,13 +8,14 @@ const Hot = () => {
   const { sounds, loading } = useTracker(() => {
     const noDataAvailable = { sounds: [], loading: true };
     const handle = Meteor.subscribe('sounds.public');
+    const usersHandle = Meteor.subscribe('users.public');
 
-    if (!handle.ready()) return noDataAvailable;
+    if (!handle.ready() || !usersHandle.ready()) return noDataAvailable;
 
     const soundsData = Sounds.find({}, { sort: { playCount: -1 }, limit: 20 }).fetch();
 
     const soundsWithUserData = soundsData.map(sound => {
-      const soundUser = Meteor.users.findOne(sound.userId);
+      const soundUser = Meteor.users.findOne({ _id: sound.userId }, { fields: { 'profile.displayName': 1, 'profile.slug': 1 } });
       return {
         ...sound,
         userName: soundUser ? soundUser.profile.displayName : 'Unknown',

@@ -32,3 +32,13 @@ Meteor.publish('users.me', function () {
     }
   });
 });
+
+Meteor.publish('users.public', function () {
+  return Meteor.users.find({}, {
+    fields: {
+      'profile.displayName': 1,
+      'profile.slug': 1,
+      'profile.avatar': 1,
+    }
+  });
+});

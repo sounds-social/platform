@@ -15,7 +15,7 @@ const Sound = () => {
     const noDataAvailable = { sound: null, comments: [], loading: true };
     const soundHandle = Meteor.subscribe('sounds.public');
     const commentsHandle = Meteor.subscribe('comments.forSound', soundId);
-    const usersHandle = Meteor.subscribe('users.me');
+    const usersHandle = Meteor.subscribe('users.public');
 
     const ready = soundHandle.ready() && commentsHandle.ready() && usersHandle.ready();
     const fetchedSound = Sounds.findOne(soundId);

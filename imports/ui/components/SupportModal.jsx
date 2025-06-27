@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const SupportModal = ({ userName, onClose }) => {
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-gray-300 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center z-50">
       <div className="relative p-8 bg-white w-96 mx-auto rounded-md shadow-lg text-center">
         <h3 className="text-2xl font-bold text-gray-900 mb-4">You are now supporting {userName}!</h3>
         <p className="text-gray-700 mb-6">
