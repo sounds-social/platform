@@ -21,6 +21,5 @@ static-html@1.4.0             # Define static page content in .html files
 react-meteor-data       # React higher-order component for reactively tracking Meteor data
 aldeed:collection2
 accounts-password
-accounts-ui
 jquery
 blaze
