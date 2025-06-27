@@ -175,7 +175,10 @@ To the right as a group:
 
 * Go PRO (as described in the Monetization section, path: /go-pro)
 * Profile (as described in the Users section, path: /profile/{slug})
-* A burger menu icon with more menu items (tbd)
+* A burger menu icon with menu items:
+  * About (path: /about)
+  * Donate (path: https://ko-fi.com/itsmatteodemicheli)
+  * Github (path: https://github.com/sounds-social/platform)
 
 ### Marketing page
 
