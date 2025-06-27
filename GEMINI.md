@@ -20,7 +20,7 @@ This platform is implemented with Meteor.js Framework and React. Following thing
 
 ## Design
 
-The design of the platform should be minimalistic and modern. Also don't forget to keep things responsive so users on mobile can also enjoy the sounds. The base color (e.g. for buttons) is purple.
+The design of the platform should be minimalistic and modern. Also don't forget to keep things responsive so users on mobile can also enjoy the sounds. The base color (e.g. for buttons) is blue.
 
 ## Features
 
