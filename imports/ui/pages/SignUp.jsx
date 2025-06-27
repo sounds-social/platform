@@ -12,7 +12,7 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    Accounts.createUser({ email, password, profile: { displayName, slug } }, (err) => {
+    Accounts.createUser({ email, password, profile: { displayName } }, (err) => {
       if (err) {
         setError(err.reason);
       } else {
@@ -42,21 +42,6 @@ const SignUp = () => {
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="slug" className="block text-sm font-medium text-gray-700">Profile Slug</label>
-              <div className="mt-1">
-                <input
-                  id="slug"
-                  name="slug"
-                  type="text"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={slug}
-                  onChange={(e) => setSlug(e.target.value)}
                 />
               </div>
             </div>

@@ -5,8 +5,12 @@ import { Accounts } from 'meteor/accounts-base';
 Meteor.methods({
   async 'users.updateProfile'(displayName, slug, avatar) {
     check(displayName, String);
-    check(slug, String);
-    check(avatar, String);
+    if (slug !== undefined) {
+      check(slug, String);
+    }
+    if (avatar !== undefined) {
+      check(avatar, String);
+    }
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
@@ -15,8 +19,8 @@ Meteor.methods({
     return await Meteor.users.updateAsync(this.userId, {
       $set: {
         'profile.displayName': displayName,
-        'profile.slug': slug,
-        'profile.avatar': avatar,
+        ...(slug !== undefined && { 'profile.slug': slug }),
+        ...(avatar !== undefined && { 'profile.avatar': avatar }),
       },
     });
   },

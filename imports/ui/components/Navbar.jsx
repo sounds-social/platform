@@ -10,12 +10,12 @@ const Navbar = ({ user }) => {
       <Link to="/" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Latest</Link>
       <Link to="/hot" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hottest</Link>
       <Link to="/explore" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Explore</Link>
+      <Link to="/sound/add" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Upload</Link>
     </>
   );
 
   const loggedOutLinks = (
     <>
-      <Link to="/about" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">About</Link>
       <Link to="/sign-in" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</Link>
       <Link to="/sign-up" className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</Link>
     </>
@@ -72,6 +72,7 @@ const Navbar = ({ user }) => {
             <div className="pt-4 pb-3 border-t border-gray-200">
               <div className="px-2 space-y-1">
                 <Link to="/go-pro" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Go PRO</Link>
+                <Link to="/sound/add" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Upload</Link>
                 <Link to="/support-overview" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Support Overview</Link>
                 <Link to={`/profile/${user.profile.slug}`} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Profile</Link>
                 <a href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Donate</a>

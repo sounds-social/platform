@@ -7,6 +7,7 @@ const UserProfileSchema = new SimpleSchema({
   },
   slug: {
     type: String,
+    optional: true,
   },
   avatar: {
     type: String,

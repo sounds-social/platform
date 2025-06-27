@@ -3,13 +3,14 @@ import { check } from 'meteor/check';
 import { Sounds } from './sounds';
 
 Meteor.methods({
-  async 'sounds.insert'(title, description, tags, coverImage, isPrivate, backgroundImage) {
+  async 'sounds.insert'(title, description, tags, coverImage, isPrivate, backgroundImage, audioFile) {
     check(title, String);
     check(description, String);
     check(tags, Array);
     check(coverImage, String);
     check(isPrivate, Boolean);
     check(backgroundImage, String);
+    check(audioFile, String);
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
@@ -23,6 +24,7 @@ Meteor.methods({
       isPrivate,
       backgroundImage,
       userId: this.userId,
+      audioFile
     });
   },
 

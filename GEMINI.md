@@ -97,7 +97,7 @@ Each user has following fields:
 * E-Mail
 * Password
 * Display name (A name (with whitespaces allowed) that is displayed when users navigate to a profile)
-* Profile Slug
+* Profile Slug (optional)
 * Avatar image (url)
 * Follows (A list of users (userIds) that the user follows)
 * Supports (A list of userIds / or groupIds that the user supports)
@@ -170,6 +170,7 @@ To the left as a group:
 * Latest (as described in Sounds section, path: /)
 * Hottest (as described in Sounds section, path: /hot)
 * Explore (as described in Sounds section, path: /explore)
+* Upload (as described in Sound Upload section, path: /upload)
 
 To the right as a group:
 
@@ -179,6 +180,7 @@ To the right as a group:
   * About (path: /about)
   * Donate (path: https://ko-fi.com/itsmatteodemicheli)
   * Github (path: https://github.com/sounds-social/platform)
+  * Logout
 
 When the user is logged out, display another navbar with following items to the left:
 
