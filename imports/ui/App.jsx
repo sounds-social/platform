@@ -7,15 +7,15 @@ import {
 } from "react-router-dom";
 
 const Home = function () {
-  return <h2>Home</h2>;
+  return <h2 className="text-3xl font-bold underline">Home</h2>;
 }
 
 const About = function () {
-  return <h2>About</h2>;
+  return <h2 className="text-3xl font-bold underline">About</h2>;
 }
 
 const Users = function () {
-  return <h2>Users</h2>;
+  return <h2 className="text-3xl font-bold underline">Users</h2>;
 }
 
 export const App = function () {
