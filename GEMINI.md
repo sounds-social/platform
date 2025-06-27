@@ -2,7 +2,7 @@
 
 ## Overview
 
-Sounds Social is a platform to share your sound with others. Users can upload audio files ( mp3, wav etc.) and gain followers by doing so. It's made from a musician for other fellow musicians. The monetization comes from a "pro" plan that takes the money and splits it up between platform costs, further development and a "Support" button on the profile page of the musician.
+Sounds Social is a platform to share your sound with others. Users can upload audio files (mp3, wav etc.) and gain followers by doing so. It's made from a musician for other fellow musicians. The monetization comes from a "pro" plan that takes the money and splits it up between platform costs, further development and a "Support" button on the profile page of the musician.
 
 ## Technologies
 
@@ -16,6 +16,7 @@ This platform is implemented with Meteor.js Framework and React. Following thing
 * Tailwindcss is used for styling the platform
 * React-icons is used for displaying svg icons
 * recharts is used to display charts (statistics)
+* File upload should be done with IPFS or an upload widget like Uploadcare or Bytescale. 
 
 ## Design
 
@@ -31,7 +32,6 @@ At the center of it all are Sounds. Sounds can be:
 * Uploaded / Added - Either mp3 or wav or any other audio/* file
 * Played - There's a play count for each sound
 * Liked - Will be added to a like playlist
-  * The monetization takes 80% from the pro plan and splits up the money between a support button. More on that later in this document
 * Edited - There's an edit page that allows the user to change everything but the sound file that was uploaded
 * Removed - Simple confirm modal that makes a sound deletable
 
@@ -70,7 +70,7 @@ The sound list should be a reusable component that is used as described above. W
 
 #### Sound Upload
 
-The sound upload page should be a single page that allows users to upload their sound / music. The Meteor.js backend has to manage the audio files somehow. There's the possibility of using IPFS so it's hosted outside of the platform itself. An alternative can be a upload widget like Uploadcare or Bytescale.
+The sound upload page should be a single page that allows users to upload their sound / music. The Meteor.js backend has to manage the audio / image files somehow. There's the possibility of using IPFS so it's hosted outside of the platform itself. An alternative can be a upload widget like Uploadcare or Bytescale.
 
 ### Users
 
