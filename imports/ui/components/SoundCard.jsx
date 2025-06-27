@@ -16,8 +16,8 @@ const SoundCard = ({ sound }) => {
           className="relative h-48 bg-cover bg-center"
           style={{ backgroundImage: `url(${sound.backgroundImage})` }}
         >
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-end p-4">
-            <div className="text-white">
+          <div className="absolute inset-0 flex items-end p-4">
+            <div className="text-white text-shadow-lg">
               <Link to={`/sound/${sound._id}`} className="text-xl font-bold text-shadow-md">
                 {sound.title}
               </Link>

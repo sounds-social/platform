@@ -67,7 +67,7 @@ const SoundAdd = () => {
                   id="description"
                   name="description"
                   rows="3"
-                  className="shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                  className="p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 ></textarea>

@@ -5,11 +5,13 @@ import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
 import { Comments } from '../../api/comments';
 import { FiPlay, FiHeart, FiPlus, FiMessageSquare } from 'react-icons/fi';
+import AudioPlayer from '../components/AudioPlayer';
 
 const Sound = () => {
   const { soundId } = useParams();
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
+  const [currentPlayingSound, setCurrentPlayingSound] = useState(null);
 
   const { sound, comments, loading } = useTracker(() => {
     const noDataAvailable = { sound: null, comments: [], loading: true };
@@ -41,15 +43,13 @@ const Sound = () => {
   const handlePlay = () => {
     if (sound) {
       Meteor.call('sounds.incrementPlayCount', soundId);
-      // Here you would integrate with an actual audio player
-      alert(`Playing: ${sound.title}`);
+      setCurrentPlayingSound(sound.audioFile);
     }
   };
 
   const handleLike = () => {
     if (sound) {
       Meteor.call('sounds.like', soundId);
-      alert(`Liked: ${sound.title}`);
     }
   };
 
@@ -162,6 +162,10 @@ const Sound = () => {
           <p className="text-gray-600">No comments yet. Be the first to comment!</p>
         )}
       </div>
+
+      {currentPlayingSound && (
+        <AudioPlayer src={currentPlayingSound} onClose={() => setCurrentPlayingSound(null)} />
+      )}
     </div>
   );
 };
