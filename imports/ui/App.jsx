@@ -44,7 +44,7 @@ export const App = () => {
         <Route path="/go-pro" component={GoPro} />
         <Route path="/support-overview" component={SupportOverview} />
         <Route path="/sound/add" component={SoundAdd} />
-        <Route path="/sound/edit/:soundId" component={SoundEdit} />
+        <Route path="/sounds/:soundId/edit" component={SoundEdit} />
         <Route path="/sound/:soundId" component={Sound} />
         <Route path="/playlist/:playlistId" component={Playlist} />
         <Route path="/likes" component={Playlist} />

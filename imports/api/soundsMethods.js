@@ -28,14 +28,14 @@ Meteor.methods({
     });
   },
 
-  async 'sounds.update'(soundId, title, description, tags, coverImage, isPrivate, backgroundImageCid) {
+  async 'sounds.update'(soundId, title, description, tags, coverImage, isPrivate, backgroundImage) {
     check(soundId, String);
     check(title, String);
     check(description, String);
     check(tags, Array);
     check(coverImage, String);
     check(isPrivate, Boolean);
-    check(backgroundImageCid, String);
+    check(backgroundImage, String);
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
@@ -46,16 +46,19 @@ Meteor.methods({
       throw new Meteor.Error('access-denied');
     }
 
+    const fieldsToUpdate = {
+      title,
+      description,
+      tags,
+      isPrivate,
+      lastUpdatedAt: new Date(),
+    };
+
+    if (coverImage) fieldsToUpdate.coverImage = coverImage;
+    if (backgroundImage) fieldsToUpdate.backgroundImage = backgroundImage;
+
     return await Sounds.updateAsync(soundId, {
-      $set: {
-        title,
-        description,
-        tags,
-        coverImage,
-        isPrivate,
-        backgroundImage,
-        lastUpdatedAt: new Date(),
-      },
+      $set: fieldsToUpdate,
     });
   },
 

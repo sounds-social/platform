@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import UploadcareWidget from '../components/UploadcareWidget';
 import { useParams, useHistory } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
@@ -110,31 +111,13 @@ const SoundEdit = () => {
             </div>
 
             <div>
-              <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">Cover Image URL</label>
-              <div className="mt-1">
-                <input
-                  id="coverImage"
-                  name="coverImage"
-                  type="text"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={coverImage}
-                  onChange={(e) => setCoverImage(e.target.value)}
-                />
-              </div>
+              <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">Cover Image</label>
+              <UploadcareWidget onUpload={setCoverImage} initialUrl={coverImage} />
             </div>
 
             <div>
-              <label htmlFor="backgroundImage" className="block text-sm font-medium text-gray-700">Background Image URL (Optional)</label>
-              <div className="mt-1">
-                <input
-                  id="backgroundImage"
-                  name="backgroundImage"
-                  type="text"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={backgroundImage}
-                  onChange={(e) => setBackgroundImage(e.target.value)}
-                />
-              </div>
+              <label htmlFor="backgroundImage" className="block text-sm font-medium text-gray-700">Background Image (Optional)</label>
+              <UploadcareWidget onUpload={setBackgroundImage} initialUrl={backgroundImage} />
             </div>
 
             <div className="flex items-center">

@@ -4,7 +4,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
 import { Comments } from '../../api/comments';
-import { FiPlay, FiHeart, FiPlus, FiMessageSquare } from 'react-icons/fi';
+import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit } from 'react-icons/fi';
 import AudioPlayer from '../components/AudioPlayer';
 
 const Sound = () => {
@@ -120,6 +120,14 @@ const Sound = () => {
             >
               <FiPlus className="mr-2" /> Add to Playlist
             </button>
+            {Meteor.userId() === sound.userId && (
+              <Link
+                to={`/sounds/${soundId}/edit`}
+                className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200"
+              >
+                <FiEdit className="mr-2" /> Edit
+              </Link>
+            )}
           </div>
         </div>
       </div>
