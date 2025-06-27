@@ -8,9 +8,8 @@ const Hot = () => {
   const { sounds, loading } = useTracker(() => {
     const noDataAvailable = { sounds: [], loading: true };
     const handle = Meteor.subscribe('sounds.public');
-    const usersHandle = Meteor.subscribe('users.public');
 
-    if (!handle.ready() || !usersHandle.ready()) return noDataAvailable;
+    if (!handle.ready()) return noDataAvailable;
 
     const soundsData = Sounds.find({}, { sort: { playCount: -1 }, limit: 20 }).fetch();
 
@@ -37,7 +36,7 @@ const Hot = () => {
   return (
     <div className="my-8">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">Hottest Sounds</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {sounds.map(sound => (
           <SoundCard key={sound._id} sound={sound} />
         ))}

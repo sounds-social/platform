@@ -12,3 +12,10 @@ Meteor.publish('sounds.private', function () {
 
   return Sounds.find({ userId: this.userId });
 });
+
+Meteor.publish('sounds.userPublic', function (userId) {
+  if (!userId) {
+    return this.ready();
+  }
+  return Sounds.find({ userId: userId, isPrivate: false });
+});

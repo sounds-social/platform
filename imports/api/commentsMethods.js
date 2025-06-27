@@ -4,6 +4,8 @@ import { Comments } from './comments';
 
 Meteor.methods({
   async 'comments.insert'(soundId, content, timestamp) {
+    timestamp = parseInt(timestamp, 10) || 0;
+
     check(soundId, String);
     check(content, String);
     check(timestamp, Number);

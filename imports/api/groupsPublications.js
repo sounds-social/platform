@@ -7,3 +7,10 @@ Meteor.publish('groups.view', function (slug) {
     }
     return Groups.find({ slug: slug });
 });
+
+Meteor.publish('groups.byUser', function (userId) {
+  if (!userId) {
+    return this.ready();
+  }
+  return Groups.find({ members: userId });
+});

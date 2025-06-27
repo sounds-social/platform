@@ -15,7 +15,7 @@ const Sound = () => {
     const noDataAvailable = { sound: null, comments: [], loading: true };
     const soundHandle = Meteor.subscribe('sounds.public');
     const commentsHandle = Meteor.subscribe('comments.forSound', soundId);
-    const usersHandle = Meteor.subscribe('users.public');
+    const usersHandle = Meteor.subscribe('users.me');
 
     const ready = soundHandle.ready() && commentsHandle.ready() && usersHandle.ready();
     const fetchedSound = Sounds.findOne(soundId);
@@ -45,10 +45,10 @@ const Sound = () => {
     }
   };
 
-  const handleAddComment = (e) => {
+  const handleAddComment = async (e) => {
     e.preventDefault();
     if (commentContent.trim()) {
-      Meteor.call('comments.insert', soundId, commentContent, commentTimestamp);
+      await Meteor.callAsync('comments.insert', soundId, commentContent, commentTimestamp);
       setCommentContent('');
       setCommentTimestamp('');
     }
@@ -129,13 +129,6 @@ const Sound = () => {
             value={commentContent}
             onChange={(e) => setCommentContent(e.target.value)}
           ></textarea>
-          <input
-            type="text"
-            className="w-full mt-2 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Timestamp (optional, e.g., 0:30)"
-            value={commentTimestamp}
-            onChange={(e) => setCommentTimestamp(e.target.value)}
-          />
           <button
             type="submit"
             className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"

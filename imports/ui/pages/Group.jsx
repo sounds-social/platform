@@ -11,7 +11,7 @@ const Group = () => {
   const { group, sounds, members, loading } = useTracker(() => {
     const noDataAvailable = { group: null, sounds: [], members: [], loading: true };
     const groupHandle = Meteor.subscribe('groups.view', slug);
-    const usersHandle = Meteor.subscribe('users.public');
+    const usersHandle = Meteor.subscribe('users.me');
 
     if (!groupHandle.ready() || !usersHandle.ready()) return noDataAvailable;
 

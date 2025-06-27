@@ -7,3 +7,10 @@ Meteor.publish('comments.forSound', function (soundId) {
   }
   return Comments.find({ soundId: soundId });
 });
+
+Meteor.publish('comments.byUser', function (userId) {
+  if (!userId) {
+    return this.ready();
+  }
+  return Comments.find({ userId: userId });
+});

@@ -3,7 +3,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 
 const ProfileSettings = () => {
-  const user = useTracker(() => Meteor.user());
+  const user = useTracker(() => Meteor.user(), []);
   const [displayName, setDisplayName] = useState('');
   const [slug, setSlug] = useState('');
   const [avatar, setAvatar] = useState('');

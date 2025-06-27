@@ -25,8 +25,8 @@ const Profile = () => {
       if (!currentUser) return noDataAvailable;
       const soundsHandle = Meteor.subscribe('sounds.private');
       const playlistsHandle = Meteor.subscribe('playlists.own');
-      const commentsHandle = Meteor.subscribe('comments.user', currentUser._id);
-      const groupsHandle = Meteor.subscribe('groups.user', currentUser._id);
+      const commentsHandle = Meteor.subscribe('comments.byUser', currentUser._id);
+      const groupsHandle = Meteor.subscribe('groups.byUser', currentUser._id);
 
       const soundsReady = soundsHandle.ready();
       const playlistsReady = playlistsHandle.ready();
@@ -44,11 +44,11 @@ const Profile = () => {
       const handle = Meteor.subscribe('users.view', slug);
       if (!handle.ready()) return noDataAvailable;
       currentUser = Meteor.users.findOne({ 'profile.slug': slug });
-      if (!currentUser) return noDataAvailable;
-      const soundsHandle = Meteor.subscribe('sounds.public');
+      if (!currentUser) return noDataAvailable
+      const soundsHandle = Meteor.subscribe('sounds.userPublic', currentUser._id);
       const playlistsHandle = Meteor.subscribe('playlists.public', currentUser._id);
-      const commentsHandle = Meteor.subscribe('comments.user', currentUser._id);
-      const groupsHandle = Meteor.subscribe('groups.user', currentUser._id);
+      const commentsHandle = Meteor.subscribe('comments.byUser', currentUser._id);
+      const groupsHandle = Meteor.subscribe('groups.byUser', currentUser._id);
 
       const soundsReady = soundsHandle.ready();
       const playlistsReady = playlistsHandle.ready();

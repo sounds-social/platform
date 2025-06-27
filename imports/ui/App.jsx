@@ -52,6 +52,11 @@ export const App = () => {
         <Route path="/group/:slug" component={Group} />
         <Route path="/hot" component={Hot} />
         <Route path="/explore" component={Explore} />
+        <Route path="/logout" component={() => {
+          Meteor.logout();
+          window.location.href = '/';
+          return null;
+        }} />
         <Route component={NotFound} />
       </Switch>
         </main>

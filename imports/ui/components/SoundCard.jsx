@@ -31,12 +31,12 @@ const SoundCard = ({ sound }) => {
         </div>
       ) : (
         <div className="flex">
-          <div className="w-1/3 h-32 bg-gray-200 flex-shrink-0">
+          <div className="w-1/6 aspect-square bg-gray-200 flex-shrink-0">
             {sound.coverImage && (
               <img src={sound.coverImage} alt={sound.title} className="w-full h-full object-cover" />
             )}
           </div>
-          <div className="w-2/3 p-4 flex flex-col justify-between">
+          <div className="w-5/6 p-4 flex flex-col justify-between">
             <div>
               <Link to={`/sound/${sound._id}`} className="text-lg font-semibold text-gray-800 hover:text-blue-500">
                 {sound.title}

@@ -13,7 +13,7 @@ const Playlist = () => {
   const { playlist, sounds, loading } = useTracker(() => {
     const noDataAvailable = { playlist: null, sounds: [], loading: true };
     const soundsHandle = Meteor.subscribe('sounds.public');
-    const usersHandle = Meteor.subscribe('users.public');
+    const usersHandle = Meteor.subscribe('users.me');
 
     let playlistData = null;
     let soundIds = [];
