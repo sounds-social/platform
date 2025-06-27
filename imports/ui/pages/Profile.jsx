@@ -13,7 +13,7 @@ const Profile = () => {
   const { slug } = useParams();
   const [showSupportModal, setShowSupportModal] = useState(false);
 
-  const { user, sounds, playlists, comments, groups, loading } = useTracker(() => {
+  const { usersBeingFollowed, user, sounds, playlists, comments, groups, loading } = useTracker(() => {
     const noDataAvailable = { user: null, sounds: [], playlists: [], comments: [], groups: [], loading: true };
     let currentUser = null;
 
@@ -45,7 +45,11 @@ const Profile = () => {
       });
       const userGroups = Groups.find({ members: currentUser._id }).fetch();
 
-      return { user: currentUser, sounds: userSounds, playlists: userPlaylists, comments: commentsWithSoundTitle, groups: userGroups, loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady };
+      const usersBeingFollowed = Meteor.users.find({
+        'profile.follows': currentUser._id
+      }).fetch()
+
+      return { usersBeingFollowed, user: currentUser, sounds: userSounds, playlists: userPlaylists, comments: commentsWithSoundTitle, groups: userGroups, loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady };
     } else {
       // Other user's profile
       const handle = Meteor.subscribe('users.view', slug);
@@ -74,7 +78,11 @@ const Profile = () => {
       });
       const userGroups = Groups.find({ members: currentUser._id }).fetch();
 
-      return { user: currentUser, sounds: userSounds, playlists: userPlaylists, comments: otherCommentsWithSoundTitle, groups: userGroups, loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady };
+      const usersBeingFollowed = Meteor.users.find({
+        'profile.follows': currentUser._id
+      }).fetch()
+
+      return { usersBeingFollowed, user: currentUser, sounds: userSounds, playlists: userPlaylists, comments: otherCommentsWithSoundTitle, groups: userGroups, loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady };
     }
   }, [slug]);
 
@@ -109,8 +117,6 @@ const Profile = () => {
     }
   };
 
-  console.log({ user })
-
   return (
     <div className="py-8">
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 flex flex-col md:flex-row items-center md:items-start">
@@ -124,11 +130,11 @@ const Profile = () => {
           <p className="text-gray-600 text-lg">@{user.profile.slug}</p>
           <div className="flex justify-center md:justify-start space-x-6 mt-4">
             <div>
-              <p className="text-gray-800 font-semibold">{user.profile.followers?.length || 0}</p>
+              <p className="text-gray-800 font-semibold">{usersBeingFollowed.length || 0}</p>
               <p className="text-gray-500 text-sm">Followers</p>
             </div>
             <div>
-              <p className="text-gray-800 font-semibold">{user.profile.following?.length || 0}</p>
+              <p className="text-gray-800 font-semibold">{user.profile.follows?.length || 0}</p>
               <p className="text-gray-500 text-sm">Following</p>
             </div>
             <div>
