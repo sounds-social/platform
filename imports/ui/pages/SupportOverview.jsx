@@ -4,7 +4,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 const data = [
   { name: 'Platform Hosting Costs', value: 10, color: '#8884d8' },
   { name: 'Platform Development', value: 10, color: '#82ca9d' },
-  { name: 'Supported Musicians', value: 80, color: '#ffc658' },
+  { name: 'Musicians To Support', value: 80, color: '#ffc658' },
 ];
 
 const SupportOverview = () => {
@@ -50,13 +50,13 @@ const SupportOverview = () => {
               ))}
             </ul>
             <p className="mt-6 text-gray-600 text-sm">
-              The remaining 80% is split evenly among the musicians you support. In the future, you'll be able to customize this split.
+              80% is split evenly among the musicians you support. In the future, you'll be able to customize this split.
             </p>
           </div>
         </div>
 
         <div className="mt-12 text-center">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Supported Musicians</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-4">Musicians To Support</h3>
           <p className="text-gray-600">List of supported musicians will appear here.</p>
           {/* Placeholder for supported musicians list */}
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
