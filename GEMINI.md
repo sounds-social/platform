@@ -78,11 +78,11 @@ Users are the vital building block of the platform.
 
 The platform has following pages in regards to user management:
 
-* Login page to login
-* Register page to create a new user
-* Password forgotten page if a user forgot their password and wants to reset it through mail
-* Profile settings page that makes it possible for users to change their password and "display name" and "slug" for the profile route (e.g. /profile/{slug})
-* Profile page that displays:
+* Login page to login (path: /sign-in)
+* Register page to create a new user (path: /sign-up)
+* Password forgotten page if a user forgot their password and wants to reset it through mail (path: /forgot-password)
+* Profile settings page (path: /profile/settings) that makes it possible for users to change their password and "display name" and "slug" for the profile route
+* Profile page (path: /profile/{slug} or /profile for current user) that displays:
   * Avatar image
   * Latest sounds from the user
   * Followers / Following count and list
@@ -163,7 +163,7 @@ Pages for the monetization are:
 
 ### Navigation
 
-The app needs a navbar with following items in it:
+When the user is logged in, the app needs a navbar with following items in it:
 
 To the left as a group:
 
@@ -179,6 +179,12 @@ To the right as a group:
   * About (path: /about)
   * Donate (path: https://ko-fi.com/itsmatteodemicheli)
   * Github (path: https://github.com/sounds-social/platform)
+
+When the user is logged out, display another navbar with following items to the left:
+
+* About (path: /about)
+* Sign In (path: /sign-in)
+* Sign Up (path: /sign-up)
 
 ### Marketing page
 
