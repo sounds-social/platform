@@ -36,9 +36,16 @@ const Profile = () => {
       const userSounds = Sounds.find({ userId: currentUser._id }).fetch();
       const userPlaylists = Playlists.find({ userId: currentUser._id }).fetch();
       const userComments = Comments.find({ userId: currentUser._id }).fetch();
+      const commentsWithSoundTitle = userComments.map(comment => {
+        const sound = Sounds.findOne(comment.soundId);
+        return {
+          ...comment,
+          soundTitle: sound ? sound.title : 'Unknown Sound',
+        };
+      });
       const userGroups = Groups.find({ members: currentUser._id }).fetch();
 
-      return { user: currentUser, sounds: userSounds, playlists: userPlaylists, comments: userComments, groups: userGroups, loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady };
+      return { user: currentUser, sounds: userSounds, playlists: userPlaylists, comments: commentsWithSoundTitle, groups: userGroups, loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady };
     } else {
       // Other user's profile
       const handle = Meteor.subscribe('users.view', slug);
@@ -57,10 +64,17 @@ const Profile = () => {
 
       const userSounds = Sounds.find({ userId: currentUser._id, isPrivate: false }).fetch();
       const userPlaylists = Playlists.find({ userId: currentUser._id, isPublic: true }).fetch();
-      const userComments = Comments.find({ userId: currentUser._id }).fetch();
+      const otherUserComments = Comments.find({ userId: currentUser._id }).fetch();
+      const otherCommentsWithSoundTitle = otherUserComments.map(comment => {
+        const sound = Sounds.findOne(comment.soundId);
+        return {
+          ...comment,
+          soundTitle: sound ? sound.title : 'Unknown Sound',
+        };
+      });
       const userGroups = Groups.find({ members: currentUser._id }).fetch();
 
-      return { user: currentUser, sounds: userSounds, playlists: userPlaylists, comments: userComments, groups: userGroups, loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady };
+      return { user: currentUser, sounds: userSounds, playlists: userPlaylists, comments: otherCommentsWithSoundTitle, groups: userGroups, loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady };
     }
   }, [slug]);
 
