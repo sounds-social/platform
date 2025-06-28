@@ -156,11 +156,17 @@ const Profile = () => {
   return (
     <div className="py-8">
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 flex flex-col md:flex-row items-center md:items-start">
-        <img
-          src={user.profile.avatar || 'https://via.placeholder.com/150'}
-          alt="Avatar"
-          className="w-32 h-32 rounded-full object-cover mb-4 md:mb-0 md:mr-6"
-        />
+        {user.profile.avatar ? (
+          <img
+            src={user.profile.avatar}
+            alt="Avatar"
+            className="w-32 h-32 rounded-full object-cover mb-4 md:mb-0 md:mr-6"
+          />
+        ) : (
+          <div className="w-32 h-32 rounded-full mb-4 md:mb-0 md:mr-6 flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-600 text-white text-5xl font-bold">
+            {user.profile.displayName ? user.profile.displayName.charAt(0).toUpperCase() : ''}
+          </div>
+        )}
         <div className="text-center md:text-left flex-grow">
           <h1 className="text-3xl font-bold text-gray-900">{user.profile.displayName}</h1>
           <p className="text-gray-600 text-lg">@{user.profile.slug}</p>
