@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Accounts } from 'meteor/accounts-base';
+import uniqid from 'uniqid';
 
 const SignUp = () => {
   const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
-  const [slug, setSlug] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    Accounts.createUser({ email, password, profile: { displayName } }, (err) => {
+
+    const slug = uniqid();
+
+    Accounts.createUser({ email, password, profile: { displayName, slug } }, (err) => {
       if (err) {
         setError(err.reason);
       } else {
