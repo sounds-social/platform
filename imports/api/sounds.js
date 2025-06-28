@@ -16,7 +16,7 @@ const SoundsSchema = new SimpleSchema({
   },
   tags: {
     type: Array,
-    optional: true,
+    optional: true
   },
   'tags.$': {
     type: String,
@@ -41,6 +41,17 @@ const SoundsSchema = new SimpleSchema({
     autoValue: () => new Date(),
   },
   playCount: {
+    type: SimpleSchema.Integer,
+    defaultValue: 0,
+  },
+  likes: {
+    type: Array,
+    defaultValue: [],
+  },
+  'likes.$': {
+    type: String,
+  },
+  likeCount: {
     type: SimpleSchema.Integer,
     defaultValue: 0,
   },

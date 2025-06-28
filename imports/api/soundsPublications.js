@@ -19,3 +19,10 @@ Meteor.publish('sounds.userPublic', function (userId) {
   }
   return Sounds.find({ userId: userId, isPrivate: false });
 });
+
+Meteor.publish('sounds.likedByUser', function (userId) {
+  if (!userId) {
+    return this.ready();
+  }
+  return Sounds.find({ likes: userId });
+});

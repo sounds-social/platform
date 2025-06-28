@@ -13,8 +13,8 @@ const Profile = () => {
   const { slug } = useParams();
   const [showSupportModal, setShowSupportModal] = useState(false);
 
-  const { usersBeingFollowed, user, sounds, playlists, comments, groups, loading } = useTracker(() => {
-    const noDataAvailable = { user: null, sounds: [], playlists: [], comments: [], groups: [], loading: true };
+  const { usersBeingFollowed, user, sounds, playlists, comments, groups, loading, likedSounds, totalLikedSoundsCount } = useTracker(() => {
+    const noDataAvailable = { user: null, sounds: [], playlists: [], comments: [], groups: [], loading: true, likedSounds: [] };
     let currentUser = null;
 
     if (!slug) {
@@ -27,11 +27,13 @@ const Profile = () => {
       const playlistsHandle = Meteor.subscribe('playlists.own');
       const commentsHandle = Meteor.subscribe('comments.byUser', currentUser._id);
       const groupsHandle = Meteor.subscribe('groups.byUser', currentUser._id);
+      const likedSoundsHandle = Meteor.subscribe('sounds.likedByUser', currentUser._id);
 
       const soundsReady = soundsHandle.ready();
       const playlistsReady = playlistsHandle.ready();
       const commentsReady = commentsHandle.ready();
       const groupsReady = groupsHandle.ready();
+      const likedSoundsReady = likedSoundsHandle.ready();
 
       const userSounds = Sounds.find({ userId: currentUser._id }).fetch();
       const userPlaylists = Playlists.find({ userId: currentUser._id }).fetch();
@@ -44,12 +46,25 @@ const Profile = () => {
         };
       });
       const userGroups = Groups.find({ members: currentUser._id }).fetch();
+      const likedSounds = Sounds.find({ likes: currentUser._id }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
 
       const usersBeingFollowed = Meteor.users.find({
         'profile.follows': currentUser._id
       }).fetch()
 
-      return { usersBeingFollowed, user: currentUser, sounds: userSounds, playlists: userPlaylists, comments: commentsWithSoundTitle, groups: userGroups, loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady };
+      const totalLikedSoundsCount = Sounds.find({ likes: currentUser._id }).count();
+
+      return { 
+        usersBeingFollowed, 
+        user: currentUser, 
+        sounds: userSounds, 
+        playlists: userPlaylists, 
+        comments: commentsWithSoundTitle, 
+        groups: userGroups, 
+        loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady || !likedSoundsReady, 
+        likedSounds,
+        totalLikedSoundsCount
+      };
     } else {
       // Other user's profile
       const handle = Meteor.subscribe('users.view', slug);
@@ -60,11 +75,13 @@ const Profile = () => {
       const playlistsHandle = Meteor.subscribe('playlists.public', currentUser._id);
       const commentsHandle = Meteor.subscribe('comments.byUser', currentUser._id);
       const groupsHandle = Meteor.subscribe('groups.byUser', currentUser._id);
+      const likedSoundsHandle = Meteor.subscribe('sounds.likedByUser', currentUser._id);
 
       const soundsReady = soundsHandle.ready();
       const playlistsReady = playlistsHandle.ready();
       const commentsReady = commentsHandle.ready();
       const groupsReady = groupsHandle.ready();
+      const likedSoundsReady = likedSoundsHandle.ready();
 
       const userSounds = Sounds.find({ userId: currentUser._id, isPrivate: false }).fetch();
       const userPlaylists = Playlists.find({ userId: currentUser._id, isPublic: true }).fetch();
@@ -78,12 +95,25 @@ const Profile = () => {
         };
       });
       const userGroups = Groups.find({ members: currentUser._id }).fetch();
+      const likedSounds = Sounds.find({ likes: currentUser._id }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
+
+      const totalLikedSoundsCount = Sounds.find({ likes: currentUser._id }).count();
 
       const usersBeingFollowed = Meteor.users.find({
         'profile.follows': currentUser._id
       }).fetch()
 
-      return { usersBeingFollowed, user: currentUser, sounds: userSounds, playlists: userPlaylists, comments: otherCommentsWithSoundTitle, groups: userGroups, loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady };
+      return { 
+        usersBeingFollowed, 
+        user: currentUser, 
+        sounds: userSounds, 
+        playlists: userPlaylists, 
+        comments: otherCommentsWithSoundTitle, 
+        groups: userGroups, 
+        loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady || !likedSoundsReady, 
+        likedSounds, 
+        totalLikedSoundsCount
+      };
     }
   }, [slug]);
 
@@ -173,6 +203,31 @@ const Profile = () => {
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Sounds</h2>
         <SoundList sounds={sounds} loading={loading} noSoundsMessage="No sounds uploaded yet." />
+      </div>
+
+      {/* Liked Sounds */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Likes</h2>
+        {likedSounds.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {likedSounds.map(sound => (
+              <Link to={`/sound/${sound._id}`} key={sound._id}>
+                <div className="relative aspect-square">
+                  <img src={sound.coverImage} alt={sound.title} className="object-cover w-full h-full rounded-lg" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-600">No liked sounds yet.</p>
+        )}
+        {totalLikedSoundsCount > 4 && (
+          <div className="text-center mt-4">
+            <Link to="/likes" className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md">
+              Load More
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Playlists */}

@@ -16,6 +16,7 @@ import Sound from './pages/Sound';
 import SoundAdd from './pages/SoundAdd';
 import SoundEdit from './pages/SoundEdit';
 import Playlist from './pages/Playlist';
+import Likes from './pages/Likes';
 import Group from './pages/Group';
 import GroupSettings from './pages/GroupSettings';
 import Home from './pages/Home';
@@ -47,7 +48,7 @@ export const App = () => {
         <Route path="/sounds/:soundId/edit" component={SoundEdit} />
         <Route path="/sound/:soundId" component={Sound} />
         <Route path="/playlist/:playlistId" component={Playlist} />
-        <Route path="/likes" component={Playlist} />
+        <Route path="/likes" component={Likes} />
         <Route path="/group/settings/:groupId" component={GroupSettings} />
         <Route path="/group/:slug" component={Group} />
         <Route path="/hot" component={Hot} />

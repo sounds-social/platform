@@ -197,3 +197,7 @@ If the user is not logged in and goes to "/" they will be redirected to "/about"
   * Sharing (sharing icon)
   * Monetization (money icon)
   * Open Source (open source icon)
+
+### Likes
+
+Users can like and unlike sounds (Sound.jsx). The likes are displayed on the profile page (Profile.jsx) from newest like to oldest. By default it's 4 sounds that are displayed in a square forma on the profile page. There's a load more button that displays all the likes with the SoundList component on a separate page.

@@ -84,4 +84,37 @@ Meteor.methods({
       $inc: { playCount: 1 },
     });
   },
+
+  async 'sounds.toggleLike'(soundId) {
+    check(soundId, String);
+
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    const sound = await Sounds.findOneAsync(soundId);
+
+    if (!sound) {
+      throw new Meteor.Error('sound-not-found');
+    }
+
+    const userHasLiked = sound.likes && sound.likes.includes(this.userId);
+
+    if (userHasLiked) {
+      return await Sounds.updateAsync(soundId, {
+        $pull: { likes: this.userId },
+        $inc: { likeCount: -1 },
+      });
+    } else {
+      return await Sounds.updateAsync(soundId, {
+        $addToSet: { likes: this.userId },
+        $inc: { likeCount: 1 },
+      });
+    }
+  },
+
+  async 'sounds.getLikedSoundsCount'(userId) {
+    check(userId, String);
+    return await Sounds.find({ likes: userId }).countAsync();
+  }
 });

@@ -14,11 +14,12 @@ const Sound = () => {
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [currentPlayingSound, setCurrentPlayingSound] = useState(null);
 
-  const { sound, comments, loading } = useTracker(() => {
-    const noDataAvailable = { sound: null, comments: [], loading: true };
+  const { sound, comments, loading, userHasLiked } = useTracker(() => {
+    const noDataAvailable = { sound: null, comments: [], loading: true, userHasLiked: false };
     const soundHandle = Meteor.subscribe('sounds.public');
     const commentsHandle = Meteor.subscribe('comments.forSound', soundId);
     const usersHandle = Meteor.subscribe('users.public');
+    const userId = Meteor.userId();
 
     const ready = soundHandle.ready() && commentsHandle.ready() && usersHandle.ready();
     const fetchedSound = Sounds.findOne(soundId);
@@ -38,7 +39,9 @@ const Sound = () => {
       fetchedSound.userSlug = soundUser ? soundUser.profile.slug : 'unknown';
     }
 
-    return { sound: fetchedSound, comments: commentsWithUserData, loading: !ready };
+    const liked = fetchedSound && fetchedSound.likes && fetchedSound.likes.includes(userId);
+
+    return { sound: fetchedSound, comments: commentsWithUserData, loading: !ready, userHasLiked: liked };
   }, [soundId]);
 
   const handlePlay = () => {
@@ -50,7 +53,7 @@ const Sound = () => {
 
   const handleLike = () => {
     if (sound) {
-      Meteor.call('sounds.like', soundId);
+      Meteor.call('sounds.toggleLike', soundId);
     }
   };
 
@@ -106,15 +109,15 @@ const Sound = () => {
           <div className="flex items-center space-x-6 mt-6">
             <div className="flex items-center text-gray-600">
               <FiPlay className="mr-2 text-xl" />
-              <span>{sound.playCount || 0} Plays</span>
+              <span>{sound.playCount || 0} {sound.playCount === 1 ? 'Play' : 'Plays'}</span>
             </div>
             <div className="flex items-center text-gray-600">
               <FiHeart className="mr-2 text-xl" />
-              <span>{sound.likesCount || 0} Likes</span>
+              <span>{sound.likeCount || 0} {sound.likeCount === 1 ? 'Like' : 'Likes'}</span>
             </div>
             <div className="flex items-center text-gray-600">
               <FiMessageSquare className="mr-2 text-xl" />
-              <span>{comments.length} Comments</span>
+              <span>{comments.length}  {comments.length === 1 ? 'Comment' : 'Comments'}</span>
             </div>
           </div>
 
@@ -127,9 +130,13 @@ const Sound = () => {
             </button>
             <button
               onClick={handleLike}
-              className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200"
+              className={`flex items-center font-bold py-3 px-6 rounded-md transition duration-200 ${
+                userHasLiked
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+              }`}
             >
-              <FiHeart className="mr-2" /> Like
+              <FiHeart className={`mr-2 ${userHasLiked ? 'fill-current' : ''}`} /> {userHasLiked ? 'Unlike' : 'Like'}
             </button>
             <button
               className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200"
