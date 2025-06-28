@@ -17,9 +17,10 @@ const PlaylistDetailPage = () => {
     const soundsHandle = playlistData ? Meteor.subscribe('sounds.byIds', playlistData.soundIds) : { ready: () => true };
 
     const loading = !playlistHandle.ready() || !soundsHandle.ready();
-    const soundData = playlistData ? Sounds.find({ _id: { $in: playlistData.soundIds } }, { sort: { createdAt: -1 } }).fetch() : [];
+    const fetchedSounds = playlistData ? Sounds.find({ _id: { $in: playlistData.soundIds } }).fetch() : [];
+    const orderedSounds = playlistData ? [...playlistData.soundIds].reverse().map(id => fetchedSounds.find(sound => sound._id === id)).filter(Boolean) : [];
 
-    return { playlist: playlistData, sounds: soundData, isLoading: loading };
+    return { playlist: playlistData, sounds: orderedSounds, isLoading: loading };
   });
 
   const handleRemovePlaylist = async () => {

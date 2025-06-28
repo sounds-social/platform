@@ -20,8 +20,9 @@ const PlaylistFormPage = () => {
     }
     const handle = Meteor.subscribe('sounds.byIds', soundIds);
     const loading = !handle.ready();
-    const fetchedSounds = Sounds.find({ _id: { $in: soundIds } }, { sort: { createdAt: -1 } }).fetch();
-    return { soundsData: fetchedSounds, areSoundsLoading: loading };
+    const fetchedSounds = Sounds.find({ _id: { $in: soundIds } }).fetch();
+    const orderedSounds = [...soundIds].reverse().map(id => fetchedSounds.find(sound => sound._id === id)).filter(Boolean);
+    return { soundsData: orderedSounds, areSoundsLoading: loading };
   }, [soundIds]);
 
   const { playlist, isLoading } = useTracker(() => {
