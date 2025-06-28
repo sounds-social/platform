@@ -4,7 +4,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { format } from "date-fns";
 import { Sounds } from '../../api/sounds';
-import { Playlists } from '../../api/playlists';
+import { PlaylistsCollection as Playlists } from '../../api/playlists';
 import { Comments } from '../../api/comments';
 import { Groups } from '../../api/groups';
 import SoundList from '../components/SoundList';
@@ -14,7 +14,7 @@ const Profile = () => {
   const { slug } = useParams();
   const [showSupportModal, setShowSupportModal] = useState(false);
 
-  const { usersBeingFollowed, user, sounds, playlists, comments, groups, loading, likedSounds, totalLikedSoundsCount, totalCommentsCount } = useTracker(() => {
+  const { usersBeingFollowed, user, sounds, playlists, comments, groups, loading, likedSounds, totalLikedSoundsCount, totalCommentsCount, totalPlaylistsCount } = useTracker(() => {
     const noDataAvailable = { user: null, sounds: [], playlists: [], comments: [], groups: [], loading: true, likedSounds: [] };
     let currentUser = null;
 
@@ -25,7 +25,7 @@ const Profile = () => {
       currentUser = Meteor.user();
       if (!currentUser) return noDataAvailable;
       const soundsHandle = Meteor.subscribe('sounds.private');
-      const playlistsHandle = Meteor.subscribe('playlists.own');
+      const playlistsHandle = Meteor.subscribe('playlists.myPlaylists');
       const commentsHandle = Meteor.subscribe('comments.byUser', currentUser._id);
       const groupsHandle = Meteor.subscribe('groups.byUser', currentUser._id);
       const likedSoundsHandle = Meteor.subscribe('sounds.likedByUser', currentUser._id);
@@ -37,7 +37,8 @@ const Profile = () => {
       const likedSoundsReady = likedSoundsHandle.ready();
 
       const userSounds = Sounds.find({ userId: currentUser._id }).fetch();
-      const userPlaylists = Playlists.find({ userId: currentUser._id }).fetch();
+      const userPlaylists = Playlists.find({ ownerId: currentUser._id }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
+      const totalPlaylistsCount = Playlists.find({ ownerId: currentUser._id }).count();
       const userComments = Comments.find({ userId: currentUser._id }, { sort: { createdAt: -1 }, limit: 3 }).fetch();
       const totalCommentsCount = Comments.find({ userId: currentUser._id }).count();
       const commentsWithSoundTitle = userComments.map(comment => {
@@ -66,7 +67,8 @@ const Profile = () => {
         loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady || !likedSoundsReady, 
         likedSounds,
         totalLikedSoundsCount,
-        totalCommentsCount
+        totalCommentsCount,
+        totalPlaylistsCount
       };
     } else {
       // Other user's profile
@@ -75,7 +77,7 @@ const Profile = () => {
       currentUser = Meteor.users.findOne({ 'profile.slug': slug });
       if (!currentUser) return noDataAvailable
       const soundsHandle = Meteor.subscribe('sounds.public', currentUser._id);
-      const playlistsHandle = Meteor.subscribe('playlists.public', currentUser._id);
+      const playlistsHandle = Meteor.subscribe('playlists.publicPlaylistsForUser', currentUser._id);
       const commentsHandle = Meteor.subscribe('comments.byUser', currentUser._id);
       const groupsHandle = Meteor.subscribe('groups.byUser', currentUser._id);
       const likedSoundsHandle = Meteor.subscribe('sounds.likedByUser', currentUser._id);
@@ -87,7 +89,8 @@ const Profile = () => {
       const likedSoundsReady = likedSoundsHandle.ready();
 
       const userSounds = Sounds.find({ userId: currentUser._id, isPrivate: false }).fetch();
-      const userPlaylists = Playlists.find({ userId: currentUser._id, isPublic: true }).fetch();
+      const userPlaylists = Playlists.find({ ownerId: currentUser._id, isPublic: true }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
+      const totalPlaylistsCount = Playlists.find({ ownerId: currentUser._id, isPublic: true }).count();
       const otherUserComments = Comments.find({ userId: currentUser._id }, { sort: { createdAt: -1 }, limit: 3 }).fetch();
       const otherCommentsWithSoundTitle = otherUserComments.map(comment => {
         const sound = Sounds.findOne(comment.soundId);
@@ -117,7 +120,8 @@ const Profile = () => {
         loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady || !likedSoundsReady, 
         likedSounds, 
         totalLikedSoundsCount,
-        totalCommentsCount
+        totalCommentsCount,
+        totalPlaylistsCount
       };
     }
   }, [slug]);
@@ -248,17 +252,27 @@ const Profile = () => {
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Playlists</h2>
             {playlists.length > 0 ? (
-              <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
                 {playlists.map(playlist => (
-                  <Link to={`/playlist/${playlist._id}`} key={playlist._id} className="block bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-200">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-1">{playlist.name}</h3>
-                    <p className="text-gray-600 text-sm">{playlist.isPublic ? 'Public' : 'Private'} playlist</p>
-                    <p className="text-gray-500 text-xs mt-1">{playlist.items?.length || 0} tracks</p>
+                  <Link to={`/playlist/${playlist._id}`} key={playlist._id}>
+                    <div className="relative aspect-square">
+                      <img src={playlist.coverImageUrl || 'https://via.placeholder.com/150'} alt={playlist.name} className="object-cover w-full h-full rounded-lg" />
+                      <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-lg">
+                        <p className="text-white text-lg font-bold text-center">{playlist.name}</p>
+                      </div>
+                    </div>
                   </Link>
                 ))}
               </div>
             ) : (
               <p className="text-gray-600">No playlists created yet.</p>
+            )}
+            {totalPlaylistsCount > 4 && (
+              <div className="text-center mt-4">
+                <Link to={`/profile/${user.profile.slug}/playlists`} className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md">
+                  Load More
+                </Link>
+              </div>
             )}
           </div>
 

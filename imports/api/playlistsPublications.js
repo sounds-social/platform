@@ -1,18 +1,24 @@
 import { Meteor } from 'meteor/meteor';
-import { Playlists } from './playlists';
+import { check } from 'meteor/check';
+import { PlaylistsCollection } from './playlists';
 
-// Publish a user's public playlists
-Meteor.publish('playlists.public', function (userId) {
-    if (!userId) {
-        return this.ready();
-    }
-    return Playlists.find({ userId: userId, isPublic: true });
+Meteor.publish('playlists.myPlaylists', function publishMyPlaylists() {
+  if (!this.userId) {
+    return this.ready();
+  }
+  return PlaylistsCollection.find({ ownerId: this.userId });
 });
 
-// Publish the current user's playlists (public and private)
-Meteor.publish('playlists.own', function () {
-    if (!this.userId) {
-        return this.ready();
-    }
-    return Playlists.find({ userId: this.userId });
+Meteor.publish('playlists.publicPlaylists', function publishPublicPlaylists() {
+  return PlaylistsCollection.find({ isPublic: true });
+});
+
+Meteor.publish('playlists.singlePlaylist', function publishSinglePlaylist(playlistId) {
+  check(playlistId, String);
+  return PlaylistsCollection.find({ _id: playlistId });
+});
+
+Meteor.publish('playlists.publicPlaylistsForUser', function publishPublicPlaylistsForUser(userId) {
+  check(userId, String);
+  return PlaylistsCollection.find({ ownerId: userId, isPublic: true });
 });

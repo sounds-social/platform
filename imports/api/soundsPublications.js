@@ -26,3 +26,9 @@ Meteor.publish('sounds.likedByUser', function (userId) {
   }
   return Sounds.find({ likes: userId });
 });
+
+Meteor.publish('sounds.byIds', function (soundIds) {
+  check(soundIds, Array);
+  check(soundIds.every(id => typeof id === 'string'), true);
+  return Sounds.find({ _id: { $in: soundIds } });
+});

@@ -16,7 +16,9 @@ import SupportOverview from './pages/SupportOverview';
 import Sound from './pages/Sound';
 import SoundAdd from './pages/SoundAdd';
 import SoundEdit from './pages/SoundEdit';
-import Playlist from './pages/Playlist';
+import PlaylistDetailPage from './pages/PlaylistDetailPage';
+import PlaylistFormPage from './pages/PlaylistFormPage';
+import AllPlaylists from './pages/AllPlaylists';
 import Likes from './pages/Likes';
 import Group from './pages/Group';
 import GroupSettings from './pages/GroupSettings';
@@ -50,7 +52,9 @@ export const App = () => {
         <Route path="/sound/add" component={SoundAdd} />
         <Route path="/sounds/:soundId/edit" component={SoundEdit} />
         <Route path="/sound/:soundId" component={Sound} />
-        <Route path="/playlist/:playlistId" component={Playlist} />
+        <Route path="/playlist/:playlistId" component={PlaylistDetailPage} />
+            <Route path="/playlist/:playlistId/edit" component={PlaylistFormPage} />
+        <Route path="/profile/:slug?/playlists" component={AllPlaylists} />
         <Route path="/likes" component={Likes} />
         <Route path="/group/settings/:groupId" component={GroupSettings} />
         <Route path="/group/:slug" component={Group} />

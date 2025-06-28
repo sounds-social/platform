@@ -6,6 +6,7 @@ import { Sounds } from '../../api/sounds';
 import { Comments } from '../../api/comments';
 import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2 } from 'react-icons/fi';
 import AudioPlayer from '../components/AudioPlayer';
+import AddPlaylistModal from '../components/AddPlaylistModal';
 
 const Sound = () => {
   const { soundId } = useParams();
@@ -13,6 +14,7 @@ const Sound = () => {
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [currentPlayingSound, setCurrentPlayingSound] = useState(null);
+  const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
     const noDataAvailable = { sound: null, comments: [], loading: true, userHasLiked: false };
@@ -139,6 +141,7 @@ const Sound = () => {
               <FiHeart className={`mr-2 ${userHasLiked ? 'fill-current' : ''}`} /> {userHasLiked ? 'Unlike' : 'Like'}
             </button>
             <button
+              onClick={() => setIsAddPlaylistModalOpen(true)}
               className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200"
             >
               <FiPlus className="mr-2" /> Add to Playlist
@@ -205,6 +208,12 @@ const Sound = () => {
       {currentPlayingSound && (
         <AudioPlayer src={currentPlayingSound} onClose={() => setCurrentPlayingSound(null)} />
       )}
+
+      <AddPlaylistModal
+        isOpen={isAddPlaylistModalOpen}
+        onRequestClose={() => setIsAddPlaylistModalOpen(false)}
+        soundId={soundId}
+      />
     </div>
   );
 };

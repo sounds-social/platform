@@ -1,41 +1,51 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
-import { Playlists } from './playlists';
+import { PlaylistsCollection } from './playlists';
 
 Meteor.methods({
-  async 'playlists.insert'(name, isPublic) {
+  async 'playlists.insert'(name, isPublic, coverImageUrl) {
     check(name, String);
     check(isPublic, Boolean);
+    check(coverImageUrl, String);
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
-    return await Playlists.insertAsync({
+    return await PlaylistsCollection.insertAsync({
       name,
       isPublic,
-      userId: this.userId,
+      coverImageUrl,
+      ownerId: this.userId,
+      createdAt: new Date(),
     });
   },
 
-  async 'playlists.update'(playlistId, name, isPublic) {
+  async 'playlists.update'(playlistId, name, isPublic, coverImageUrl, soundIds) {
     check(playlistId, String);
     check(name, String);
     check(isPublic, Boolean);
+    check(coverImageUrl, String);
+    check(soundIds, Array);
+    check(soundIds.every(id => typeof id === 'string'), true);
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
-    const playlist = await Playlists.findOneAsync({ _id: playlistId, userId: this.userId });
-    if (!playlist) {
-      throw new Meteor.Error('access-denied');
+    const playlist = await PlaylistsCollection.findOneAsync(playlistId);
+
+    if (playlist.ownerId !== this.userId) {
+      throw new Meteor.Error('not-authorized');
     }
 
-    return await Playlists.updateAsync(playlistId, {
+    return await PlaylistsCollection.updateAsync(playlistId, {
       $set: {
         name,
         isPublic,
+        coverImageUrl,
+        soundIds,
+        updatedAt: new Date(),
       },
     });
   },
@@ -47,15 +57,17 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
-    const playlist = await Playlists.findOneAsync({ _id: playlistId, userId: this.userId });
-    if (!playlist) {
-      throw new Meteor.Error('access-denied');
+    const playlist = await PlaylistsCollection.findOneAsync(playlistId);
+
+    if (playlist.ownerId !== this.userId) {
+      throw new Meteor.Error('not-authorized');
     }
 
-    return await Playlists.removeAsync(playlistId);
+    return await PlaylistsCollection.removeAsync(playlistId);
   },
 
   async 'playlists.addSound'(playlistId, soundId) {
+    console.log('Adding sound to playlist', { playlistId, soundId });
     check(playlistId, String);
     check(soundId, String);
 
@@ -63,13 +75,16 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
-    const playlist = await Playlists.findOneAsync({ _id: playlistId, userId: this.userId });
-    if (!playlist) {
-      throw new Meteor.Error('access-denied');
+    const playlist = await PlaylistsCollection.findOneAsync(playlistId);
+
+    console.log({ playlist })
+
+    if (playlist.ownerId !== this.userId) {
+      throw new Meteor.Error('not-authorized');
     }
 
-    return await Playlists.updateAsync(playlistId, {
-      $addToSet: { sounds: soundId },
+    return await PlaylistsCollection.updateAsync(playlistId, {
+      $addToSet: { soundIds: soundId },
     });
   },
 
@@ -81,31 +96,14 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
-    const playlist = await Playlists.findOneAsync({ _id: playlistId, userId: this.userId });
-    if (!playlist) {
-      throw new Meteor.Error('access-denied');
-    }
+    const playlist = await PlaylistsCollection.findOneAsync(playlistId);
 
-    return await Playlists.updateAsync(playlistId, {
-      $pull: { sounds: soundId },
-    });
-  },
-
-  async 'playlists.reorderSounds'(playlistId, soundIds) {
-    check(playlistId, String);
-    check(soundIds, Array);
-
-    if (!this.userId) {
+    if (playlist.ownerId !== this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
-    const playlist = await Playlists.findOneAsync({ _id: playlistId, userId: this.userId });
-    if (!playlist) {
-      throw new Meteor.Error('access-denied');
-    }
-
-    return await Playlists.updateAsync(playlistId, {
-      $set: { sounds: soundIds },
+    return await PlaylistsCollection.updateAsync(playlistId, {
+      $pull: { soundIds: soundId },
     });
   },
 });
