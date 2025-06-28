@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 
 import AllComments from './pages/AllComments';
+import AllLikes from './pages/AllLikes';
 import About from './pages/About';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -41,6 +42,7 @@ export const App = () => {
         <Route path="/sign-up" component={SignUp} />
         <Route path="/forgot-password" component={ForgotPassword} />
         <Route path="/profile/settings" component={ProfileSettings} />
+        <Route path="/profile/:slug?/likes" component={AllLikes} />
         <Route path="/profile/:slug?/comments" component={AllComments} />
         <Route path="/profile/:slug?" component={Profile} />
         <Route path="/go-pro" component={GoPro} />

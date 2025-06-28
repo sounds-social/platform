@@ -231,7 +231,7 @@ const Profile = () => {
             )}
             {totalLikedSoundsCount > 4 && (
               <div className="text-center mt-4">
-                <Link to="/likes" className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md">
+                <Link to={`/profile/${user.profile.slug}/likes`} className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md">
                   Load More
                 </Link>
               </div>
