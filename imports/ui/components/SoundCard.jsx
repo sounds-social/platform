@@ -16,7 +16,15 @@ const SoundCard = ({ sound }) => {
           className="relative h-48 bg-cover bg-center"
           style={{ backgroundImage: `url(${sound.backgroundImage})` }}
         >
-          <div className="absolute inset-0 flex items-end p-4">
+          <div className="absolute inset-0 flex flex-col justify-between p-4">
+            <div className="flex justify-end space-x-4 text-white text-shadow-lg">
+              <div className="flex items-center text-sm">
+                <FiPlay className="mr-1" /> {sound.playCount || 0}
+              </div>
+              <div className="flex items-center text-sm">
+                <FiHeart className="mr-1" /> {sound.likes ? sound.likes.length : 0}
+              </div>
+            </div>
             <div className="text-white text-shadow-lg">
               <Link to={`/sound/${sound._id}`} className="text-xl font-bold text-shadow-md">
                 {sound.title}
@@ -52,7 +60,7 @@ const SoundCard = ({ sound }) => {
                 <FiPlay className="mr-1" /> {sound.playCount || 0}
               </div>
               <div className="flex items-center text-gray-500 text-sm">
-                <FiHeart className="mr-1" /> {sound.likesCount || 0}
+                <FiHeart className="mr-1" /> {sound.likes ? sound.likes.length : 0}
               </div>
             </div>
           </div>

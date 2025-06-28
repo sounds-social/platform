@@ -102,6 +102,9 @@ const ProfileSettings = () => {
             <div>
               <label htmlFor="avatar" className="block text-sm font-medium text-gray-700">Avatar Image</label>
               <UploadcareWidget onUpload={setAvatar} />  
+              {avatar && (
+                <img src={avatar} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
+              )}
             </div>
 
             <div>

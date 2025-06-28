@@ -156,8 +156,6 @@ const Profile = () => {
       console.error('Failed to toggle follow status:', error);
     }
   };
-  
-  console.log({ playlists })
 
   return (
     <div className="py-8">
