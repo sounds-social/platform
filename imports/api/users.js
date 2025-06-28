@@ -56,6 +56,11 @@ const UserSchema = new SimpleSchema({
   },
   createdAt: {
     type: Date,
+    autoValue () {
+      if (this.isInsert) {
+        return new Date()
+      }
+    },
   },
   profile: {
     type: UserProfileSchema,

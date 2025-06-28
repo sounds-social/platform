@@ -34,7 +34,11 @@ const SoundsSchema = new SimpleSchema({
   },
   createdAt: {
     type: Date,
-    autoValue: () => new Date(),
+    autoValue () {
+      if (this.isInsert) {
+        return new Date()
+      }
+    },
   },
   lastUpdatedAt: {
     type: Date,
