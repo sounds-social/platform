@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import { PlaylistsCollection } from '../../api/playlists';
 import { Sounds } from '../../api/sounds';
 import UploadcareWidget from '../components/UploadcareWidget';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
 
 const PlaylistFormPage = () => {
   const { playlistId } = useParams();
@@ -14,7 +14,15 @@ const PlaylistFormPage = () => {
   const [isPublic, setIsPublic] = useState(false);
   const [coverImageUrl, setCoverImageUrl] = useState('');
   const [soundIds, setSoundIds] = useState([]);
-  const [soundsData, setSoundsData] = useState([]);
+  const { soundsData, areSoundsLoading } = useTracker(() => {
+    if (soundIds.length === 0) {
+      return { soundsData: [], areSoundsLoading: false };
+    }
+    const handle = Meteor.subscribe('sounds.byIds', soundIds);
+    const loading = !handle.ready();
+    const fetchedSounds = Sounds.find({ _id: { $in: soundIds } }, { sort: { createdAt: -1 } }).fetch();
+    return { soundsData: fetchedSounds, areSoundsLoading: loading };
+  }, [soundIds]);
 
   const { playlist, isLoading } = useTracker(() => {
     const handle = Meteor.subscribe('playlists.singlePlaylist', playlistId);
@@ -32,31 +40,9 @@ const PlaylistFormPage = () => {
     }
   }, [playlist]);
 
-  useEffect(() => {
-    if (soundIds.length > 0) {
-      const soundsHandle = Meteor.subscribe('sounds.byIds', soundIds); // Assuming a publication for sounds by IDs
-      if (soundsHandle.ready()) {
-        const fetchedSounds = Sounds.find({ _id: { $in: soundIds } }).fetch();
-        // Maintain order based on soundIds array
-        const orderedSounds = soundIds.map(id => fetchedSounds.find(sound => sound._id === id)).filter(Boolean);
-        setSoundsData(orderedSounds);
-      }
-    } else {
-      setSoundsData([]);
-    }
-  }, [soundIds]);
+  
 
-  const onDragEnd = (result) => {
-    if (!result.destination) {
-      return;
-    }
-
-    const reorderedSoundIds = Array.from(soundIds);
-    const [removed] = reorderedSoundIds.splice(result.source.index, 1);
-    reorderedSoundIds.splice(result.destination.index, 0, removed);
-
-    setSoundIds(reorderedSoundIds);
-  };
+  
 
   const handleRemoveSound = (idToRemove) => {
     setSoundIds(soundIds.filter(id => id !== idToRemove));
@@ -91,7 +77,7 @@ const PlaylistFormPage = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || areSoundsLoading) {
     return <div className="text-center py-8 text-gray-600">Loading playlist form...</div>;
   }
 
@@ -138,41 +124,24 @@ const PlaylistFormPage = () => {
 
         <div className="mb-6">
           <h2 className="text-xl font-bold text-gray-800 mb-3">Sounds in Playlist:</h2>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="sounds">
-              {(provided) => (
-                <ul
-                  className="bg-gray-100 p-4 rounded-lg border border-gray-200"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
+          <ul className="bg-gray-100 p-4 rounded-lg border border-gray-200">
+            {soundsData.length === 0 && <p className="text-gray-600 text-center py-4">No sounds added yet.</p>}
+            {soundsData.map((sound) => (
+              <li
+                key={sound._id}
+                className="flex items-center justify-between bg-white p-3 mb-2 rounded-md shadow-sm border border-gray-200 last:mb-0"
+              >
+                <span className="text-gray-800 font-medium">{sound.title}</span>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveSound(sound._id)}
+                  className="ml-4 text-red-500 hover:text-red-700 transition-colors duration-200"
                 >
-                  {soundsData.length === 0 && <p className="text-gray-600 text-center py-4">No sounds added yet.</p>}
-                  {soundsData.map((sound, index) => (
-                    <Draggable key={sound._id} draggableId={sound._id} index={index}>
-                      {(provided) => (
-                        <li
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="flex items-center justify-between bg-white p-3 mb-2 rounded-md shadow-sm border border-gray-200 last:mb-0"
-                        >
-                          <span className="text-gray-800 font-medium">{sound.title}</span>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveSound(sound._id)}
-                            className="ml-4 text-red-500 hover:text-red-700 transition-colors duration-200"
-                          >
-                            Remove
-                          </button>
-                        </li>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
-          </DragDropContext>
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <button
