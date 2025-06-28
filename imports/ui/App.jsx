@@ -52,8 +52,8 @@ export const App = () => {
         <Route path="/sound/add" component={SoundAdd} />
         <Route path="/sounds/:soundId/edit" component={SoundEdit} />
         <Route path="/sound/:soundId" component={Sound} />
+        <Route path="/playlist/:playlistId/edit" component={PlaylistFormPage} />
         <Route path="/playlist/:playlistId" component={PlaylistDetailPage} />
-            <Route path="/playlist/:playlistId/edit" component={PlaylistFormPage} />
         <Route path="/profile/:slug?/playlists" component={AllPlaylists} />
         <Route path="/likes" component={Likes} />
         <Route path="/group/settings/:groupId" component={GroupSettings} />

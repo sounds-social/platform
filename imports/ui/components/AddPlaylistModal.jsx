@@ -4,10 +4,12 @@ import Select from 'react-select';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 import { PlaylistsCollection } from '../../api/playlists';
+import { useHistory } from 'react-router-dom';
 
 Modal.setAppElement('#react-target'); // Set the app element for accessibility
 
 const AddPlaylistModal = ({ isOpen, onRequestClose, soundId }) => {
+  const history = useHistory();
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [newPlaylistName, setNewPlaylistName] = useState('');
 
@@ -28,6 +30,7 @@ const AddPlaylistModal = ({ isOpen, onRequestClose, soundId }) => {
           alert(err.reason);
         } else {
           onRequestClose();
+          history.push(`/playlist/${selectedPlaylist.value}`);
         }
       });
     } else if (newPlaylistName.trim() !== '') {
@@ -40,10 +43,12 @@ const AddPlaylistModal = ({ isOpen, onRequestClose, soundId }) => {
               alert(err.reason);
             } else {
               onRequestClose();
+              history.push(`/playlist/${playlistId}`);
             }
           });
         } else {
           onRequestClose();
+          history.push(`/playlist/${playlistId}`);
         }
       });
     }
@@ -62,7 +67,7 @@ const AddPlaylistModal = ({ isOpen, onRequestClose, soundId }) => {
         <Select
           options={playlistOptions}
           onChange={setSelectedPlaylist}
-          placeholder="Select a playlist or create a new one"
+          placeholder="Select an existing playlist"
           isClearable
           className="react-select-container"
           classNamePrefix="react-select"
@@ -71,7 +76,7 @@ const AddPlaylistModal = ({ isOpen, onRequestClose, soundId }) => {
       <div className="mb-4">
         <input
           type="text"
-          placeholder="New playlist name (optional)"
+          placeholder="Or create a new one"
           value={newPlaylistName}
           onChange={(e) => setNewPlaylistName(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"

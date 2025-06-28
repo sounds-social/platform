@@ -3,8 +3,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { PlaylistsCollection } from '../../api/playlists';
-import { SoundsCollection } from '../../api/sounds'; // Assuming you have a SoundsCollection
-import { UploadcareWidget } from '@uploadcare/react-uploader';
+import { Sounds } from '../../api/sounds';
+import UploadcareWidget from '../components/UploadcareWidget';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const PlaylistFormPage = () => {
@@ -36,7 +36,7 @@ const PlaylistFormPage = () => {
     if (soundIds.length > 0) {
       const soundsHandle = Meteor.subscribe('sounds.byIds', soundIds); // Assuming a publication for sounds by IDs
       if (soundsHandle.ready()) {
-        const fetchedSounds = SoundsCollection.find({ _id: { $in: soundIds } }).fetch();
+        const fetchedSounds = Sounds.find({ _id: { $in: soundIds } }).fetch();
         // Maintain order based on soundIds array
         const orderedSounds = soundIds.map(id => fetchedSounds.find(sound => sound._id === id)).filter(Boolean);
         setSoundsData(orderedSounds);

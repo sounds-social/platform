@@ -5,6 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import { PlaylistsCollection } from '../../api/playlists';
 import { Sounds } from '../../api/sounds'; // Assuming Sounds is the correct collection name
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import SoundList from '../components/SoundList';
 
 const PlaylistDetailPage = () => {
   const { playlistId } = useParams();
@@ -12,12 +13,11 @@ const PlaylistDetailPage = () => {
 
   const { playlist, sounds, isLoading } = useTracker(() => {
     const playlistHandle = Meteor.subscribe('playlists.singlePlaylist', playlistId);
-    const soundsHandle = Meteor.subscribe('sounds.all'); // Assuming a publication for all sounds
+    const playlistData = PlaylistsCollection.findOne({ _id: playlistId });
+    const soundsHandle = playlistData ? Meteor.subscribe('sounds.byIds', playlistData.soundIds) : { ready: () => true };
 
     const loading = !playlistHandle.ready() || !soundsHandle.ready();
-
-    const playlistData = PlaylistsCollection.findOne({ _id: playlistId });
-    const soundData = playlistData ? Sounds.find({ _id: { $in: playlistData.soundIds } }).fetch() : [];
+    const soundData = playlistData ? Sounds.find({ _id: { $in: playlistData.soundIds } }, { sort: { createdAt: -1 } }).fetch() : [];
 
     return { playlist: playlistData, sounds: soundData, isLoading: loading };
   });
@@ -46,12 +46,16 @@ const PlaylistDetailPage = () => {
   return (
     <div className="container mx-auto p-4 bg-gray-50 min-h-screen">
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 flex flex-col md:flex-row items-center md:items-start">
-        {playlist.coverImageUrl && (
+        {playlist.coverImageUrl ? (
           <img
             src={playlist.coverImageUrl}
             alt={playlist.name}
             className="w-full md:w-64 h-64 object-cover rounded-lg shadow-lg mb-4 md:mb-0 md:mr-8"
           />
+        ) : (
+          <div className="w-full md:w-64 h-64 rounded-lg mb-4 md:mb-0 md:mr-8 flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-600 text-white text-5xl font-bold">
+            {playlist.name ? playlist.name.charAt(0).toUpperCase() : ''}
+          </div>
         )}
         <div className="flex-grow text-center md:text-left">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-2">{playlist.name}</h1>
@@ -77,22 +81,7 @@ const PlaylistDetailPage = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Sounds in this Playlist:</h2>
-        {sounds.length > 0 ? (
-          <ul className="space-y-3">
-            {sounds.map(sound => (
-              <li key={sound._id} className="flex items-center bg-gray-50 p-3 rounded-md shadow-sm">
-                <Link to={`/sound/${sound._id}`} className="text-blue-600 hover:underline font-medium">
-                  {sound.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-gray-600">No sounds in this playlist yet.</p>
-        )}
-      </div>
+      <SoundList sounds={sounds} loading={isLoading} noSoundsMessage="No sounds in this playlist yet." />
     </div>
   );
 };

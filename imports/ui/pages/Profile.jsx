@@ -265,7 +265,7 @@ const Profile = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-600">No playlists created yet.</p>
+              <p className="text-gray-600">No playlists found.</p>
             )}
             {totalPlaylistsCount > 4 && (
               <div className="text-center mt-4">
