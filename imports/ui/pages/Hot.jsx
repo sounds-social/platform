@@ -2,7 +2,7 @@ import React from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
-import SoundCard from '../components/SoundCard';
+import SoundList from '../components/SoundList';
 
 const Hot = () => {
   const { sounds, loading } = useTracker(() => {
@@ -26,22 +26,10 @@ const Hot = () => {
     return { sounds: soundsWithUserData, loading: false };
   }, []);
 
-  if (loading) {
-    return <div className="text-center py-8">Loading...</div>;
-  }
-
-  if (sounds.length === 0) {
-    return <div className="text-center py-8 text-gray-600">No hot sounds to display yet.</div>;
-  }
-
   return (
     <div className="my-8">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">Hottest Sounds</h2>
-      <div className="grid grid-cols-1 gap-6">
-        {sounds.map(sound => (
-          <SoundCard key={sound._id} sound={sound} />
-        ))}
-      </div>
+      <SoundList sounds={sounds} loading={loading} noSoundsMessage="No hot sounds to display yet." />
     </div>
   );
 };

@@ -6,7 +6,7 @@ import { Sounds } from '../../api/sounds';
 import { Playlists } from '../../api/playlists';
 import { Comments } from '../../api/comments';
 import { Groups } from '../../api/groups';
-import SoundCard from '../components/SoundCard';
+import SoundList from '../components/SoundList';
 import SupportModal from '../components/SupportModal';
 
 const Profile = () => {
@@ -171,16 +171,8 @@ const Profile = () => {
 
       {/* Latest Sounds */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Latest Sounds</h2>
-        {sounds.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {sounds.map(sound => (
-              <SoundCard key={sound._id} sound={sound} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-600">No sounds uploaded yet.</p>
-        )}
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Sounds</h2>
+        <SoundList sounds={sounds} loading={loading} noSoundsMessage="No sounds uploaded yet." />
       </div>
 
       {/* Playlists */}
@@ -219,7 +211,7 @@ const Profile = () => {
         )}
       </div>
 
-      {/* Groups (Placeholder) */}
+      {/* Groups (Placeholder)
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Groups</h2>
         {groups.length > 0 ? (
@@ -234,7 +226,7 @@ const Profile = () => {
         ) : (
           <p className="text-gray-600">Not a member of any groups yet.</p>
         )}
-      </div>
+      </div> */}
 
       {showSupportModal && (
         <SupportModal userName={user.profile.displayName} onClose={handleCloseSupportModal} />
