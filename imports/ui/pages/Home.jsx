@@ -7,28 +7,13 @@ import SoundCard from '../components/SoundCard';
 const Home = () => {
   const { sounds, loading } = useTracker(() => {
     const noDataAvailable = { sounds: [], loading: true };
-    const handle = Meteor.subscribe('sounds.public');
-    const usersHandle = Meteor.subscribe('users.me');
-    const publicUsersHandle = Meteor.subscribe('users.public');
+    const handle = Meteor.subscribe('sounds.private');
 
-    if (!handle.ready() || !usersHandle.ready() || !publicUsersHandle.ready()) return noDataAvailable;
+    if (!handle.ready()) return noDataAvailable;
 
-    const user = Meteor.user();
-    if (!user) return noDataAvailable;
+    const soundsData = Sounds.find({ userId: Meteor.userId() }, { sort: { createdAt: -1 } }).fetch();
 
-    const following = user.profile.follows || [];
-    const soundsData = Sounds.find({ userId: { $in: following } }, { sort: { createdAt: -1 } }).fetch();
-
-    const soundsWithUserData = soundsData.map(sound => {
-      const soundUser = Meteor.users.findOne({ _id: sound.userId }, { fields: { 'profile.displayName': 1, 'profile.slug': 1 } });
-      return {
-        ...sound,
-        userName: soundUser ? soundUser.profile.displayName : 'Unknown',
-        userSlug: soundUser ? soundUser.profile.slug : 'unknown',
-      };
-    });
-
-    return { sounds: soundsWithUserData, loading: false };
+    return { sounds: soundsData, loading: false };
   }, []);
 
   if (loading) {
@@ -36,12 +21,12 @@ const Home = () => {
   }
 
   if (sounds.length === 0) {
-    return <div className="text-center py-8 text-gray-600">No sounds from people you follow yet. Start following some users!</div>;
+    return <div className="text-center py-8 text-gray-600">You have not uploaded any sounds yet.</div>;
   }
 
   return (
     <div className="my-8">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Latest Sounds from people you follow</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">Your Latest Sounds</h2>
       <div className="grid grid-cols-1 gap-6">
         {sounds.map(sound => (
           <SoundCard key={sound._id} sound={sound} />
