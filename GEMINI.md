@@ -114,16 +114,38 @@ Each sound has multiple comments and every user can create / edit multiple comme
 
 ### Playlists
 
-Each user has one playlist by default which is Likes. A user can create a new playlist by providing:
+A user can create a new playlist by providing:
 
 * Playlist name
-* Public or Private (if Public, will be displayed in the profile page)
+* Public or Private (if Public, will be displayed in the profile page to others)
+* Cover image with UploadcareWidget
+* List of sounds that is reorderable
 
 Initially the playlist is empty but the user can: 
 
-* Add new tracks on the Sound Detail Page
+* Add new tracks on the Sound Detail Page (Add to playlist button)
+  * When the user clicks on the button it opens up a modal with a dropdown 
+  * The dropdown is implemented with "react-select" and the Creatable component
+  * There's a Save button that adds the sound to the playlist
+  * After pressing save the user is redirected to a detail playlist page that displays all tracks for the playlist.
 * Remove tracks on a playlist form page
 * Reorder tracks on the same playlist form page
+
+#### Pages & Modals
+
+The playlist feature creates following pages and modals:
+
+* Modal when clicking on the "Add to playlist" button that shows a form as described above
+* Playlist form / edit page that displays the following fields:
+  * Name
+  * Public or private
+  * Cover image with UploadcareWidget
+  * List of sounds that is reorderable
+    * Use "react-reorder" for that
+* A detail playlist page which lists all the sounds (sorted by the order defined in the playlist edit page)
+  * An edit button is displayed that opens the playlist edit page
+  * A remove button is displayed that allows the user that owns the playlist to delete it
+* The profile page displays the 4 latest playlists (list the name of the playlist)
 
 ### Groups
 

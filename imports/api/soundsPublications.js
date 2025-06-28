@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 import { Sounds } from './sounds';
 
 Meteor.publish('sounds.public', function () {
@@ -25,4 +26,10 @@ Meteor.publish('sounds.likedByUser', function (userId) {
     return this.ready();
   }
   return Sounds.find({ likes: userId });
+});
+
+Meteor.publish('sounds.byIds', function (soundIds) {
+  check(soundIds, Array);
+  check(soundIds.every(id => typeof id === 'string'), true);
+  return Sounds.find({ _id: { $in: soundIds } });
 });
