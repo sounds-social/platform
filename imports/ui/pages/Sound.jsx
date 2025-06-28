@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
 import { Comments } from '../../api/comments';
-import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit } from 'react-icons/fi';
+import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2 } from 'react-icons/fi';
 import AudioPlayer from '../components/AudioPlayer';
 
 const Sound = () => {
   const { soundId } = useParams();
+  const history = useHistory();
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [currentPlayingSound, setCurrentPlayingSound] = useState(null);
@@ -59,6 +60,13 @@ const Sound = () => {
       await Meteor.callAsync('comments.insert', soundId, commentContent, commentTimestamp);
       setCommentContent('');
       setCommentTimestamp('');
+    }
+  };
+
+  const handleRemove = async () => {
+    if (window.confirm('Are you sure you want to remove this sound?')) {
+      await Meteor.callAsync('sounds.remove', soundId);
+      history.push('/');
     }
   };
 
@@ -135,6 +143,14 @@ const Sound = () => {
               >
                 <FiEdit className="mr-2" /> Edit
               </Link>
+            )}
+            {Meteor.userId() === sound.userId && (
+              <button
+                onClick={handleRemove}
+                className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition duration-200"
+              >
+                <FiTrash2 className="mr-2" /> Remove
+              </button>
             )}
           </div>
         </div>
