@@ -92,16 +92,25 @@ const SoundAdd = () => {
             <div>
               <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">Cover Image</label>
               <UploadcareWidget onUpload={setCoverImage} />
+              {coverImage && (
+                <img src={coverImage} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
+              )}
             </div>
 
             <div>
               <label htmlFor="backgroundImage" className="block text-sm font-medium text-gray-700">Background Image (Optional)</label>
               <UploadcareWidget onUpload={setBackgroundImage} />
+              {backgroundImage && (
+                <img src={backgroundImage} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
+              )}
             </div>
 
             <div>
               <label htmlFor="audioFile" className="block text-sm font-medium text-gray-700">Audio File</label>
               <UploadcareWidget onUpload={setAudioFile} />
+              {audioFile && (
+                <audio controls src={audioFile}></audio>
+              )}
             </div>
 
             <div className="flex items-center">

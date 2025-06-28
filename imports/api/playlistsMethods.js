@@ -67,7 +67,6 @@ Meteor.methods({
   },
 
   async 'playlists.addSound'(playlistId, soundId) {
-    console.log('Adding sound to playlist', { playlistId, soundId });
     check(playlistId, String);
     check(soundId, String);
 
@@ -76,8 +75,6 @@ Meteor.methods({
     }
 
     const playlist = await PlaylistsCollection.findOneAsync(playlistId);
-
-    console.log({ playlist })
 
     if (playlist.ownerId !== this.userId) {
       throw new Meteor.Error('not-authorized');

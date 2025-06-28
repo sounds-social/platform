@@ -22,7 +22,6 @@ const PlaylistsSchema = new SimpleSchema({
   coverImageUrl: {
     type: String,
     optional: true,
-    regEx: /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i
   },
   soundIds: {
     type: Array,

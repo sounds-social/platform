@@ -130,16 +130,7 @@ const PlaylistFormPage = () => {
           <label className="block text-gray-700 text-sm font-semibold mb-2">
             Cover Image:
           </label>
-          <UploadcareWidget
-            publicKey="YOUR_UPLOADCARE_PUBLIC_KEY" // Replace with your actual public key
-            onFileSelect={(file) => {
-              if (file) {
-                file.done(info => {
-                  setCoverImageUrl(info.cdnUrl);
-                });
-              }
-            }}
-          />
+          <UploadcareWidget onUpload={setCoverImageUrl} />  
           {coverImageUrl && (
             <img src={coverImageUrl} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
           )}

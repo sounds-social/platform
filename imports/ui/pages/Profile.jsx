@@ -36,7 +36,7 @@ const Profile = () => {
       const groupsReady = groupsHandle.ready();
       const likedSoundsReady = likedSoundsHandle.ready();
 
-      const userSounds = Sounds.find({ userId: currentUser._id }).fetch();
+      const userSounds = Sounds.find({ userId: currentUser._id }, { sort: { createdAt: -1 } }).fetch();
       const userPlaylists = Playlists.find({ ownerId: currentUser._id }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
       const totalPlaylistsCount = Playlists.find({ ownerId: currentUser._id }).count();
       const userComments = Comments.find({ userId: currentUser._id }, { sort: { createdAt: -1 }, limit: 3 }).fetch();
@@ -88,7 +88,7 @@ const Profile = () => {
       const groupsReady = groupsHandle.ready();
       const likedSoundsReady = likedSoundsHandle.ready();
 
-      const userSounds = Sounds.find({ userId: currentUser._id, isPrivate: false }).fetch();
+      const userSounds = Sounds.find({ userId: currentUser._id, isPrivate: false }, { sort: { createdAt: -1 } }).fetch();
       const userPlaylists = Playlists.find({ ownerId: currentUser._id, isPublic: true }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
       const totalPlaylistsCount = Playlists.find({ ownerId: currentUser._id, isPublic: true }).count();
       const otherUserComments = Comments.find({ userId: currentUser._id }, { sort: { createdAt: -1 }, limit: 3 }).fetch();
@@ -156,6 +156,8 @@ const Profile = () => {
       console.error('Failed to toggle follow status:', error);
     }
   };
+  
+  console.log({ playlists })
 
   return (
     <div className="py-8">
@@ -256,10 +258,13 @@ const Profile = () => {
                 {playlists.map(playlist => (
                   <Link to={`/playlist/${playlist._id}`} key={playlist._id}>
                     <div className="relative aspect-square">
-                      <img src={playlist.coverImageUrl || 'https://via.placeholder.com/150'} alt={playlist.name} className="object-cover w-full h-full rounded-lg" />
-                      <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-lg">
-                        <p className="text-white text-lg font-bold text-center">{playlist.name}</p>
-                      </div>
+                      {playlist.coverImageUrl ? (
+                        <img src={playlist.coverImageUrl} alt={playlist.name} className="object-cover w-full h-full rounded-lg" />
+                      ) : (
+                        <div className="w-full h-full rounded-lg flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-600 text-white text-5xl font-bold">
+                          {playlist.name ? playlist.name.charAt(0).toUpperCase() : ''}
+                        </div>
+                      )}
                     </div>
                   </Link>
                 ))}
