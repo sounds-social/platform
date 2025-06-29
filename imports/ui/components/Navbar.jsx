@@ -13,7 +13,6 @@ const Navbar = ({ user }) => {
     e.preventDefault();
     if (searchTerm.trim()) {
       history.push(`/search?q=${searchTerm}`);
-      setSearchTerm('');
       setIsOpen(false);
     }
   };
