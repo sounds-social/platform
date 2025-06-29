@@ -107,7 +107,7 @@ const SoundAdd = () => {
 
             <div>
               <label htmlFor="audioFile" className="block text-sm font-medium text-gray-700">Audio File</label>
-              <UploadcareWidget onUpload={setAudioFile} />
+              <UploadcareWidget onUpload={setAudioFile} accept="audio/*" />
               {audioFile && (
                 <audio controls src={audioFile}></audio>
               )}

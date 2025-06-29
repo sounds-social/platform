@@ -2,7 +2,7 @@ import React from 'react';
 import { FileUploaderRegular } from "@uploadcare/react-uploader";
 import "@uploadcare/react-uploader/dist/react-uploader.css";
 
-const UploadcareWidget = ({ onUpload }) => {
+const UploadcareWidget = ({ onUpload, accept }) => {
   const handleChange = (info) => {
     // info contains file information, including the CDN URL
     if (info?.allEntries && info?.allEntries[0].cdnUrl) {
@@ -16,6 +16,7 @@ const UploadcareWidget = ({ onUpload }) => {
         pubkey="0340a6630cbea0325452" 
         onChange={handleChange}
         multiple={false}
+        accept={accept || 'image/*'}
         clearable />
     </div>
   );
