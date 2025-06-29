@@ -115,6 +115,13 @@ const ProfileSettings = () => {
           </form>
 
           <div className="mt-10">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">E-Mail</h3>
+            <div className="bg-gray-50 p-4 rounded-md mb-6">
+              <p className="text-gray-700">{user.emails && user.emails[0] && user.emails[0].address}</p>
+            </div>
+          </div>
+
+          <div className="mt-10">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Change Password</h3>
             <form className="space-y-6" onSubmit={handlePasswordChange}>
               <div>
