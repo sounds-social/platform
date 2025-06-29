@@ -5,6 +5,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 
 import AllComments from './pages/AllComments';
 import AllLikes from './pages/AllLikes';
+import AllPlaylists from './pages/AllPlaylists';
 import About from './pages/About';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -18,7 +19,6 @@ import SoundAdd from './pages/SoundAdd';
 import SoundEdit from './pages/SoundEdit';
 import PlaylistDetailPage from './pages/PlaylistDetailPage';
 import PlaylistFormPage from './pages/PlaylistFormPage';
-import AllPlaylists from './pages/AllPlaylists';
 import Likes from './pages/Likes';
 import Group from './pages/Group';
 import GroupSettings from './pages/GroupSettings';
@@ -46,6 +46,7 @@ export const App = () => {
         <Route path="/profile/settings" component={ProfileSettings} />
         <Route path="/profile/:slug?/likes" component={AllLikes} />
         <Route path="/profile/:slug?/comments" component={AllComments} />
+        <Route path="/profile/:slug?/playlists" component={AllPlaylists} />
         <Route path="/profile/:slug?" component={Profile} />
         <Route path="/go-pro" component={GoPro} />
         <Route path="/support-overview" component={SupportOverview} />
@@ -54,7 +55,6 @@ export const App = () => {
         <Route path="/sound/:soundId" component={Sound} />
         <Route path="/playlist/:playlistId/edit" component={PlaylistFormPage} />
         <Route path="/playlist/:playlistId" component={PlaylistDetailPage} />
-        <Route path="/profile/:slug?/playlists" component={AllPlaylists} />
         <Route path="/likes" component={Likes} />
         <Route path="/group/settings/:groupId" component={GroupSettings} />
         <Route path="/group/:slug" component={Group} />
