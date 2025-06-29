@@ -1,16 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FiPlay, FiHeart } from 'react-icons/fi';
 
 const SoundCard = ({ sound }) => {
   const isPrivate = sound.isPrivate && sound.userId !== Meteor.userId();
+  const history = useHistory();
 
   if (isPrivate) {
     return null; // Don't display private sounds to other users
   }
 
+  const handleUserClick = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    history.push(`/profile/${sound.userSlug}`);
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <Link to={`/sound/${sound._id}`} className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200">
       {sound.backgroundImage ? (
         <div
           className="relative h-48 bg-cover bg-center"
@@ -26,13 +33,13 @@ const SoundCard = ({ sound }) => {
               </div>
             </div>
             <div className="text-white text-shadow-lg">
-              <Link to={`/sound/${sound._id}`} className="text-xl font-bold text-shadow-md">
+              <h3 className="text-xl font-bold text-shadow-md">
                 {sound.title}
-              </Link>
+              </h3>
               <p className="text-sm text-shadow-sm">
-                <Link to={`/profile/${sound.userSlug}`} className="hover:underline">
+                <a onClick={handleUserClick} className="hover:underline cursor-pointer">
                   {sound.userName}
-                </Link>
+                </a>
               </p>
             </div>
           </div>
@@ -46,13 +53,13 @@ const SoundCard = ({ sound }) => {
           </div>
           <div className="w-5/6 p-4 flex flex-col justify-between">
             <div>
-              <Link to={`/sound/${sound._id}`} className="text-lg font-semibold text-gray-800 hover:text-blue-500">
+              <h3 className="text-lg font-semibold text-gray-800">
                 {sound.title}
-              </Link>
+              </h3>
               <p className="text-sm text-gray-600">
-                <Link to={`/profile/${sound.userSlug}`} className="hover:underline">
+                <a onClick={handleUserClick} className="hover:underline cursor-pointer">
                   {sound.userName}
-                </Link>
+                </a>
               </p>
             </div>
             <div className="flex items-center space-x-4 mt-2">
@@ -66,7 +73,7 @@ const SoundCard = ({ sound }) => {
           </div>
         </div>
       )}
-    </div>
+    </Link>
   );
 };
 
