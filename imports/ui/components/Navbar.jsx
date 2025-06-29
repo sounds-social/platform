@@ -5,19 +5,21 @@ import { FiMenu, FiX } from 'react-icons/fi';
 const Navbar = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleDropdownClick = () => setIsOpen(false);
+
   const loggedInLinks = (
     <>
-      <Link to="/" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Latest</Link>
-      <Link to="/hot" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</Link>
-      <Link to="/explore" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Explore</Link>
-      <Link to="/sound/add" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Upload</Link>
+      <Link onClick={handleDropdownClick} to="/" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Latest</Link>
+      <Link onClick={handleDropdownClick} to="/hot" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</Link>
+      <Link onClick={handleDropdownClick} to="/explore" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Explore</Link>
+      <Link onClick={handleDropdownClick} to="/sound/add" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Upload</Link>
     </>
   );
 
   const loggedOutLinks = (
     <>
-      <Link to="/sign-in" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</Link>
-      <Link to="/sign-up" className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</Link>
+      <Link onClick={handleDropdownClick} to="/sign-in" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</Link>
+      <Link onClick={handleDropdownClick} to="/sign-up" className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</Link>
     </>
   );
 
@@ -30,12 +32,12 @@ const Navbar = ({ user }) => {
       {isOpen && (
         <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50">
           
-          <Link to="/support-overview" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support Overview</Link>
-          <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</Link>
-          <a href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Donate</a>
-          <a href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Github</a>
-          <Link to="/profile/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</Link>
-          <Link to="/logout" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</Link>
+          <Link onClick={handleDropdownClick} to="/support-overview" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support Overview</Link>
+          <Link onClick={handleDropdownClick}  to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</Link>
+          <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Donate</a>
+          <a onClick={handleDropdownClick} href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Github</a>
+          <Link onClick={handleDropdownClick} to="/profile/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</Link>
+          <Link onClick={handleDropdownClick} to="/logout" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</Link>
         </div>
       )}
     </div>
@@ -46,7 +48,7 @@ const Navbar = ({ user }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="text-xl font-bold text-blue-500">Sounds Social</Link>
+            <Link onClick={handleDropdownClick} to="/" className="text-xl font-bold text-blue-500">Sounds Social</Link>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 {user ? loggedInLinks : loggedOutLinks}
@@ -55,7 +57,7 @@ const Navbar = ({ user }) => {
           </div>
           <div className="hidden md:flex items-center">
             {user && (
-              <Link to="/go-pro" className="text-blue-500 font-bold px-3 py-2 rounded-md text-sm mr-4">Go PRO</Link>
+              <Link onClick={handleDropdownClick} to="/go-pro" className="text-blue-500 font-bold px-3 py-2 rounded-md text-sm mr-4">Go PRO</Link>
             )}
             {userMenu}
           </div>
@@ -76,11 +78,10 @@ const Navbar = ({ user }) => {
           {user && (
             <div className="pt-4 pb-3 border-t border-gray-200">
               <div className="px-2 space-y-1">
-                <Link to="/sound/add" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Upload</Link>
-                <Link to={`/profile/${user.profile.slug}`} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Profile</Link>
-                <a href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Donate</a>
-                <a href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Github</a>
-                <Link to="/logout" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Logout</Link>
+                <Link onClick={handleDropdownClick} to={`/profile/${user.profile.slug}`} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Profile</Link>
+                <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Donate</a>
+                <a onClick={handleDropdownClick} href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Github</a>
+                <Link onClick={handleDropdownClick} to="/logout" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Logout</Link>
               </div>
             </div>
           )}

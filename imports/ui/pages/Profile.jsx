@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { format } from "date-fns";
+import { useHistory } from 'react-router-dom';
 import { Sounds } from '../../api/sounds';
 import { PlaylistsCollection as Playlists } from '../../api/playlists';
 import { Comments } from '../../api/comments';
@@ -12,6 +13,7 @@ import SupportModal from '../components/SupportModal';
 
 const Profile = () => {
   const { slug } = useParams();
+  const history = useHistory();
   const [showSupportModal, setShowSupportModal] = useState(false);
 
   const { usersBeingFollowed, user, sounds, playlists, comments, groups, loading, likedSounds, totalLikedSoundsCount, totalCommentsCount, totalPlaylistsCount } = useTracker(() => {
@@ -71,6 +73,11 @@ const Profile = () => {
         totalPlaylistsCount
       };
     } else {
+      if (slug === Meteor.user()?.profile?.slug) {
+        history.push('/profile');
+        return noDataAvailable;
+      }
+
       // Other user's profile
       const handle = Meteor.subscribe('users.view', slug);
       if (!handle.ready()) return noDataAvailable;
