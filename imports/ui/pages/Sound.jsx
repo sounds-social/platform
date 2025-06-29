@@ -41,7 +41,7 @@ const Sound = () => {
       fetchedSound.userSlug = soundUser ? soundUser.profile.slug : 'unknown';
     }
 
-    const liked = fetchedSound && fetchedSound.likes && fetchedSound.likes.includes(userId);
+    const liked = fetchedSound && fetchedSound.likes && fetchedSound.likes.some(like => like.userId === userId);
 
     return { sound: fetchedSound, comments: commentsWithUserData, loading: !ready, userHasLiked: liked };
   }, [soundId]);

@@ -25,7 +25,7 @@ Meteor.publish('sounds.likedByUser', function (userId) {
   if (!userId) {
     return this.ready();
   }
-  return Sounds.find({ likes: userId });
+  return Sounds.find({ 'likes.userId': userId });
 });
 
 Meteor.publish('sounds.byIds', function (soundIds) {

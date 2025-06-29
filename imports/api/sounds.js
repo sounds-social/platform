@@ -53,7 +53,13 @@ const SoundsSchema = new SimpleSchema({
     defaultValue: [],
   },
   'likes.$': {
+    type: Object,
+  },
+  'likes.$.userId': {
     type: String,
+  },
+  'likes.$.likedAt': {
+    type: Date,
   },
   likeCount: {
     type: SimpleSchema.Integer,

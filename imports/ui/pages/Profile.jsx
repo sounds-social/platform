@@ -51,13 +51,20 @@ const Profile = () => {
         };
       });
       const userGroups = Groups.find({ members: currentUser._id }).fetch();
-      const likedSounds = Sounds.find({ likes: currentUser._id }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
+      const likedSounds = Sounds.find({ 'likes.userId': currentUser._id })
+        .fetch()
+        .map(sound => {
+          const like = sound.likes.find(like => like.userId === currentUser._id);
+          return { ...sound, likedAt: like.likedAt };
+        })
+        .sort((a, b) => b.likedAt - a.likedAt)
+        .slice(0, 4);
 
       const usersBeingFollowed = Meteor.users.find({
         'profile.follows': currentUser._id
       }).fetch()
 
-      const totalLikedSoundsCount = Sounds.find({ likes: currentUser._id }).count();
+      const totalLikedSoundsCount = Sounds.find({ 'likes.userId': currentUser._id }).count();
 
       return { 
         usersBeingFollowed, 
@@ -108,9 +115,16 @@ const Profile = () => {
         };
       });
       const userGroups = Groups.find({ members: currentUser._id }).fetch();
-      const likedSounds = Sounds.find({ likes: currentUser._id }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
+      const likedSounds = Sounds.find({ 'likes.userId': currentUser._id })
+        .fetch()
+        .map(sound => {
+          const like = sound.likes.find(like => like.userId === currentUser._id);
+          return { ...sound, likedAt: like.likedAt };
+        })
+        .sort((a, b) => b.likedAt - a.likedAt)
+        .slice(0, 4);
 
-      const totalLikedSoundsCount = Sounds.find({ likes: currentUser._id }).count();
+      const totalLikedSoundsCount = Sounds.find({ 'likes.userId': currentUser._id }).count();
       const totalCommentsCount = Comments.find({ userId: currentUser._id }).count();
 
       const usersBeingFollowed = Meteor.users.find({

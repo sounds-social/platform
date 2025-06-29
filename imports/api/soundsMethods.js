@@ -98,16 +98,16 @@ Meteor.methods({
       throw new Meteor.Error('sound-not-found');
     }
 
-    const userHasLiked = sound.likes && sound.likes.includes(this.userId);
+    const userHasLiked = sound.likes && sound.likes.some(like => like.userId === this.userId);
 
     if (userHasLiked) {
       return await Sounds.updateAsync(soundId, {
-        $pull: { likes: this.userId },
+        $pull: { likes: { userId: this.userId } },
         $inc: { likeCount: -1 },
       });
     } else {
       return await Sounds.updateAsync(soundId, {
-        $addToSet: { likes: this.userId },
+        $addToSet: { likes: { userId: this.userId, likedAt: new Date() } },
         $inc: { likeCount: 1 },
       });
     }

@@ -21,7 +21,13 @@ const AllLikes = () => {
 
     if (!likedSoundsHandle.ready()) return noDataAvailable;
 
-    const sounds = Sounds.find({ likes: currentUser._id }, { sort: { createdAt: -1 } }).fetch();
+    const sounds = Sounds.find({ 'likes.userId': currentUser._id })
+      .fetch()
+      .map(sound => {
+        const like = sound.likes.find(like => like.userId === currentUser._id);
+        return { ...sound, likedAt: like.likedAt };
+      })
+      .sort((a, b) => b.likedAt - a.likedAt);
 
     return { likedSounds: sounds, loading: false, user: currentUser };
   }, [slug]);
