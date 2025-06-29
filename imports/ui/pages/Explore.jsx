@@ -33,7 +33,8 @@ const Explore = () => {
 
   return (
     <div className="my-8">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Explore Sounds</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-2">Explore Sounds</h2>
+      <p className="text-gray-500 mb-6">Discover random sounds from across the platform.</p>
       <SoundList sounds={sounds} loading={loading} noSoundsMessage="No sounds to explore yet." />
     </div>
   );
