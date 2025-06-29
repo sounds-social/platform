@@ -11,16 +11,20 @@ const PlaylistDetailPage = () => {
   const { playlistId } = useParams();
   const history = useHistory();
 
-  const { playlist, sounds, isLoading } = useTracker(() => {
+  const { playlist, sounds, isLoading, playlistOwner } = useTracker(() => {
     const playlistHandle = Meteor.subscribe('playlists.singlePlaylist', playlistId);
+    const usersHandle = Meteor.subscribe('users.public');
+
     const playlistData = PlaylistsCollection.findOne({ _id: playlistId });
     const soundsHandle = playlistData ? Meteor.subscribe('sounds.byIds', playlistData.soundIds) : { ready: () => true };
 
-    const loading = !playlistHandle.ready() || !soundsHandle.ready();
+    const loading = !playlistHandle.ready() || !soundsHandle.ready() || !usersHandle.ready();
     const fetchedSounds = playlistData ? Sounds.find({ _id: { $in: playlistData.soundIds } }).fetch() : [];
     const orderedSounds = playlistData ? [...playlistData.soundIds].reverse().map(id => fetchedSounds.find(sound => sound._id === id)).filter(Boolean) : [];
 
-    return { playlist: playlistData, sounds: orderedSounds, isLoading: loading };
+    const owner = playlistData ? Meteor.users.findOne(playlistData.ownerId) : null;
+
+    return { playlist: playlistData, sounds: orderedSounds, isLoading: loading, playlistOwner: owner };
   });
 
   const handleRemovePlaylist = async () => {
@@ -60,6 +64,11 @@ const PlaylistDetailPage = () => {
         )}
         <div className="flex-grow text-center md:text-left">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-2">{playlist.name}</h1>
+          {playlistOwner && (
+            <p className="text-lg text-gray-600 mb-2">
+              by <Link to={`/profile/${playlistOwner.profile.slug}`} className="text-blue-500 hover:underline">{playlistOwner.profile.displayName}</Link>
+            </p>
+          )}
           <p className="text-lg text-gray-600 mb-4">
             {playlist.isPublic ? 'Public Playlist' : 'Private Playlist'}
           </p>

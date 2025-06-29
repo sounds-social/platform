@@ -223,3 +223,21 @@ If the user is not logged in and goes to "/" they will be redirected to "/about"
 ### Likes
 
 Users can like and unlike sounds (Sound.jsx). The likes are displayed on the profile page (Profile.jsx) from newest like to oldest. By default it's 4 sounds that are displayed in a square forma on the profile page. There's a load more button that displays all the likes with the SoundList component on a separate page.
+
+
+### Search
+
+Users should be able to search the platform for sounds if they want to.
+
+* Add a search bar to the Navbar.jsx. Put it to the right of the "Upload" menu item.
+* If the user presses enter in the input it should load a new page called "Search Results":
+  * The page filters (fuzzy search) through following fields:
+    * Title
+    * Description
+    * Tags
+  * The page uses the SoundList.jsx component to render each sound
+  * By default it searches through sounds but there's a button on the page that switches to search for users:
+    * Users are filtered (fuzzy search) by their "Display name"
+    * Users list is a list with the "display name" as the title and a square format of their avatar image
+* Display the tags (only if not empty) inside the Sound.jsx page.
+  * When a single tag is clicked on it should load the Search Results page with the content of that tag

@@ -13,6 +13,10 @@ Meteor.publish('playlists.publicPlaylists', function publishPublicPlaylists() {
   return PlaylistsCollection.find({ isPublic: true });
 });
 
+Meteor.publish('playlists.allPublicPlaylists', function publishAllPublicPlaylists() {
+  return PlaylistsCollection.find({ isPublic: true });
+});
+
 Meteor.publish('playlists.singlePlaylist', function publishSinglePlaylist(playlistId) {
   check(playlistId, String);
   return PlaylistsCollection.find({ _id: playlistId });

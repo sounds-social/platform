@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { Link, useHistory } from 'react-router-dom';
+import { FiMenu, FiX, FiSearch } from 'react-icons/fi';
 
 const Navbar = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const history = useHistory();
 
   const handleDropdownClick = () => setIsOpen(false);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      history.push(`/search?q=${searchTerm}`);
+      setIsOpen(false);
+    }
+  };
 
   const loggedInLinks = (
     <>
@@ -50,8 +60,26 @@ const Navbar = ({ user }) => {
           <div className="flex items-center">
             <Link onClick={handleDropdownClick} to="/" className="text-xl font-bold text-blue-500">Sounds Social</Link>
             <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                {user ? loggedInLinks : loggedOutLinks}
+              <div className="ml-10 flex items-baseline">
+                {user ? (
+                  <>
+                    <div className="flex items-baseline space-x-4">
+                      {loggedInLinks}
+                    </div>
+                    <form onSubmit={handleSearch} className="flex items-center ml-4">
+                      <input
+                        type="text"
+                        placeholder="Search"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="px-3 py-2 rounded-l-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+                      />
+                      <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-r-md text-sm font-medium h-[38px] cursor-pointer">
+                        <FiSearch />
+                      </button>
+                    </form>
+                  </>
+                ) : loggedOutLinks}
               </div>
             </div>
           </div>
