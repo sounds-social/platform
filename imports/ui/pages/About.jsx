@@ -22,7 +22,7 @@ const About = () => {
           </div>
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
             <FiDollarSign className="text-5xl text-blue-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Monetization</h2>
+            <h2 className="text-2xl font-bold mb-2">Monetization <br /><span className="text-gray-400 text-xl">(coming soon)</span></h2>
             <p className="text-gray-600">Monetize your work by receiving support from your fans.</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
