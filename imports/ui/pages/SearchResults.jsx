@@ -3,7 +3,9 @@ import { useLocation, Link } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
+import { PlaylistsCollection as Playlists } from '../../api/playlists';
 import SoundList from '../components/SoundList';
+import PlaylistList from '../components/PlaylistList';
 import Fuse from 'fuse.js';
 
 const SearchResults = () => {
@@ -11,15 +13,17 @@ const SearchResults = () => {
   const searchQuery = new URLSearchParams(location.search).get('q');
   const [searchType, setSearchType] = useState('sounds'); // 'sounds' or 'users'
 
-  const { sounds, users, loading } = useTracker(() => {
-    const noDataAvailable = { sounds: [], users: [], loading: true };
+  const { sounds, users, playlists, loading } = useTracker(() => {
+    const noDataAvailable = { sounds: [], users: [], playlists: [], loading: true };
     const soundsHandle = Meteor.subscribe('sounds.public');
     const usersHandle = Meteor.subscribe('users.public');
+    const playlistsHandle = Meteor.subscribe('playlists.allPublicPlaylists');
 
-    if (!soundsHandle.ready() || !usersHandle.ready()) return noDataAvailable;
+    if (!soundsHandle.ready() || !usersHandle.ready() || !playlistsHandle.ready()) return noDataAvailable;
 
     const allSounds = Sounds.find({}).fetch();
     const allUsers = Meteor.users.find({}).fetch();
+    const allPlaylists = Playlists.find({ isPublic: true }).fetch();
 
     const fuseSounds = new Fuse(allSounds, {
       keys: ['title', 'description', 'tags'],
@@ -31,8 +35,14 @@ const SearchResults = () => {
       threshold: 0.3,
     });
 
+    const fusePlaylists = new Fuse(allPlaylists, {
+      keys: ['name'],
+      threshold: 0.3,
+    });
+
     const filteredSounds = searchQuery ? fuseSounds.search(searchQuery).map(result => result.item) : [];
     const filteredUsers = searchQuery ? fuseUsers.search(searchQuery).map(result => result.item) : [];
+    const filteredPlaylists = searchQuery ? fusePlaylists.search(searchQuery).map(result => result.item) : [];
 
     const soundsWithUserData = filteredSounds.map(sound => {
       const soundUser = Meteor.users.findOne({ _id: sound.userId }, { fields: { 'profile.displayName': 1, 'profile.slug': 1 } });
@@ -43,7 +53,7 @@ const SearchResults = () => {
       };
     });
 
-    return { sounds: soundsWithUserData, users: filteredUsers, loading: false };
+    return { sounds: soundsWithUserData, users: filteredUsers, playlists: filteredPlaylists, loading: false };
   }, [searchQuery]);
 
   if (loading) {
@@ -70,6 +80,14 @@ const SearchResults = () => {
           }`}
         >
           Users
+        </button>
+        <button
+          onClick={() => setSearchType('playlists')}
+          className={`px-4 py-2 rounded-md font-semibold ${
+            searchType === 'playlists' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
+          }`}
+        >
+          Playlists
         </button>
       </div>
 
@@ -100,6 +118,10 @@ const SearchResults = () => {
             </div>
           )}
         </div>
+      )}
+
+      {searchType === 'playlists' && (
+        <PlaylistList playlists={playlists} loading={loading} noPlaylistsMessage="No playlists found matching your search." />
       )}
     </div>
   );

@@ -10,25 +10,28 @@ const Playlist = () => {
   const { playlistId } = useParams();
   const isLikesPlaylist = playlistId === 'likes';
 
-  const { playlist, sounds, loading } = useTracker(() => {
-    const noDataAvailable = { playlist: null, sounds: [], loading: true };
+  const { playlist, sounds, loading, playlistOwner } = useTracker(() => {
+    const noDataAvailable = { playlist: null, sounds: [], loading: true, playlistOwner: null };
     const soundsHandle = Meteor.subscribe('sounds.public');
-    const usersHandle = Meteor.subscribe('users.me');
+    const usersHandle = Meteor.subscribe('users.public');
 
     let playlistData = null;
     let soundIds = [];
+    let ownerId = null;
 
     if (isLikesPlaylist) {
       const user = Meteor.user();
       if (!user) return noDataAvailable;
       playlistData = { _id: 'likes', name: 'Liked Sounds', isPublic: false, sounds: user.profile?.likes || [] };
       soundIds = user.profile?.likes || [];
+      ownerId = user._id;
     } else {
-      const playlistHandle = Meteor.subscribe('playlists.own');
+      const playlistHandle = Meteor.subscribe('playlists.singlePlaylist', playlistId);
       if (!playlistHandle.ready()) return noDataAvailable;
       playlistData = Playlists.findOne(playlistId);
       if (playlistData) {
         soundIds = playlistData.sounds || [];
+        ownerId = playlistData.ownerId;
       }
     }
 
@@ -44,7 +47,9 @@ const Playlist = () => {
       };
     });
 
-    return { playlist: playlistData, sounds: soundsWithUserData, loading: !ready };
+    const owner = ownerId ? Meteor.users.findOne(ownerId) : null;
+
+    return { playlist: playlistData, sounds: soundsWithUserData, loading: !ready, playlistOwner: owner };
   }, [playlistId]);
 
   if (loading) {
@@ -59,6 +64,11 @@ const Playlist = () => {
     <div className="py-8">
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <h1 className="text-3xl font-extrabold text-gray-900">{playlist.name}</h1>
+        {!isLikesPlaylist && playlistOwner && (
+          <p className="text-lg text-gray-600 mt-2">
+            by <Link to={`/profile/${playlistOwner.profile.slug}`} className="text-blue-500 hover:underline">{playlistOwner.profile.displayName}</Link>
+          </p>
+        )}
         {!isLikesPlaylist && (
           <p className="text-gray-600 text-lg mt-2">{playlist.isPublic ? 'Public' : 'Private'} Playlist</p>
         )}
