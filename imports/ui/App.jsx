@@ -26,6 +26,7 @@ import Home from './pages/Home';
 import Hot from './pages/Hot';
 import Explore from './pages/Explore';
 import NotFound from './pages/NotFound';
+import SearchResults from './pages/SearchResults';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -62,6 +63,7 @@ export const App = () => {
         <Route path="/group/:slug" component={Group} />
         <Route path="/hot" component={Hot} />
         <Route path="/explore" component={Explore} />
+        <Route path="/search" component={SearchResults} />
         <Route path="/terms-of-service" component={TermsOfService} />
         <Route path="/logout" component={() => {
           Meteor.logout();

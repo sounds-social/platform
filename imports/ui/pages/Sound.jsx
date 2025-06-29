@@ -109,6 +109,20 @@ const Sound = () => {
           </p>
           <p className="text-gray-700 mt-4">{sound.description}</p>
 
+          {sound.tags && sound.tags.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {sound.tags.map((tag, index) => (
+                <Link
+                  key={index}
+                  to={`/search?q=${tag}`}
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium px-3 py-1 rounded-full transition duration-200"
+                >
+                  #{tag}
+                </Link>
+              ))}
+            </div>
+          )}
+
           <div className="flex items-center space-x-6 mt-6">
             <div className="flex items-center text-gray-600">
               <FiPlay className="mr-2 text-xl" />
