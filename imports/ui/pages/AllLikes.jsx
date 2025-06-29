@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
@@ -42,7 +42,9 @@ const AllLikes = () => {
 
   return (
     <div className="py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">All Liked Sounds by {user.profile.displayName}</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+        All Liked Sounds by <Link to={`/profile/${user.profile.slug}`} className="text-blue-500 hover:underline">{user.profile.displayName}</Link>
+      </h1>
       <SoundList sounds={likedSounds} loading={loading} noSoundsMessage="No liked sounds yet." />
     </div>
   );

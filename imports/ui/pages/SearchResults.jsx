@@ -44,6 +44,15 @@ const SearchResults = () => {
     const filteredUsers = searchQuery ? fuseUsers.search(searchQuery).map(result => result.item) : [];
     const filteredPlaylists = searchQuery ? fusePlaylists.search(searchQuery).map(result => result.item) : [];
 
+    const playlistsWithUserData = filteredPlaylists.map(playlist => {
+      const playlistUser = Meteor.users.findOne({ _id: playlist.ownerId }, { fields: { 'profile.displayName': 1, 'profile.slug': 1 } });
+      return {
+        ...playlist,
+        ownerName: playlistUser ? playlistUser.profile.displayName : 'Unknown',
+        ownerSlug: playlistUser ? playlistUser.profile.slug : 'unknown',
+      };
+    });
+
     const soundsWithUserData = filteredSounds.map(sound => {
       const soundUser = Meteor.users.findOne({ _id: sound.userId }, { fields: { 'profile.displayName': 1, 'profile.slug': 1 } });
       return {
@@ -53,7 +62,7 @@ const SearchResults = () => {
       };
     });
 
-    return { sounds: soundsWithUserData, users: filteredUsers, playlists: filteredPlaylists, loading: false };
+    return { sounds: soundsWithUserData, users: filteredUsers, playlists: playlistsWithUserData, loading: false };
   }, [searchQuery]);
 
   if (loading) {

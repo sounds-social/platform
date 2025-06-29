@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { PlaylistsCollection as Playlists } from '../../api/playlists';
@@ -45,7 +45,9 @@ const AllPlaylists = () => {
 
   return (
     <div className="py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">All Playlists by {user.profile.displayName}</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+        All Playlists by <Link to={`/profile/${user.profile.slug}`} className="text-blue-500 hover:underline">{user.profile.displayName}</Link>
+      </h1>
       <PlaylistList playlists={playlists} loading={loading} noPlaylistsMessage="No playlists found." />
     </div>
   );

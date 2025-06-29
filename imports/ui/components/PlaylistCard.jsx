@@ -15,6 +15,10 @@ const PlaylistCard = ({ playlist }) => {
       </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-800">{playlist.name}</h3>
+        {playlist.ownerName && (<p className="text-sm text-gray-600">
+          by <Link to={`/profile/${playlist.ownerSlug}`} className="text-blue-500 hover:underline">{playlist.ownerName}</Link>
+        </p>)}
+        
         <p className="text-sm text-gray-600">{playlist.soundIds?.length} {playlist.soundIds?.length === 1 ? 'sound' : 'sounds'}</p>
       </div>
     </Link>
