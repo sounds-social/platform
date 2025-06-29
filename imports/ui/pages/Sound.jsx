@@ -32,6 +32,7 @@ const Sound = () => {
       return {
         ...comment,
         userName: commentUser ? commentUser.profile.displayName : 'Anonymous',
+        userSlug: commentUser ? commentUser.profile.slug : 'unknown',
       };
     }).reverse();
 
@@ -193,7 +194,11 @@ const Sound = () => {
             {comments.map(comment => (
               <div key={comment._id} className="bg-gray-50 p-4 rounded-lg shadow-sm">
                 <div className="flex items-center mb-2">
-                  <p className="font-semibold text-gray-800">{comment.userName}</p>
+                  <p className="font-semibold text-gray-800">
+                    <Link to={`/profile/${comment.userSlug}`} className="text-blue-500 hover:underline">
+                      {comment.userName}
+                    </Link>
+                  </p>
                   <span className="ml-auto text-sm text-gray-500">{new Date(comment.createdAt).toString()}</span>
                 </div>
                 <p className="text-gray-700">{comment.content}</p>

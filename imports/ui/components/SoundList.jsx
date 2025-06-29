@@ -13,7 +13,11 @@ const SoundList = ({ sounds, loading, noSoundsMessage }) => {
   }
 
   if (sounds.length === 0) {
-    return <div className="text-center py-8 text-gray-600">{noSoundsMessage}</div>;
+    return (
+      <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+        <span className="block sm:inline">{noSoundsMessage}</span>
+      </div>
+    );
   }
 
   const soundsToDisplay = sounds.slice(0, displayLimit);

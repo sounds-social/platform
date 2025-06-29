@@ -37,7 +37,7 @@ const Home = () => {
     <div className="my-8">
       <h2 className="text-3xl font-bold text-gray-800 mb-2">Latest Sounds</h2>
       <p className="text-gray-500 mb-6">See the latest sounds from users you follow and your own uploads.</p>
-      <SoundList sounds={sounds} loading={loading} noSoundsMessage="No sounds to display. Upload your first sound or follow other users." />
+      <SoundList sounds={sounds} loading={loading} noSoundsMessage="No sounds found. Upload your first sound or follow other users." />
     </div>
   );
 };
