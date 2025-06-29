@@ -29,15 +29,17 @@ import NotFound from './pages/NotFound';
 
 // Import components
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import TermsOfService from './pages/TermsOfService';
 
 export const App = () => {
   const user = useTracker(() => Meteor.user());
 
   return (
     <Router>
-      <div className="bg-gray-50 min-h-screen">
+      <div className="bg-gray-50 min-h-screen flex flex-col">
         <Navbar user={user} />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
           <Switch>
             <Route exact path="/" component={user ? Home : About} />
         <Route path="/sign-in" component={SignIn} />
@@ -60,6 +62,7 @@ export const App = () => {
         <Route path="/group/:slug" component={Group} />
         <Route path="/hot" component={Hot} />
         <Route path="/explore" component={Explore} />
+        <Route path="/terms-of-service" component={TermsOfService} />
         <Route path="/logout" component={() => {
           Meteor.logout();
           window.location.href = '/';
@@ -68,6 +71,7 @@ export const App = () => {
         <Route component={NotFound} />
       </Switch>
         </main>
+        <Footer />
       </div>
     </Router>
   );
