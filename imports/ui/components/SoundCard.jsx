@@ -45,13 +45,13 @@ const SoundCard = ({ sound }) => {
           </div>
         </div>
       ) : (
-        <div className="flex">
-          <div className="w-1/6 aspect-square bg-gray-200 flex-shrink-0">
+        <div className="flex h-48">
+          <div className="h-full aspect-square bg-gray-200 flex-shrink-0">
             {sound.coverImage && (
               <img src={sound.coverImage} alt={sound.title} className="w-full h-full object-cover" />
             )}
           </div>
-          <div className="w-5/6 p-4 flex flex-col justify-between">
+          <div className="flex-grow p-4 flex flex-col justify-between">
             <div>
               <h3 className="text-lg font-semibold text-gray-800">
                 {sound.title}
