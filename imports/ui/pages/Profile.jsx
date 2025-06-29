@@ -204,10 +204,10 @@ const Profile = () => {
               <p className="text-gray-800 font-semibold">{user.profile.follows?.length || 0}</p>
               <p className="text-gray-500 text-sm">Following</p>
             </div>
-            <div>
+            {/* <div>
               <p className="text-gray-800 font-semibold">{user.profile.supports?.length || 0}</p>
               <p className="text-gray-500 text-sm">Supporters</p>
-            </div>
+            </div> */}
           </div>
           {!isCurrentUser && Meteor.userId() && (
             <div className="mt-6 flex justify-center md:justify-start space-x-4">
@@ -217,12 +217,12 @@ const Profile = () => {
               >
                 {isFollowing ? 'Unfollow' : 'Follow'}
               </button>
-              <button
+              {/* <button
                 onClick={handleSupportClick}
                 className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
               >
                 Support
-              </button>
+              </button> */}
             </div>
           )}
           {isCurrentUser && (
