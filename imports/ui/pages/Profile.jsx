@@ -17,6 +17,7 @@ const Profile = () => {
   const { slug } = useParams();
   const history = useHistory();
   const [showSupportModal, setShowSupportModal] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const { usersBeingFollowed, user, sounds, playlists, comments, groups, loading, likedSounds, totalLikedSoundsCount, totalCommentsCount, totalPlaylistsCount } = useTracker(() => {
     const noDataAvailable = { user: null, sounds: [], playlists: [], comments: [], groups: [], loading: true, likedSounds: [] };
@@ -255,6 +256,16 @@ const Profile = () => {
               >
                 Support
               </button> */}
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/profile/${user.profile.slug}`);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                }}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md"
+              >
+                {copied ? 'Copied!' : 'Share'}
+              </button>
             </div>
           )}
           {isCurrentUser && (
@@ -262,6 +273,16 @@ const Profile = () => {
               <Link to="/profile/settings" className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md">
                 Edit Profile
               </Link>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/profile/${user.profile.slug}`);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                }}
+                className="ml-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md"
+              >
+                {copied ? 'Copied!' : 'Share'}
+              </button>
             </div>
           )}
         </div>

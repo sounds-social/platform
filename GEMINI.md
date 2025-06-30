@@ -253,3 +253,9 @@ Each user can add social links to their profile. The links are editable in the P
 * Website (their own website)
 
 The links are displayed with icons in their profile. 
+
+### Profile Slug
+
+Add a slug (called "Profile URL") to the ProfileSettings.jsx which is used to route the "/profile/:slug" page. The slug has to be unique and in the form there's a checkmark / "X" icon which shows if the currently provided slug is available (create a Meteor.method that checks the slug for its uniqueness).
+
+Also if the current user is vieweing their own profile, add a button called "Share" which copies the "/profile/:slug" route to the clipboard.

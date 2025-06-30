@@ -7,6 +7,10 @@ Meteor.methods({
     check(displayName, String);
     if (slug !== undefined) {
       check(slug, String);
+      const user = await Meteor.users.findOneAsync({ 'profile.slug': slug });
+      if (user && user._id !== this.userId) {
+        throw new Meteor.Error('slug-already-exists', 'This slug is already in use.');
+      }
     }
     if (avatar !== undefined) {
       check(avatar, String);

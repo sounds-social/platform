@@ -92,7 +92,6 @@ const ProfileSettings = () => {
               </div>
             </div>
 
-            {/*
             <div>
               <label htmlFor="slug" className="block text-sm font-medium text-gray-700">Profile Slug (e.g. /profile/<span className="font-bold">my-awesome-slug</span>)</label>
               <div className="mt-1">
@@ -107,7 +106,6 @@ const ProfileSettings = () => {
                 />
               </div>
             </div>
-            */}
 
             <div>
               <label htmlFor="avatar" className="block text-sm font-medium text-gray-700">Avatar Image</label>
