@@ -200,7 +200,7 @@ const Profile = () => {
           <div className="flex justify-center md:justify-start space-x-6 mt-4">
             <div>
               <p className="text-gray-800 font-semibold">{usersBeingFollowed.length || 0}</p>
-              <p className="text-gray-500 text-sm">Followers</p>
+              <p className="text-gray-500 text-sm">{usersBeingFollowed.length === 1 ? 'Follower': 'Followers'}</p>
             </div>
             <div>
               <p className="text-gray-800 font-semibold">{user.profile.follows?.length || 0}</p>
