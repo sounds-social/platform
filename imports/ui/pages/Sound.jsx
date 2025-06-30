@@ -149,22 +149,26 @@ const Sound = ({ setCurrentPlayingSound }) => {
             >
               <FiPlay className="mr-2" /> Play
             </button>
-            <button
-              onClick={handleLike}
-              className={`flex items-center font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0 ${
-                userHasLiked
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                  : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-              }`}
-            >
-              <FiHeart className={`mr-2 ${userHasLiked ? 'fill-current' : ''}`} /> {userHasLiked ? 'Unlike' : 'Like'}
-            </button>
-            <button
-              onClick={() => setIsAddPlaylistModalOpen(true)}
-              className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
-            >
-              <FiPlus className="mr-2" /> Add to Playlist
-            </button>
+            {Meteor.userId() && (
+              <button
+                onClick={handleLike}
+                className={`flex items-center font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0 ${
+                  userHasLiked
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                    : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+                }`}
+              >
+                <FiHeart className={`mr-2 ${userHasLiked ? 'fill-current' : ''}`} /> {userHasLiked ? 'Unlike' : 'Like'}
+              </button>
+            )}
+            {Meteor.userId() && (
+              <button
+                onClick={() => setIsAddPlaylistModalOpen(true)}
+                className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
+              >
+                <FiPlus className="mr-2" /> Add to Playlist
+              </button>
+            )}
             {Meteor.userId() === sound.userId && (
               <Link
                 to={`/sounds/${soundId}/edit`}
