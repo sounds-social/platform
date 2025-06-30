@@ -14,6 +14,7 @@ const Sound = ({ setCurrentPlayingSound }) => {
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
+  const [canPlay, setCanPlay] = useState(true);
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
     const noDataAvailable = { sound: null, comments: [], loading: true, userHasLiked: false };
@@ -47,9 +48,13 @@ const Sound = ({ setCurrentPlayingSound }) => {
   }, [soundId]);
 
   const handlePlay = () => {
-    if (sound) {
+    if (sound && canPlay) {
+      setCanPlay(false);
       Meteor.call('sounds.incrementPlayCount', soundId);
       setCurrentPlayingSound(sound.audioFile);
+      setTimeout(() => {
+        setCanPlay(true);
+      }, 5000);
     }
   };
 
