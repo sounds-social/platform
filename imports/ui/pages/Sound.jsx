@@ -193,22 +193,23 @@ const Sound = ({ setCurrentPlayingSound }) => {
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Comments</h2>
 
-        {/* Comment Form */}
-        <form onSubmit={handleAddComment} className="mb-8">
-          <textarea
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            rows="3"
-            placeholder="Add a comment..."
-            value={commentContent}
-            onChange={(e) => setCommentContent(e.target.value)}
-          ></textarea>
-          <button
-            type="submit"
-            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
-          >
-            Post Comment
-          </button>
-        </form>
+        {Meteor.userId() && (
+          <form onSubmit={handleAddComment} className="mb-8">
+            <textarea
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              rows="3"
+              placeholder="Add a comment..."
+              value={commentContent}
+              onChange={(e) => setCommentContent(e.target.value)}
+            ></textarea>
+            <button
+              type="submit"
+              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
+            >
+              Post Comment
+            </button>
+          </form>
+        )}
 
         {/* Comment List */}
         {comments.length > 0 ? (
