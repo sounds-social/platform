@@ -78,7 +78,7 @@ export const App = () => {
       </Switch>
         </main>
         {currentPlayingSound && (
-          <AudioPlayer src={currentPlayingSound} onClose={() => setCurrentPlayingSound(null)} />
+          <AudioPlayer src={currentPlayingSound.src} title={currentPlayingSound.title} soundId={currentPlayingSound.id} onClose={() => setCurrentPlayingSound(null)} />
         )}
         <Footer />
       </div>

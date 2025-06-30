@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { FiPlay, FiPause, FiX } from 'react-icons/fi';
 
-const AudioPlayer = ({ src, onClose }) => {
+const AudioPlayer = ({ src, title, soundId, onClose }) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -59,7 +60,7 @@ const AudioPlayer = ({ src, onClose }) => {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 flex items-center justify-between shadow-lg">
+    <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-6 flex items-center justify-between shadow-lg">
       <audio
         ref={audioRef}
         onTimeUpdate={handleTimeUpdate}
@@ -71,7 +72,14 @@ const AudioPlayer = ({ src, onClose }) => {
         <button onClick={togglePlayPause} className="p-2 rounded-full bg-blue-500 hover:bg-blue-600">
           {isPlaying ? <FiPause size={24} /> : <FiPlay size={24} />}
         </button>
-        <div className="flex-grow flex items-center space-x-2">
+        <div className="flex-grow flex items-center space-x-4">
+          {title && soundId && (
+            <div className="grow">
+              <Link to={`/sound/${soundId}`} className="text-blue-300 hover:underline text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis block">
+                {title}
+              </Link>
+            </div>
+          )}
           <span>{formatTime(currentTime)}</span>
           <input
             type="range"
