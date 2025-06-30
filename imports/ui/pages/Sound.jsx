@@ -138,16 +138,16 @@ const Sound = () => {
             </div>
           </div>
 
-          <div className="mt-8 flex space-x-4">
+          <div className="mt-8 flex flex-wrap">
             <button
               onClick={handlePlay}
-              className="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-200"
+              className="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4"
             >
               <FiPlay className="mr-2" /> Play
             </button>
             <button
               onClick={handleLike}
-              className={`flex items-center font-bold py-3 px-6 rounded-md transition duration-200 ${
+              className={`flex items-center font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 ${
                 userHasLiked
                   ? 'bg-blue-600 hover:bg-blue-700 text-white'
                   : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
@@ -157,14 +157,14 @@ const Sound = () => {
             </button>
             <button
               onClick={() => setIsAddPlaylistModalOpen(true)}
-              className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200"
+              className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4"
             >
               <FiPlus className="mr-2" /> Add to Playlist
             </button>
             {Meteor.userId() === sound.userId && (
               <Link
                 to={`/sounds/${soundId}/edit`}
-                className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200"
+                className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4"
               >
                 <FiEdit className="mr-2" /> Edit
               </Link>
@@ -172,7 +172,7 @@ const Sound = () => {
             {Meteor.userId() === sound.userId && (
               <button
                 onClick={handleRemove}
-                className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition duration-200"
+                className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4"
               >
                 <FiTrash2 className="mr-2" /> Remove
               </button>
