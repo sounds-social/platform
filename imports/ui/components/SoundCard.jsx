@@ -37,9 +37,9 @@ const SoundCard = ({ sound }) => {
                 {sound.title}
               </h3>
               <p className="text-sm text-shadow-sm">
-                <a onClick={handleUserClick} className="hover:underline cursor-pointer">
+                <span onClick={handleUserClick} className="hover:underline cursor-pointer">
                   {sound.userName}
-                </a>
+                </span>
               </p>
             </div>
           </div>
@@ -57,9 +57,9 @@ const SoundCard = ({ sound }) => {
                 {sound.title}
               </h3>
               <p className="text-sm text-gray-600">
-                <a onClick={handleUserClick} className="hover:underline cursor-pointer">
+                <span onClick={handleUserClick} className="hover:underline cursor-pointer">
                   {sound.userName}
-                </a>
+                </span>
               </p>
             </div>
             <div className="flex items-center space-x-4 mt-2">

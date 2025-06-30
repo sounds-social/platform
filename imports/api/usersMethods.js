@@ -3,13 +3,28 @@ import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 
 Meteor.methods({
-  async 'users.updateProfile'(displayName, slug, avatar) {
+  async 'users.updateProfile'(displayName, slug, avatar, youtube, twitter, spotify, instagram, website) {
     check(displayName, String);
     if (slug !== undefined) {
       check(slug, String);
     }
     if (avatar !== undefined) {
       check(avatar, String);
+    }
+    if (youtube !== undefined) {
+      check(youtube, String);
+    }
+    if (twitter !== undefined) {
+      check(twitter, String);
+    }
+    if (spotify !== undefined) {
+      check(spotify, String);
+    }
+    if (instagram !== undefined) {
+      check(instagram, String);
+    }
+    if (website !== undefined) {
+      check(website, String);
     }
 
     if (!this.userId) {
@@ -21,6 +36,11 @@ Meteor.methods({
         'profile.displayName': displayName,
         ...(slug !== undefined && { 'profile.slug': slug }),
         ...(avatar !== undefined && { 'profile.avatar': avatar }),
+        ...(youtube !== undefined && { 'profile.youtube': youtube }),
+        ...(twitter !== undefined && { 'profile.twitter': twitter }),
+        ...(spotify !== undefined && { 'profile.spotify': spotify }),
+        ...(instagram !== undefined && { 'profile.instagram': instagram }),
+        ...(website !== undefined && { 'profile.website': website }),
       },
     });
   },

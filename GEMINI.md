@@ -241,3 +241,15 @@ Users should be able to search the platform for sounds if they want to.
     * Users list is a list with the "display name" as the title and a square format of their avatar image
 * Display the tags (only if not empty) inside the Sound.jsx page.
   * When a single tag is clicked on it should load the Search Results page with the content of that tag
+
+### Social Links
+
+Each user can add social links to their profile. The links are editable in the Profile settings. The link fields are:
+
+* YouTube
+* X (formerly Twitter)
+* Spotify
+* Instagram
+* Website (their own website)
+
+The links are displayed with icons in their profile. 

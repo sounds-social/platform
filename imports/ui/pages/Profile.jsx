@@ -8,6 +8,7 @@ import { Sounds } from '../../api/sounds';
 import { PlaylistsCollection as Playlists } from '../../api/playlists';
 import { Comments } from '../../api/comments';
 import { Groups } from '../../api/groups';
+import { FaYoutube, FaTwitter, FaSpotify, FaInstagram, FaGlobe } from 'react-icons/fa';
 import SoundList from '../components/SoundList';
 import SupportModal from '../components/SupportModal';
 
@@ -157,6 +158,7 @@ const Profile = () => {
 
   const isCurrentUser = Meteor.userId() === user._id;
   const isFollowing = Meteor.user()?.profile?.follows?.includes(user._id);
+  const hasSocialLinks = user.profile.website || user.profile.youtube || user.profile.twitter || user.profile.instagram || user.profile.spotify;
 
   const handleSupportClick = () => {
     setShowSupportModal(true);
@@ -209,6 +211,35 @@ const Profile = () => {
               <p className="text-gray-500 text-sm">Supporters</p>
             </div> */}
           </div>
+          {hasSocialLinks && (
+            <div className="flex justify-center md:justify-start space-x-4 mt-4">
+              {user.profile.website && (
+                <a href={user.profile.website} target="_blank" rel="noopener noreferrer">
+                  <FaGlobe className="text-gray-500 hover:text-gray-700" size={24} />
+                </a>
+              )}
+              {user.profile.youtube && (
+                <a href={user.profile.youtube} target="_blank" rel="noopener noreferrer">
+                  <FaYoutube className="text-red-600 hover:text-red-800" size={24} />
+                </a>
+              )}
+              {user.profile.twitter && (
+                <a href={user.profile.twitter} target="_blank" rel="noopener noreferrer">
+                  <FaTwitter className="text-blue-400 hover:text-blue-600" size={24} />
+                </a>
+              )}
+              {user.profile.instagram && (
+                <a href={user.profile.instagram} target="_blank" rel="noopener noreferrer">
+                  <FaInstagram className="text-pink-500 hover:text-pink-700" size={24} />
+                </a>
+              )}
+              {user.profile.spotify && (
+                <a href={user.profile.spotify} target="_blank" rel="noopener noreferrer">
+                  <FaSpotify className="text-green-500 hover:text-green-700" size={24} />
+                </a>
+              )}
+            </div>
+          )}
           {!isCurrentUser && Meteor.userId() && (
             <div className="mt-6 flex justify-center md:justify-start space-x-4">
               <button

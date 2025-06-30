@@ -8,6 +8,11 @@ const ProfileSettings = () => {
   const [displayName, setDisplayName] = useState('');
   const [slug, setSlug] = useState('');
   const [avatar, setAvatar] = useState('');
+  const [youtube, setYoutube] = useState('');
+  const [twitter, setTwitter] = useState('');
+  const [spotify, setSpotify] = useState('');
+  const [instagram, setInstagram] = useState('');
+  const [website, setWebsite] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [error, setError] = useState('');
@@ -18,6 +23,11 @@ const ProfileSettings = () => {
       setDisplayName(user.profile?.displayName || '');
       setSlug(user.profile?.slug || '');
       setAvatar(user.profile?.avatar || '');
+      setYoutube(user.profile?.youtube || '');
+      setTwitter(user.profile?.twitter || '');
+      setSpotify(user.profile?.spotify || '');
+      setInstagram(user.profile?.instagram || '');
+      setWebsite(user.profile?.website || '');
     }
   }, [user]);
 
@@ -25,7 +35,7 @@ const ProfileSettings = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    Meteor.callAsync('users.updateProfile', displayName, slug, avatar)
+    Meteor.callAsync('users.updateProfile', displayName, slug, avatar, youtube, twitter, spotify, instagram, website)
       .then(() => setSuccess('Profile updated successfully.'))
       .catch(err => setError(err.reason));
   };
@@ -108,7 +118,77 @@ const ProfileSettings = () => {
             </div>
 
             <div>
-              <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <label htmlFor="website" className="block text-sm font-medium text-gray-700">Website</label>
+              <div className="mt-1">
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="youtube" className="block text-sm font-medium text-gray-700">YouTube</label>
+              <div className="mt-1">
+                <input
+                  id="youtube"
+                  name="youtube"
+                  type="text"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  value={youtube}
+                  onChange={(e) => setYoutube(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="twitter" className="block text-sm font-medium text-gray-700">X (formerly Twitter)</label>
+              <div className="mt-1">
+                <input
+                  id="twitter"
+                  name="twitter"
+                  type="text"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  value={twitter}
+                  onChange={(e) => setTwitter(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="instagram" className="block text-sm font-medium text-gray-700">Instagram</label>
+              <div className="mt-1">
+                <input
+                  id="instagram"
+                  name="instagram"
+                  type="text"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  value={instagram}
+                  onChange={(e) => setInstagram(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="spotify" className="block text-sm font-medium text-gray-700">Spotify</label>
+              <div className="mt-1">
+                <input
+                  id="spotify"
+                  name="spotify"
+                  type="text"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  value={spotify}
+                  onChange={(e) => setSpotify(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <button onClick={() => window.scrollTo(0,0)} type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 Update Profile
               </button>
             </div>

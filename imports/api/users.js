@@ -34,6 +34,26 @@ const UserProfileSchema = new SimpleSchema({
   'followers.$': {
     type: String,
   },
+  youtube: {
+    type: String,
+    optional: true,
+  },
+  twitter: {
+    type: String,
+    optional: true,
+  },
+  spotify: {
+    type: String,
+    optional: true,
+  },
+  instagram: {
+    type: String,
+    optional: true,
+  },
+  website: {
+    type: String,
+    optional: true,
+  },
 });
 
 const UserSchema = new SimpleSchema({
