@@ -60,7 +60,7 @@ const AudioPlayer = ({ src, title, soundId, onClose }) => {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-6 flex items-center justify-between shadow-lg">
+    <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-3 flex items-center justify-between shadow-lg">
       <audio
         ref={audioRef}
         onTimeUpdate={handleTimeUpdate}
