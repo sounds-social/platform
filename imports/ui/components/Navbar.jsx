@@ -79,7 +79,11 @@ const Navbar = ({ user }) => {
                       </button>
                     </form>
                   </>
-                ) : loggedOutLinks}
+                ) : (
+                  <div className="flex items-baseline space-x-4">
+                    {loggedOutLinks}
+                  </div>
+                )}
               </div>
             </div>
           </div>
