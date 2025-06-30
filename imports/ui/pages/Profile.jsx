@@ -8,7 +8,8 @@ import { Sounds } from '../../api/sounds';
 import { PlaylistsCollection as Playlists } from '../../api/playlists';
 import { Comments } from '../../api/comments';
 import { Groups } from '../../api/groups';
-import { FaYoutube, FaTwitter, FaSpotify, FaInstagram, FaGlobe } from 'react-icons/fa';
+import { FaYoutube, FaSpotify, FaInstagram, FaGlobe } from 'react-icons/fa';
+import { BsTwitterX } from 'react-icons/bs';
 import SoundList from '../components/SoundList';
 import SupportModal from '../components/SupportModal';
 
@@ -225,7 +226,7 @@ const Profile = () => {
               )}
               {user.profile.twitter && (
                 <a href={user.profile.twitter} target="_blank" rel="noopener noreferrer">
-                  <FaTwitter className="text-blue-400 hover:text-blue-600" size={24} />
+                  <BsTwitterX className="text-gray-500 hover:text-gray-700" size={24} />
                 </a>
               )}
               {user.profile.instagram && (
