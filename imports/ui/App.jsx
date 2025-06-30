@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
@@ -31,10 +31,12 @@ import SearchResults from './pages/SearchResults';
 // Import components
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import AudioPlayer from './components/AudioPlayer';
 import TermsOfService from './pages/TermsOfService';
 
 export const App = () => {
   const user = useTracker(() => Meteor.user());
+  const [currentPlayingSound, setCurrentPlayingSound] = useState(null);
 
   return (
     <Router>
@@ -55,7 +57,9 @@ export const App = () => {
         <Route path="/support-overview" component={SupportOverview} />
         <Route path="/sound/add" component={SoundAdd} />
         <Route path="/sounds/:soundId/edit" component={SoundEdit} />
-        <Route path="/sound/:soundId" component={Sound} />
+        <Route path="/sound/:soundId">
+          <Sound setCurrentPlayingSound={setCurrentPlayingSound} />
+        </Route>
         <Route path="/playlist/:playlistId/edit" component={PlaylistFormPage} />
         <Route path="/playlist/:playlistId" component={PlaylistDetailPage} />
         <Route path="/likes" component={Likes} />
@@ -73,6 +77,9 @@ export const App = () => {
         <Route component={NotFound} />
       </Switch>
         </main>
+        {currentPlayingSound && (
+          <AudioPlayer src={currentPlayingSound} onClose={() => setCurrentPlayingSound(null)} />
+        )}
         <Footer />
       </div>
     </Router>

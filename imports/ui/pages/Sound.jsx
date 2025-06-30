@@ -8,12 +8,11 @@ import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2 } from 'reac
 import AudioPlayer from '../components/AudioPlayer';
 import AddPlaylistModal from '../components/AddPlaylistModal';
 
-const Sound = () => {
+const Sound = ({ setCurrentPlayingSound }) => {
   const { soundId } = useParams();
   const history = useHistory();
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
-  const [currentPlayingSound, setCurrentPlayingSound] = useState(null);
   const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
@@ -141,13 +140,13 @@ const Sound = () => {
           <div className="mt-8 flex flex-wrap">
             <button
               onClick={handlePlay}
-              className="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4"
+              className="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
             >
               <FiPlay className="mr-2" /> Play
             </button>
             <button
               onClick={handleLike}
-              className={`flex items-center font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 ${
+              className={`flex items-center font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0 ${
                 userHasLiked
                   ? 'bg-blue-600 hover:bg-blue-700 text-white'
                   : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
@@ -157,14 +156,14 @@ const Sound = () => {
             </button>
             <button
               onClick={() => setIsAddPlaylistModalOpen(true)}
-              className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4"
+              className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
             >
               <FiPlus className="mr-2" /> Add to Playlist
             </button>
             {Meteor.userId() === sound.userId && (
               <Link
                 to={`/sounds/${soundId}/edit`}
-                className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4"
+                className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
               >
                 <FiEdit className="mr-2" /> Edit
               </Link>
@@ -172,7 +171,7 @@ const Sound = () => {
             {Meteor.userId() === sound.userId && (
               <button
                 onClick={handleRemove}
-                className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4"
+                className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
               >
                 <FiTrash2 className="mr-2" /> Remove
               </button>
@@ -223,10 +222,6 @@ const Sound = () => {
           <p className="text-gray-600">No comments yet. Be the first to comment!</p>
         )}
       </div>
-
-      {currentPlayingSound && (
-        <AudioPlayer src={currentPlayingSound} onClose={() => setCurrentPlayingSound(null)} />
-      )}
 
       <AddPlaylistModal
         isOpen={isAddPlaylistModalOpen}
