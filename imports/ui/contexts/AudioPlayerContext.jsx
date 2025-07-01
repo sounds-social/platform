@@ -11,22 +11,10 @@ export const AudioPlayerProvider = ({ children }) => {
   const [isLooping, setIsLooping] = useState(false); // New state for looping
   const audioRef = useRef(null);
 
-  const playSound = useCallback((sound) => {
-    setCurrentSound(sound);
-    // Increment play count if it's a new sound being played
-    if (sound && sound.id && Meteor.isClient) {
-      Meteor.call('sounds.incrementPlayCount', sound.id);
-    }
-  }, []);
-
   const playSingleSound = useCallback((sound) => {
     setCurrentSound(sound);
     setPlaylist([]); // Clear the playlist
     setPlaylistIndex(-1); // Reset the playlist index
-    // Increment play count if it's a new sound being played
-    if (sound && sound.id && Meteor.isClient) {
-      Meteor.call('sounds.incrementPlayCount', sound.id);
-    }
   }, []);
 
   const handleNext = useCallback(() => {
@@ -109,6 +97,10 @@ export const AudioPlayerProvider = ({ children }) => {
       audioRef.current.src = currentSound.src;
       audioRef.current.load();
       audioRef.current.play();
+      // Increment play count here, as this is where the sound actually starts playing
+      if (currentSound.id && Meteor.isClient) {
+        Meteor.call('sounds.incrementPlayCount', currentSound.id);
+      }
     } else if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = '';
