@@ -6,7 +6,7 @@ import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 const SoundCard = ({ sound, sounds, index }) => {
   const isPrivate = sound.isPrivate && sound.userId !== Meteor.userId();
   const history = useHistory();
-  const { playPlaylist } = useAudioPlayer();
+  const { playPlaylist, playSingleSound } = useAudioPlayer();
 
   if (isPrivate) {
     return null; // Don't display private sounds to other users
@@ -21,7 +21,11 @@ const SoundCard = ({ sound, sounds, index }) => {
   const handlePlayClick = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    playPlaylist(sounds.map(s => ({ src: s.audioFile, title: s.title, id: s._id })), index);
+    if (sounds.length === 1) {
+      playSingleSound({ src: sound.audioFile, title: sound.title, id: sound._id });
+    } else {
+      playPlaylist(sounds.map(s => ({ src: s.audioFile, title: s.title, id: s._id })), index);
+    }
   };
 
   return (
