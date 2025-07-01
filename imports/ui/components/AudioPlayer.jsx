@@ -51,8 +51,8 @@ const AudioPlayer = () => {
       <div className="flex items-center space-x-4 flex-grow">
         <button
           onClick={handlePrevious}
-          className={`p-2 rounded-full ${!isLooping && playlistIndex === 0 ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'}`}
-          disabled={!isLooping && playlistIndex === 0}
+          className={`p-2 rounded-full ${playlist.length <= 1 || (!isLooping && playlistIndex === 0) ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'}`}
+          disabled={playlist.length <= 1 || (!isLooping && playlistIndex === 0)}
         >
           <FiSkipBack size={24} />
         </button>
@@ -61,8 +61,8 @@ const AudioPlayer = () => {
         </button>
         <button
           onClick={handleNext}
-          className={`p-2 rounded-full ${!isLooping && playlistIndex === playlist.length - 1 ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'}`}
-          disabled={!isLooping && playlistIndex === playlist.length - 1}
+          className={`p-2 rounded-full ${playlist.length <= 1 || (!isLooping && playlistIndex === playlist.length - 1) ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'}`}
+          disabled={playlist.length <= 1 || (!isLooping && playlistIndex === playlist.length - 1)}
         >
           <FiSkipForward size={24} />
         </button>

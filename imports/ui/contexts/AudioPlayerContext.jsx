@@ -19,16 +19,30 @@ export const AudioPlayerProvider = ({ children }) => {
     }
   }, []);
 
+  const playSingleSound = useCallback((sound) => {
+    setCurrentSound(sound);
+    setPlaylist([]); // Clear the playlist
+    setPlaylistIndex(-1); // Reset the playlist index
+    // Increment play count if it's a new sound being played
+    if (sound && sound.id && Meteor.isClient) {
+      Meteor.call('sounds.incrementPlayCount', sound.id);
+    }
+  }, []);
+
   const handleNext = useCallback(() => {
     setPlaylistIndex(prevIndex => {
       if (playlist.length === 0) {
-        return prevIndex; // Do nothing if no playlist
+        // If a single sound is playing and looping is enabled, do nothing (native loop handles it)
+        if (isLooping && currentSound) {
+          return prevIndex;
+        }
+        return prevIndex; // Do nothing if no playlist and not looping
       }
 
       const nextIndex = (prevIndex + 1);
       if (nextIndex >= playlist.length) {
         if (isLooping) {
-          playSound(playlist[0]);
+          setCurrentSound(playlist[0]);
           return 0;
         } else {
           if (audioRef.current) {
@@ -38,11 +52,11 @@ export const AudioPlayerProvider = ({ children }) => {
           return prevIndex; // Stay on the last song
         }
       } else {
-        playSound(playlist[nextIndex]);
+        setCurrentSound(playlist[nextIndex]);
         return nextIndex;
       }
     });
-  }, [playlist, playSound, isLooping]); // Add isLooping to dependencies
+  }, [playlist, isLooping, currentSound, setCurrentSound]);
 
   const handlePrevious = useCallback(() => {
     setPlaylistIndex(prevIndex => {
@@ -54,10 +68,10 @@ export const AudioPlayerProvider = ({ children }) => {
         return prevIndex;
       }
       const prevIndexCalculated = (prevIndex - 1 + playlist.length) % playlist.length;
-      playSound(playlist[prevIndexCalculated]);
+      setCurrentSound(playlist[prevIndexCalculated]);
       return prevIndexCalculated;
     });
-  }, [playlist, playSound, isLooping]);
+  }, [playlist, isLooping, setCurrentSound]);
 
   useEffect(() => {
     if (!audioRef.current) {
@@ -68,22 +82,27 @@ export const AudioPlayerProvider = ({ children }) => {
     const handlePlayEvent = () => setIsPlaying(true);
     const handlePauseEvent = () => setIsPlaying(false);
 
-    audio.addEventListener('ended', handleNext);
+    // Only add ended listener if there's a playlist to navigate
+    if (playlist.length > 0) {
+      audio.addEventListener('ended', handleNext);
+    }
     audio.addEventListener('play', handlePlayEvent);
     audio.addEventListener('pause', handlePauseEvent);
 
     return () => {
-      audio.removeEventListener('ended', handleNext);
+      if (playlist.length > 0) {
+        audio.removeEventListener('ended', handleNext);
+      }
       audio.removeEventListener('play', handlePlayEvent);
       audio.removeEventListener('pause', handlePauseEvent);
     };
-  }, [handleNext]);
+  }, [handleNext, playlist.length]);
 
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.loop = (playlist.length === 0 && isLooping); // Set loop property for single sound
     }
-  }, [isLooping, playlist.length]);
+  }, [isLooping, playlist.length, audioRef.current]);
 
   useEffect(() => {
     if (currentSound && audioRef.current) {
@@ -101,11 +120,11 @@ export const AudioPlayerProvider = ({ children }) => {
     setPlaylist(newPlaylist);
     setPlaylistIndex(startIndex);
     if (newPlaylist.length > 0) {
-      playSound(newPlaylist[startIndex]);
+      setCurrentSound(newPlaylist[startIndex]);
     } else {
       setCurrentSound(null);
     }
-  }, [playSound]);
+  }, []);
 
   const togglePlayPause = useCallback(() => {
     if (audioRef.current) {
@@ -128,7 +147,7 @@ export const AudioPlayerProvider = ({ children }) => {
     isPlaying,
     isLooping, // Expose isLooping
     audioRef,
-    playSound,
+    playSingleSound,
     playPlaylist,
     handleNext,
     handlePrevious,

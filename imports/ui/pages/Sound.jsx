@@ -15,7 +15,7 @@ const Sound = () => {
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
-  const { playSound, playPlaylist } = useAudioPlayer();
+  const { playSingleSound } = useAudioPlayer();
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
     const noDataAvailable = { sound: null, comments: [], loading: true, userHasLiked: false };
@@ -50,7 +50,7 @@ const Sound = () => {
 
   const handlePlay = () => {
     if (sound) {
-      playPlaylist([{ src: sound.audioFile, title: sound.title, id: soundId }]);
+      playSingleSound({ src: sound.audioFile, title: sound.title, id: soundId });
     }
   };
 
