@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlay, FiPause, FiX, FiSkipForward, FiSkipBack } from 'react-icons/fi';
+import { FiPlay, FiPause, FiX, FiSkipForward, FiSkipBack, FiRepeat } from 'react-icons/fi';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 
 const AudioPlayer = () => {
-  const { currentSound, isPlaying, audioRef, handleNext, handlePrevious, togglePlayPause, setCurrentSound } = useAudioPlayer();
+  const { currentSound, isPlaying, audioRef, handleNext, handlePrevious, togglePlayPause, setCurrentSound, isLooping, toggleLoop } = useAudioPlayer();
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -78,6 +78,12 @@ const AudioPlayer = () => {
           <span>{formatTime(duration)}</span>
         </div>
       </div>
+      <button
+        onClick={toggleLoop}
+        className={`ml-4 p-2 rounded-full ${isLooping ? 'bg-blue-500' : 'bg-gray-500'} cursor-pointer`}
+      >
+        <FiRepeat size={24} />
+      </button>
       <button onClick={() => setCurrentSound(null)} className="ml-4 p-2 rounded-full bg-red-500 hover:bg-red-600">
         <FiX size={24} />
       </button>

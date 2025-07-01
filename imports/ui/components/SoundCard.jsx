@@ -6,7 +6,7 @@ import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 const SoundCard = ({ sound, sounds, index }) => {
   const isPrivate = sound.isPrivate && sound.userId !== Meteor.userId();
   const history = useHistory();
-  const { playSound, playPlaylist } = useAudioPlayer();
+  const { playPlaylist } = useAudioPlayer();
 
   if (isPrivate) {
     return null; // Don't display private sounds to other users

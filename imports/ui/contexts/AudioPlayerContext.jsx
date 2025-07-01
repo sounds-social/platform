@@ -8,6 +8,7 @@ export const AudioPlayerProvider = ({ children }) => {
   const [playlist, setPlaylist] = useState([]); // Array of { src, title, id }
   const [playlistIndex, setPlaylistIndex] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLooping, setIsLooping] = useState(false); // New state for looping
   const audioRef = useRef(null);
 
   const playSound = useCallback((sound) => {
@@ -20,16 +21,36 @@ export const AudioPlayerProvider = ({ children }) => {
 
   const handleNext = useCallback(() => {
     setPlaylistIndex(prevIndex => {
-      if (playlist.length === 0) return -1; // No playlist
-      const nextIndex = (prevIndex + 1) % playlist.length;
-      playSound(playlist[nextIndex]);
-      return nextIndex;
+      if (playlist.length === 0) {
+        setCurrentSound(null); // No playlist, stop playback
+        return -1;
+      }
+
+      const nextIndex = (prevIndex + 1);
+      if (nextIndex >= playlist.length) {
+        if (isLooping) {
+          playSound(playlist[0]);
+          return 0;
+        } else {
+          if (audioRef.current) {
+            audioRef.current.pause();
+          }
+          setIsPlaying(false);
+          return prevIndex; // Stay on the last song
+        }
+      } else {
+        playSound(playlist[nextIndex]);
+        return nextIndex;
+      }
     });
-  }, [playlist, playSound]);
+  }, [playlist, playSound, isLooping]); // Add isLooping to dependencies
 
   const handlePrevious = useCallback(() => {
     setPlaylistIndex(prevIndex => {
-      if (playlist.length === 0) return -1; // No playlist
+      if (playlist.length === 0) {
+        setCurrentSound(null);
+        return -1;
+      }
       const prevIndexCalculated = (prevIndex - 1 + playlist.length) % playlist.length;
       playSound(playlist[prevIndexCalculated]);
       return prevIndexCalculated;
@@ -87,17 +108,23 @@ export const AudioPlayerProvider = ({ children }) => {
     }
   }, [isPlaying]);
 
+  const toggleLoop = useCallback(() => {
+    setIsLooping(prev => !prev);
+  }, []);
+
   const value = {
     currentSound,
     playlist,
     playlistIndex,
     isPlaying,
+    isLooping, // Expose isLooping
     audioRef,
     playSound,
     playPlaylist,
     handleNext,
     handlePrevious,
     togglePlayPause,
+    toggleLoop, // Expose toggleLoop
     setCurrentSound,
   };
 
