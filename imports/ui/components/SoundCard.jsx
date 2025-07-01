@@ -58,7 +58,7 @@ const SoundCard = ({ sound, sounds, index }) => {
           <div className="absolute inset-0 flex items-center justify-center">
             <button
               onClick={handlePlayClick}
-              className="bg-blue-500 text-white rounded-full p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110 cursor-pointer"
+              className="bg-blue-500 text-white rounded-full p-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110 cursor-pointer"
             >
               <FiPlay size={24} />
             </button>
@@ -73,7 +73,7 @@ const SoundCard = ({ sound, sounds, index }) => {
             <div className="absolute inset-0 flex items-center justify-center">
               <button
                 onClick={handlePlayClick}
-                className="bg-blue-500 text-white rounded-full p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110 cursor-pointer"
+                className="bg-blue-500 text-white rounded-full p-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110 cursor-pointer"
               >
                 <FiPlay size={24} />
               </button>
