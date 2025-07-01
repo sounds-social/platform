@@ -4,7 +4,7 @@ import { FiPlay, FiPause, FiX, FiSkipForward, FiSkipBack, FiRepeat } from 'react
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 
 const AudioPlayer = () => {
-  const { currentSound, isPlaying, audioRef, handleNext, handlePrevious, togglePlayPause, setCurrentSound, isLooping, toggleLoop } = useAudioPlayer();
+  const { currentSound, isPlaying, audioRef, handleNext, handlePrevious, togglePlayPause, setCurrentSound, isLooping, toggleLoop, playlist } = useAudioPlayer();
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -49,13 +49,21 @@ const AudioPlayer = () => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-3 flex items-center justify-between shadow-lg z-50">
       <div className="flex items-center space-x-4 flex-grow">
-        <button onClick={handlePrevious} className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer">
+        <button
+          onClick={handlePrevious}
+          className={`p-2 rounded-full ${playlist.length <= 1 ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'}`}
+          disabled={playlist.length <= 1}
+        >
           <FiSkipBack size={24} />
         </button>
         <button onClick={togglePlayPause} className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer">
           {isPlaying ? <FiPause size={24} /> : <FiPlay size={24} />}
         </button>
-        <button onClick={handleNext} className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer">
+        <button
+          onClick={handleNext}
+          className={`p-2 rounded-full ${playlist.length <= 1 ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'}`}
+          disabled={playlist.length <= 1}
+        >
           <FiSkipForward size={24} />
         </button>
         <div className="flex-grow flex items-center space-x-4">

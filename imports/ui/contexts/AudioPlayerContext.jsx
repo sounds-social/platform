@@ -22,8 +22,7 @@ export const AudioPlayerProvider = ({ children }) => {
   const handleNext = useCallback(() => {
     setPlaylistIndex(prevIndex => {
       if (playlist.length === 0) {
-        setCurrentSound(null); // No playlist, stop playback
-        return -1;
+        return prevIndex; // Do nothing if no playlist
       }
 
       const nextIndex = (prevIndex + 1);
@@ -48,8 +47,7 @@ export const AudioPlayerProvider = ({ children }) => {
   const handlePrevious = useCallback(() => {
     setPlaylistIndex(prevIndex => {
       if (playlist.length === 0) {
-        setCurrentSound(null);
-        return -1;
+        return prevIndex; // Do nothing if no playlist
       }
       const prevIndexCalculated = (prevIndex - 1 + playlist.length) % playlist.length;
       playSound(playlist[prevIndexCalculated]);
@@ -78,6 +76,12 @@ export const AudioPlayerProvider = ({ children }) => {
   }, [handleNext]);
 
   useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.loop = (playlist.length === 0 && isLooping); // Set loop property for single sound
+    }
+  }, [isLooping, playlist.length]);
+
+  useEffect(() => {
     if (currentSound && audioRef.current) {
       audioRef.current.src = currentSound.src;
       audioRef.current.load();
@@ -85,6 +89,7 @@ export const AudioPlayerProvider = ({ children }) => {
     } else if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = '';
+      audioRef.current.loop = false; // Ensure loop is off when no sound
     }
   }, [currentSound]);
 
