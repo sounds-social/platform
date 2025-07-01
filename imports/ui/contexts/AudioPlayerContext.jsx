@@ -49,11 +49,15 @@ export const AudioPlayerProvider = ({ children }) => {
       if (playlist.length === 0) {
         return prevIndex; // Do nothing if no playlist
       }
+      // If not looping and at the first song, do nothing
+      if (!isLooping && prevIndex === 0) {
+        return prevIndex;
+      }
       const prevIndexCalculated = (prevIndex - 1 + playlist.length) % playlist.length;
       playSound(playlist[prevIndexCalculated]);
       return prevIndexCalculated;
     });
-  }, [playlist, playSound]);
+  }, [playlist, playSound, isLooping]);
 
   useEffect(() => {
     if (!audioRef.current) {
