@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
@@ -34,9 +34,12 @@ import Footer from './components/Footer';
 import AudioPlayer from './components/AudioPlayer';
 import TermsOfService from './pages/TermsOfService';
 
+// Import AudioPlayerContext
+import { AudioPlayerProvider, useAudioPlayer } from './contexts/AudioPlayerContext';
+
 export const App = () => {
   const user = useTracker(() => Meteor.user());
-  const [currentPlayingSound, setCurrentPlayingSound] = useState(null);
+  const { currentSound, setCurrentSound } = useAudioPlayer();
 
   return (
     <Router>
@@ -44,30 +47,46 @@ export const App = () => {
         <Navbar user={user} />
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Switch>
-            <Route exact path="/" component={user ? Home : About} />
+            <Route exact path="/">
+              {user ? <Home /> : <About />}
+            </Route>
         <Route path="/sign-in" component={SignIn} />
         <Route path="/sign-up" component={SignUp} />
         <Route path="/forgot-password" component={ForgotPassword} />
         <Route path="/profile/settings" component={ProfileSettings} />
-        <Route path="/profile/:slug?/likes" component={AllLikes} />
+        <Route path="/profile/:slug?/likes">
+          <AllLikes />
+        </Route>
         <Route path="/profile/:slug?/comments" component={AllComments} />
         <Route path="/profile/:slug?/playlists" component={AllPlaylists} />
-        <Route path="/profile/:slug?" component={Profile} />
+        <Route path="/profile/:slug?">
+          <Profile />
+        </Route>
         <Route path="/go-pro" component={GoPro} />
         <Route path="/support-overview" component={SupportOverview} />
         <Route path="/sound/add" component={SoundAdd} />
         <Route path="/sounds/:soundId/edit" component={SoundEdit} />
         <Route path="/sound/:soundId">
-          <Sound setCurrentPlayingSound={setCurrentPlayingSound} />
+          <Sound />
         </Route>
         <Route path="/playlist/:playlistId/edit" component={PlaylistFormPage} />
-        <Route path="/playlist/:playlistId" component={PlaylistDetailPage} />
-        <Route path="/likes" component={Likes} />
+        <Route path="/playlist/:playlistId">
+          <PlaylistDetailPage />
+        </Route>
+        <Route path="/likes">
+          <Likes />
+        </Route>
         <Route path="/group/settings/:groupId" component={GroupSettings} />
         <Route path="/group/:slug" component={Group} />
-        <Route path="/hot" component={Hot} />
-        <Route path="/explore" component={Explore} />
-        <Route path="/search" component={SearchResults} />
+        <Route path="/hot">
+          <Hot />
+        </Route>
+        <Route path="/explore">
+          <Explore />
+        </Route>
+        <Route path="/search">
+          <SearchResults />
+        </Route>
         <Route path="/terms-of-service" component={TermsOfService} />
         <Route path="/logout" component={() => {
           Meteor.logout();
@@ -77,11 +96,17 @@ export const App = () => {
         <Route component={NotFound} />
       </Switch>
         </main>
-        {currentPlayingSound && (
-          <AudioPlayer src={currentPlayingSound.src} title={currentPlayingSound.title} soundId={currentPlayingSound.id} onClose={() => setCurrentPlayingSound(null)} />
+        {currentSound && (
+          <AudioPlayer />
         )}
         <Footer />
       </div>
     </Router>
   );
 };
+
+export const AppWithAudioPlayerProvider = () => (
+  <AudioPlayerProvider>
+    <App />
+  </AudioPlayerProvider>
+);

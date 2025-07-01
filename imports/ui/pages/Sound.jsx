@@ -7,14 +7,15 @@ import { Comments } from '../../api/comments';
 import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2 } from 'react-icons/fi';
 import { format } from "date-fns";
 import AddPlaylistModal from '../components/AddPlaylistModal';
+import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 
-const Sound = ({ setCurrentPlayingSound }) => {
+const Sound = () => {
   const { soundId } = useParams();
   const history = useHistory();
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
-  const [canPlay, setCanPlay] = useState(true);
+  const { playSingleSound } = useAudioPlayer();
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
     const noDataAvailable = { sound: null, comments: [], loading: true, userHasLiked: false };
@@ -48,13 +49,8 @@ const Sound = ({ setCurrentPlayingSound }) => {
   }, [soundId]);
 
   const handlePlay = () => {
-    if (sound && canPlay) {
-      setCanPlay(false);
-      Meteor.call('sounds.incrementPlayCount', soundId);
-      setCurrentPlayingSound({ src: sound.audioFile, title: sound.title, id: soundId });
-      setTimeout(() => {
-        setCanPlay(true);
-      }, 5000);
+    if (sound) {
+      playSingleSound({ src: sound.audioFile, title: sound.title, id: soundId });
     }
   };
 
@@ -95,7 +91,7 @@ const Sound = ({ setCurrentPlayingSound }) => {
           className="relative w-full h-64 bg-cover bg-center rounded-lg shadow-md mb-8"
           style={{ backgroundImage: `url(${sound.backgroundImage})` }}
         >
-          <div className="absolute inset-0 bg-black opacity-40 rounded-lg"></div>
+          <div className="absolute inset-0 rounded-lg"></div>
         </div>
       )}
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 flex flex-col md:flex-row">
@@ -145,14 +141,14 @@ const Sound = ({ setCurrentPlayingSound }) => {
           <div className="mt-8 flex flex-wrap">
             <button
               onClick={handlePlay}
-              className="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
+              className="cursor-pointer flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
             >
               <FiPlay className="mr-2" /> Play
             </button>
             {Meteor.userId() && (
               <button
                 onClick={handleLike}
-                className={`flex items-center font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0 ${
+                className={`cursor-pointer flex items-center font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0 ${
                   userHasLiked
                     ? 'bg-blue-600 hover:bg-blue-700 text-white'
                     : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
@@ -164,7 +160,7 @@ const Sound = ({ setCurrentPlayingSound }) => {
             {Meteor.userId() && (
               <button
                 onClick={() => setIsAddPlaylistModalOpen(true)}
-                className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
+                className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
               >
                 <FiPlus className="mr-2" /> Add to Playlist
               </button>
@@ -172,7 +168,7 @@ const Sound = ({ setCurrentPlayingSound }) => {
             {Meteor.userId() === sound.userId && (
               <Link
                 to={`/sounds/${soundId}/edit`}
-                className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
+                className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
               >
                 <FiEdit className="mr-2" /> Edit
               </Link>
@@ -180,7 +176,7 @@ const Sound = ({ setCurrentPlayingSound }) => {
             {Meteor.userId() === sound.userId && (
               <button
                 onClick={handleRemove}
-                className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
+                className="cursor-pointer flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
               >
                 <FiTrash2 className="mr-2" /> Remove
               </button>
@@ -204,7 +200,7 @@ const Sound = ({ setCurrentPlayingSound }) => {
             ></textarea>
             <button
               type="submit"
-              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
+              className="cursor-pointer mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
             >
               Post Comment
             </button>

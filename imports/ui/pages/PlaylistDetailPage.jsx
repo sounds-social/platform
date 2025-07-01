@@ -4,12 +4,14 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { PlaylistsCollection } from '../../api/playlists';
 import { Sounds } from '../../api/sounds'; // Assuming Sounds is the correct collection name
-import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { FiEdit, FiTrash2, FiPlay } from 'react-icons/fi';
 import SoundList from '../components/SoundList';
+import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 
 const PlaylistDetailPage = () => {
   const { playlistId } = useParams();
   const history = useHistory();
+  const { playPlaylist } = useAudioPlayer();
 
   const { playlist, sounds, isLoading, playlistOwner } = useTracker(() => {
     const playlistHandle = Meteor.subscribe('playlists.singlePlaylist', playlistId);
@@ -35,6 +37,12 @@ const PlaylistDetailPage = () => {
       } catch (error) {
         alert(error.reason || 'Failed to delete playlist.');
       }
+    }
+  };
+
+  const handlePlayAll = () => {
+    if (sounds.length > 0) {
+      playPlaylist(sounds.map(sound => ({ src: sound.audioFile, title: sound.title, id: sound._id })));
     }
   };
 
@@ -72,22 +80,30 @@ const PlaylistDetailPage = () => {
           <p className="text-lg text-gray-600 mb-4">
             {playlist.isPublic ? 'Public Playlist' : 'Private Playlist'}
           </p>
-          {isOwner && (
-            <div className="flex justify-center md:justify-start space-x-4 mt-4">
+          <div className="flex justify-center md:justify-start space-x-4 mt-4">
+            <button
+              onClick={handlePlayAll}
+              className="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
+            >
+              <FiPlay className="mr-2" /> Play All
+            </button>
+            {isOwner && (
               <Link
                 to={`/playlist/${playlistId}/edit`}
                 className="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
               >
                 <FiEdit className="mr-2" /> Edit Playlist
               </Link>
+            )}
+            {isOwner && (
               <button
                 onClick={handleRemovePlaylist}
                 className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
               >
                 <FiTrash2 className="mr-2" /> Delete Playlist
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 

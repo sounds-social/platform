@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SoundCard from './SoundCard';
 
-const SoundList = ({ sounds, loading, noSoundsMessage }) => {
+const SoundList = ({ sounds, loading, noSoundsMessage, setCurrentPlayingSound }) => {
   const [displayLimit, setDisplayLimit] = useState(10);
 
   const handleLoadMore = () => {
@@ -24,8 +24,8 @@ const SoundList = ({ sounds, loading, noSoundsMessage }) => {
 
   return (
     <div className="grid grid-cols-1 gap-6">
-      {soundsToDisplay.map(sound => (
-        <SoundCard key={sound._id} sound={sound} />
+      {soundsToDisplay.map((sound, index) => (
+        <SoundCard key={sound._id} sound={sound} sounds={sounds} index={index} />
       ))}
       {sounds.length > displayLimit && (
         <div className="text-center mt-4">
