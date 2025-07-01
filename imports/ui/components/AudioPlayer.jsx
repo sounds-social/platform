@@ -47,53 +47,53 @@ const AudioPlayer = () => {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-3 flex items-center justify-between shadow-lg z-50">
-      <div className="flex items-center space-x-4 flex-grow">
+    <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-2 sm:p-3 flex items-center justify-between shadow-lg z-50">
+      <div className="flex items-center space-x-2 sm:space-x-4 flex-grow">
         <button
           onClick={handlePrevious}
-          className={`p-2 rounded-full ${playlist.length <= 1 || (!isLooping && playlistIndex === 0) ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'}`}
+          className={`p-1 sm:p-2 rounded-full ${playlist.length <= 1 || (!isLooping && playlistIndex === 0) ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'}`}
           disabled={playlist.length <= 1 || (!isLooping && playlistIndex === 0)}
         >
-          <FiSkipBack size={24} />
+          <FiSkipBack size={20} className="sm:w-6 sm:h-6" />
         </button>
-        <button onClick={togglePlayPause} className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer">
-          {isPlaying ? <FiPause size={24} /> : <FiPlay size={24} />}
+        <button onClick={togglePlayPause} className="p-1 sm:p-2 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer">
+          {isPlaying ? <FiPause size={20} className="sm:w-6 sm:h-6" /> : <FiPlay size={20} className="sm:w-6 sm:h-6" />}
         </button>
         <button
           onClick={handleNext}
-          className={`p-2 rounded-full ${playlist.length <= 1 || (!isLooping && playlistIndex === playlist.length - 1) ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'}`}
+          className={`p-1 sm:p-2 rounded-full ${playlist.length <= 1 || (!isLooping && playlistIndex === playlist.length - 1) ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'}`}
           disabled={playlist.length <= 1 || (!isLooping && playlistIndex === playlist.length - 1)}
         >
-          <FiSkipForward size={24} />
+          <FiSkipForward size={20} className="sm:w-6 sm:h-6" />
         </button>
-        <div className="flex-grow flex items-center space-x-4">
+        <div className="flex-grow flex items-center space-x-2 sm:space-x-4">
           {currentSound.title && currentSound.id && (
-            <div className="grow">
-              <Link to={`/sound/${currentSound.id}`} className="text-blue-300 hover:underline text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis block">
+            <div className="grow hidden sm:block">
+              <Link to={`/sound/${currentSound.id}`} className="text-blue-300 hover:underline text-xs sm:text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis block">
                 {currentSound.title}
               </Link>
             </div>
           )}
-          <span>{formatTime(currentTime)}</span>
+          <span className="text-xs sm:text-base">{formatTime(currentTime)}</span>
           <input
             type="range"
             min="0"
             max={duration}
             value={currentTime}
             onChange={handleSeek}
-            className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+            className="w-full h-1 sm:h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
           />
-          <span>{formatTime(duration)}</span>
+          <span className="text-xs sm:text-base">{formatTime(duration)}</span>
         </div>
       </div>
       <button
         onClick={toggleLoop}
-        className={`ml-4 p-2 rounded-full ${isLooping ? 'bg-blue-500' : 'bg-gray-500'} cursor-pointer`}
+        className={`ml-2 sm:ml-4 p-1 sm:p-2 rounded-full ${isLooping ? 'bg-blue-500' : 'bg-gray-500'} hover:bg-blue-600 cursor-pointer`}
       >
-        <FiRepeat size={24} />
+        <FiRepeat size={20} className="sm:w-6 sm:h-6" />
       </button>
-      <button onClick={() => setCurrentSound(null)} className="ml-4 p-2 rounded-full bg-red-500 hover:bg-red-600">
-        <FiX size={24} />
+      <button onClick={() => setCurrentSound(null)} className="ml-2 sm:ml-4 p-1 sm:p-2 rounded-full bg-red-500 hover:bg-red-600">
+        <FiX size={20} className="sm:w-6 sm:h-6" />
       </button>
     </div>
   );
