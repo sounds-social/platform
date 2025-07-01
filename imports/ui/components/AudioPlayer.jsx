@@ -1,46 +1,33 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlay, FiPause, FiX } from 'react-icons/fi';
+import { FiPlay, FiPause, FiX, FiSkipForward, FiSkipBack } from 'react-icons/fi';
+import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 
-const AudioPlayer = ({ src, title, soundId, onClose }) => {
-  const audioRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+const AudioPlayer = () => {
+  const { currentSound, isPlaying, audioRef, handleNext, handlePrevious, togglePlayPause, setCurrentSound } = useAudioPlayer();
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
-    if (src) {
-      if (audioRef.current) {
-        audioRef.current.src = src;
-        audioRef.current.load();
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
-    }
-  }, [src]);
-
-  const togglePlayPause = () => {
     if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
+      const audio = audioRef.current;
 
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime);
-    }
-  };
+      const setAudioData = () => {
+        setDuration(audio.duration);
+        setCurrentTime(audio.currentTime);
+      };
 
-  const handleLoadedMetadata = () => {
-    if (audioRef.current) {
-      setDuration(audioRef.current.duration);
+      const setAudioTime = () => setCurrentTime(audio.currentTime);
+
+      audio.addEventListener('loadeddata', setAudioData);
+      audio.addEventListener('timeupdate', setAudioTime);
+
+      return () => {
+        audio.removeEventListener('loadeddata', setAudioData);
+        audio.removeEventListener('timeupdate', setAudioTime);
+      };
     }
-  };
+  }, [audioRef.current]);
 
   const handleSeek = (e) => {
     if (audioRef.current) {
@@ -55,28 +42,27 @@ const AudioPlayer = ({ src, title, soundId, onClose }) => {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
-  if (!src) {
+  if (!currentSound) {
     return null;
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-3 flex items-center justify-between shadow-lg">
-      <audio
-        ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
-        onEnded={() => setIsPlaying(false)}
-        preload="auto"
-      />
+    <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-3 flex items-center justify-between shadow-lg z-50">
       <div className="flex items-center space-x-4 flex-grow">
-        <button onClick={togglePlayPause} className="p-2 rounded-full bg-blue-500 hover:bg-blue-600">
+        <button onClick={handlePrevious} className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer">
+          <FiSkipBack size={24} />
+        </button>
+        <button onClick={togglePlayPause} className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer">
           {isPlaying ? <FiPause size={24} /> : <FiPlay size={24} />}
         </button>
+        <button onClick={handleNext} className="p-2 rounded-full bg-blue-500 hover:bg-blue-600 cursor-pointer">
+          <FiSkipForward size={24} />
+        </button>
         <div className="flex-grow flex items-center space-x-4">
-          {title && soundId && (
+          {currentSound.title && currentSound.id && (
             <div className="grow">
-              <Link to={`/sound/${soundId}`} className="text-blue-300 hover:underline text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis block">
-                {title}
+              <Link to={`/sound/${currentSound.id}`} className="text-blue-300 hover:underline text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis block">
+                {currentSound.title}
               </Link>
             </div>
           )}
@@ -92,7 +78,7 @@ const AudioPlayer = ({ src, title, soundId, onClose }) => {
           <span>{formatTime(duration)}</span>
         </div>
       </div>
-      <button onClick={onClose} className="ml-4 p-2 rounded-full bg-red-500 hover:bg-red-600">
+      <button onClick={() => setCurrentSound(null)} className="ml-4 p-2 rounded-full bg-red-500 hover:bg-red-600">
         <FiX size={24} />
       </button>
     </div>

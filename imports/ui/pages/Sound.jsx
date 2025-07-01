@@ -7,14 +7,15 @@ import { Comments } from '../../api/comments';
 import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2 } from 'react-icons/fi';
 import { format } from "date-fns";
 import AddPlaylistModal from '../components/AddPlaylistModal';
+import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 
-const Sound = ({ setCurrentPlayingSound }) => {
+const Sound = () => {
   const { soundId } = useParams();
   const history = useHistory();
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
-  const [canPlay, setCanPlay] = useState(true);
+  const { playSound } = useAudioPlayer();
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
     const noDataAvailable = { sound: null, comments: [], loading: true, userHasLiked: false };
@@ -48,13 +49,8 @@ const Sound = ({ setCurrentPlayingSound }) => {
   }, [soundId]);
 
   const handlePlay = () => {
-    if (sound && canPlay) {
-      setCanPlay(false);
-      Meteor.call('sounds.incrementPlayCount', soundId);
-      setCurrentPlayingSound({ src: sound.audioFile, title: sound.title, id: soundId });
-      setTimeout(() => {
-        setCanPlay(true);
-      }, 5000);
+    if (sound) {
+      playSound({ src: sound.audioFile, title: sound.title, id: soundId });
     }
   };
 

@@ -259,3 +259,16 @@ The links are displayed with icons in their profile.
 Add a slug (called "Profile URL") to the ProfileSettings.jsx which is used to route the "/profile/:slug" page. The slug has to be unique and in the form there's a checkmark / "X" icon which shows if the currently provided slug is available (create a Meteor.method that checks the slug for its uniqueness).
 
 Also if the current user is vieweing their own profile, add a button called "Share" which copies the "/profile/:slug" route to the clipboard.
+
+### Audio Player
+
+Users can play sounds in the list and it displays all the sounds within the audio player. E.g. if I'm on the Hot.jsx page and click on play to the first sound it plays through all the sounds within that list. Use a state management library (like redux or something more modern?) to make the code more readable.
+
+* Add a functional play button to the SoundCard.jsx 
+* After clicking on the button:
+  * The audio player now displays the list of sounds in a dropdown (audio playlist)
+    * The dropdown is toggable with a playlist icon button
+  * The currently playing sound is highlighted within that list
+  * The list has also a play button where users can choose what sound to play
+  * The playlist icon button scrolls to the currently playing sound within the list
+  * The user can click on a backwards / next button (icons) to play the next or previous sound (within the list)
