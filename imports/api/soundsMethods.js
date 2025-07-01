@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Sounds } from './sounds';
+import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
 
 Meteor.methods({
   async 'sounds.insert'(title, description, tags, coverImage, isPrivate, backgroundImage, audioFile) {
@@ -118,3 +119,13 @@ Meteor.methods({
     return await Sounds.find({ likes: userId }).countAsync();
   }
 });
+
+if (Meteor.isServer) {
+  DDPRateLimiter.addRule({
+    type: 'method',
+    name: 'sounds.incrementPlayCount',
+    userId(userId) {
+      return true;
+    },
+  }, 1, 1000); // 1 call per 1 second (1000ms) per connection/user
+}
