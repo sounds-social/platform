@@ -4,10 +4,12 @@ import SimpleSchema from 'simpl-schema';
 const UserProfileSchema = new SimpleSchema({
   displayName: {
     type: String,
+    max: 100,
   },
   slug: {
     type: String,
     optional: true,
+    max: 100,
   },
   avatar: {
     type: String,

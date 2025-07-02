@@ -6,6 +6,7 @@ export const Comments = new Mongo.Collection('comments');
 const CommentsSchema = new SimpleSchema({
   content: {
     type: String,
+    max: 1000,
   },
   timestamp: {
     type: SimpleSchema.Integer,
