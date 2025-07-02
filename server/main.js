@@ -15,3 +15,6 @@ import '/imports/api/playlistsPublications';
 import '/imports/api/groups';
 import '/imports/api/groupsMethods';
 import '/imports/api/groupsPublications';
+import '/imports/api/notifications';
+import '/imports/api/notificationsMethods';
+import '/imports/api/notificationsPublications';

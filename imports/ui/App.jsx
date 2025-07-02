@@ -27,6 +27,7 @@ import Hot from './pages/Hot';
 import Explore from './pages/Explore';
 import NotFound from './pages/NotFound';
 import SearchResults from './pages/SearchResults';
+import { NotificationsPage } from './pages/NotificationsPage';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -86,6 +87,9 @@ export const App = () => {
         </Route>
         <Route path="/search">
           <SearchResults />
+        </Route>
+        <Route path="/notifications">
+          <NotificationsPage />
         </Route>
         <Route path="/terms-of-service" component={TermsOfService} />
         <Route path="/logout" component={() => {

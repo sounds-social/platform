@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
+import { Notifications } from './notifications';
 
 Meteor.methods({
   async 'users.updateProfile'(displayName, slug, avatar, youtube, twitter, spotify, instagram, website) {
@@ -56,9 +57,20 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
-    return await Meteor.users.updateAsync(this.userId, {
+    const result = await Meteor.users.updateAsync(this.userId, {
       $addToSet: { 'profile.follows': userIdToFollow },
     });
+
+    if (result) {
+      const currentUser = await Meteor.users.findOneAsync(this.userId);
+      await Notifications.insertAsync({
+        userId: userIdToFollow,
+        message: `${currentUser.profile.displayName} started following you`,
+        link: `/profile/${currentUser.profile.slug}`,
+      });
+    }
+
+    return result;
   },
 
   async 'users.unfollow'(userIdToUnfollow) {

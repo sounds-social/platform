@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Comments } from './comments';
+import { Sounds } from './sounds';
+import { Notifications } from './notifications';
 
 Meteor.methods({
   async 'comments.insert'(soundId, content, timestamp) {
@@ -14,12 +16,28 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
-    return await Comments.insertAsync({
+    const sound = await Sounds.findOneAsync(soundId);
+    if (!sound) {
+      throw new Meteor.Error('not-found', 'Sound not found');
+    }
+
+    const commentId = await Comments.insertAsync({
       soundId,
       content,
       timestamp,
       userId: this.userId,
     });
+
+    if (this.userId !== sound.userId) {
+      const commenter = await Meteor.users.findOneAsync(this.userId);
+      await Notifications.insertAsync({
+        userId: sound.userId,
+        message: `${commenter.profile.displayName} commented on your sound ${sound.title}`,
+        link: `/sound/${soundId}`,
+      });
+    }
+
+    return commentId;
   },
 
   async 'comments.update'(commentId, content) {
