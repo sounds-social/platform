@@ -26,6 +26,14 @@ export const NotificationsPage = () => {
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-2xl font-bold mb-4">Notifications</h1>
+      {notifications.some(notification => !notification.isRead) && (
+        <button
+          onClick={() => Meteor.call('notifications.markAllAsRead')}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md mb-4"
+        >
+          Mark all as read
+        </button>
+      )}
       <div>
         {notifications.length > 0 ? (
           notifications.map((notification) => (

@@ -18,4 +18,16 @@ Meteor.methods({
 
     return await Notifications.updateAsync(notificationId, { $set: { isRead: true } });
   },
+
+  async 'notifications.markAllAsRead'() {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    return await Notifications.updateAsync(
+      { userId: this.userId, isRead: false },
+      { $set: { isRead: true } },
+      { multi: true }
+    );
+  },
 });
