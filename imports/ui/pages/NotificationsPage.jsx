@@ -8,7 +8,7 @@ import { formatDistanceToNow } from 'date-fns';
 export const NotificationsPage = () => {
   const { notifications, isLoading } = useTracker(() => {
     const handle = Meteor.subscribe('notifications');
-    const notifications = NotificationsCollection.find({}, { sort: { createdAt: -1 } }).fetch();
+    const notifications = NotificationsCollection.find({}, { sort: { createdAt: -1 }, limit: 30 }).fetch();
 
     return { notifications, isLoading: !handle.ready() };
   });
