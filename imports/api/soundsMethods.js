@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Sounds } from './sounds';
+import { Notifications } from './notifications';
 import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
 
 Meteor.methods({
@@ -17,7 +18,7 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
-    return await Sounds.insertAsync({
+    const soundId = await Sounds.insertAsync({
       title,
       description,
       tags,
@@ -27,6 +28,19 @@ Meteor.methods({
       userId: this.userId,
       audioFile
     });
+
+    const uploader = await Meteor.users.findOneAsync(this.userId);
+    const followers = await Meteor.users.find({ 'profile.follows': this.userId }).fetch();
+
+    for (const follower of followers) {
+      await Notifications.insertAsync({
+        userId: follower._id,
+        message: `${uploader.profile.displayName} uploaded a new sound: ${title}`,
+        link: `/sound/${soundId}`,
+      });
+    }
+
+    return soundId;
   },
 
   async 'sounds.update'(soundId, title, description, tags, coverImage, isPrivate, backgroundImage) {
