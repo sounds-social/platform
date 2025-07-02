@@ -9,14 +9,17 @@ const SoundsSchema = new SimpleSchema({
   },
   title: {
     type: String,
+    max: 100,
   },
   description: {
     type: String,
     optional: true,
+    max: 1000,
   },
   tags: {
     type: Array,
-    optional: true
+    optional: true,
+    max: 100,
   },
   'tags.$': {
     type: String,
