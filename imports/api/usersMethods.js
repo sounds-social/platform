@@ -62,6 +62,10 @@ Meteor.methods({
     });
 
     if (result) {
+      await Meteor.users.updateAsync(userIdToFollow, {
+        $addToSet: { 'profile.followers': this.userId },
+      });
+
       const currentUser = await Meteor.users.findOneAsync(this.userId);
       await Notifications.insertAsync({
         userId: userIdToFollow,

@@ -19,7 +19,7 @@ const Profile = () => {
   const [showSupportModal, setShowSupportModal] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const { usersBeingFollowed, user, sounds, playlists, comments, groups, loading, likedSounds, totalLikedSoundsCount, totalCommentsCount, totalPlaylistsCount } = useTracker(() => {
+  const { user, sounds, playlists, comments, groups, loading, likedSounds, totalLikedSoundsCount, totalCommentsCount, totalPlaylistsCount, followerCount } = useTracker(() => {
     const noDataAvailable = { user: null, sounds: [], playlists: [], comments: [], groups: [], loading: true, likedSounds: [] };
     let currentUser = null;
 
@@ -63,25 +63,22 @@ const Profile = () => {
         .sort((a, b) => b.likedAt - a.likedAt)
         .slice(0, 4);
 
-      const usersBeingFollowed = Meteor.users.find({
-        'profile.follows': currentUser._id
-      }).fetch()
-
       const totalLikedSoundsCount = Sounds.find({ 'likes.userId': currentUser._id }).count();
+      const followerCount = currentUser.profile.followers?.length || 0;
 
       return { 
-        usersBeingFollowed, 
-        user: currentUser, 
-        sounds: userSounds, 
-        playlists: userPlaylists, 
-        comments: commentsWithSoundTitle, 
-        groups: userGroups, 
-        loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady || !likedSoundsReady, 
-        likedSounds,
-        totalLikedSoundsCount,
-        totalCommentsCount,
-        totalPlaylistsCount
-      };
+          user: currentUser, 
+          sounds: userSounds, 
+          playlists: userPlaylists, 
+          comments: commentsWithSoundTitle, 
+          groups: userGroups, 
+          loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady || !likedSoundsReady, 
+          likedSounds,
+          totalLikedSoundsCount,
+          totalCommentsCount,
+          totalPlaylistsCount,
+          followerCount
+        };
     } else {
       if (slug === Meteor.user()?.profile?.slug) {
         history.push('/profile');
@@ -129,24 +126,21 @@ const Profile = () => {
 
       const totalLikedSoundsCount = Sounds.find({ 'likes.userId': currentUser._id }).count();
       const totalCommentsCount = Comments.find({ userId: currentUser._id }).count();
-
-      const usersBeingFollowed = Meteor.users.find({
-        'profile.follows': currentUser._id
-      }).fetch()
+      const followerCount = currentUser.profile.followers?.length || 0;
 
       return { 
-        usersBeingFollowed, 
-        user: currentUser, 
-        sounds: userSounds, 
-        playlists: userPlaylists, 
-        comments: otherCommentsWithSoundTitle, 
-        groups: userGroups, 
-        loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady || !likedSoundsReady, 
-        likedSounds, 
-        totalLikedSoundsCount,
-        totalCommentsCount,
-        totalPlaylistsCount
-      };
+          user: currentUser, 
+          sounds: userSounds, 
+          playlists: userPlaylists, 
+          comments: otherCommentsWithSoundTitle, 
+          groups: userGroups, 
+          loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady || !likedSoundsReady, 
+          likedSounds, 
+          totalLikedSoundsCount,
+          totalCommentsCount,
+          totalPlaylistsCount,
+          followerCount
+        };
     }
   }, [slug]);
 
@@ -201,8 +195,8 @@ const Profile = () => {
           <p className="text-gray-600 text-lg">@{user.profile.slug}</p>
           <div className="flex justify-center md:justify-start space-x-6 mt-4">
             <div>
-              <p className="text-gray-800 font-semibold">{usersBeingFollowed.length || 0}</p>
-              <p className="text-gray-500 text-sm">{usersBeingFollowed.length === 1 ? 'Follower': 'Followers'}</p>
+              <p className="text-gray-800 font-semibold">{followerCount}</p>
+              <p className="text-gray-500 text-sm">{followerCount === 1 ? 'Follower': 'Followers'}</p>
             </div>
             <div>
               <p className="text-gray-800 font-semibold">{user.profile.follows?.length || 0}</p>
