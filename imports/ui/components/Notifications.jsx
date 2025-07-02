@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Notifications as NotificationsCollection } from '../../api/notifications';
 import { Link } from 'react-router-dom';
-import { IoNotifications } from 'react-icons/io5';
+import { IoNotifications, IoNotificationsOutline } from 'react-icons/io5';
 import { formatDistanceToNow } from 'date-fns';
 
 export const Notifications = () => {
@@ -25,7 +25,7 @@ export const Notifications = () => {
   return (
     <div className="relative h-[24px]">
       <button onClick={() => setIsOpen(!isOpen)} className="relative cursor-pointer">
-        <IoNotifications className="h-6 w-6" />
+        {isOpen ? <IoNotifications className="h-6 w-6" /> : <IoNotificationsOutline className="h-6 w-6" />}
         {unreadCount > 0 && (
           <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-blue-500" />
         )}
