@@ -272,3 +272,24 @@ Users can play sounds in the list and it displays all the sounds within the audi
   * The list has also a play button where users can choose what sound to play
   * The playlist icon button scrolls to the currently playing sound within the list
   * The user can click on a backwards / next button (icons) to play the next or previous sound (within the list)
+
+### Notifications
+
+Users have the ability to get and read notifications. 
+
+* Add a new notifications collection with following fields:
+  * userId (the id for which user the notification is for)
+  * isRead (true or false, by default its false)
+  * createdAt (timestamp for the notification)
+  * link (the link which the notification links to)
+* Add a notification icon button and list to the Navbar.jsx
+  * If the button is clicked it opens up a list with 5 recent notifications, where isRead is false
+  * At the end of the list there's a "Show all" button that opens up a new page with all notifications for that user
+    * The route is "/notifications" which loads all notifications (read and unread) for the currently logged in user
+  * There's a number on the button which displays the count of all notifications for the user which are not read (isRead = false)
+  * If the notification is clicked the isRead property changes to true and the count updates too
+  * If the list is empty it displays: "No unread notifications"
+
+Create a notification if:
+  * The currently logged in user gets a comment on one of their sounds
+  * The currently logged in user gets a new follower
