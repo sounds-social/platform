@@ -33,3 +33,18 @@ Meteor.publish('sounds.byIds', function (soundIds) {
   check(soundIds.every(id => typeof id === 'string'), true);
   return Sounds.find({ _id: { $in: soundIds } });
 });
+
+Meteor.publish('sounds.singleSound', async function (soundId) {
+  check(soundId, String);
+  const sound = await Sounds.findOneAsync(soundId);
+
+  if (!sound) {
+    return this.ready();
+  }
+
+  if (sound.isPrivate === false || this.userId === sound.userId) {
+    return Sounds.find({ _id: soundId });
+  } else {
+    return this.ready();
+  }
+});

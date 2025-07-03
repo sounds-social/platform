@@ -19,7 +19,7 @@ const Sound = () => {
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
     const noDataAvailable = { sound: null, comments: [], loading: true, userHasLiked: false };
-    const soundHandle = Meteor.subscribe('sounds.public');
+    const soundHandle = Meteor.subscribe('sounds.singleSound', soundId);
     const commentsHandle = Meteor.subscribe('comments.forSound', soundId);
     const usersHandle = Meteor.subscribe('users.public');
     const userId = Meteor.userId();
