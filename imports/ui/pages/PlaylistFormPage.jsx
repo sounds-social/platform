@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { PlaylistsCollection } from '../../api/playlists';
 import { Sounds } from '../../api/sounds';
 import UploadcareWidget from '../components/UploadcareWidget';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import { DndContext, closestCenter, useSensors, useSensor, PointerSensor } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 
@@ -44,38 +44,35 @@ const PlaylistFormPage = () => {
     }
   }, [playlist]);
 
-  
-
-  
-
   const handleRemoveSound = (idToRemove) => {
+    console.log("Removing sound with ID:", idToRemove);
     setSoundIds(soundIds.filter(id => id !== idToRemove));
   };
 
-  const onDragEnd = (event) => {
-    const { active, over } = event;
+  const scrollRef = useRef(null);
 
-    if (active.id !== over.id) {
-      setSoundIds((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over.id);
-        const newItems = [...items];
-        const [removed] = newItems.splice(oldIndex, 1);
-        newItems.splice(newIndex, 0, removed);
-        return newItems;
-      });
+  const sensors = useSensors(
+    useSensor(PointerSensor)
+  );
+
+  const onDragEnd = (event) => {
+    try {
+      const { active, over } = event;
+
+      if (active && over && active.id !== over.id) {
+        setSoundIds((items) => {
+          const oldIndex = items.indexOf(active.id);
+          const newIndex = items.indexOf(over.id);
+          return arrayMove(items, oldIndex, newIndex);
+        });
+      }
+    } catch (error) {
+      console.error("Error during drag end:", error);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const playlistData = {
-      name,
-      isPublic,
-      coverImageUrl,
-      soundIds,
-    };
 
     if (playlistId) {
       Meteor.call('playlists.update', playlistId, name, isPublic, coverImageUrl, soundIds, (err) => {
@@ -158,10 +155,12 @@ const PlaylistFormPage = () => {
 
         <div className="mb-6">
           <h2 className="text-xl font-bold text-gray-800 mb-3">Sounds in Playlist:</h2>
-          <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-            <SortableContext items={soundIds} strategy={verticalListSortingStrategy}>
+          <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd} autoScroll={false} sensors={sensors}>
+            <SortableContext items={soundIds} strategy={verticalListSortingStrategy} key={soundIds.length}>
               <ul
                 className="bg-gray-100 p-4 rounded-lg border border-gray-200 max-h-96 overflow-y-auto list-none p-0 m-0"
+                ref={scrollRef}
+                key="playlist-sounds-list"
               >
                 {soundsData.length === 0 && <p className="text-gray-600 text-center py-4">No sounds added yet.</p>}
                 {soundsData.map((sound, index) => (
@@ -170,7 +169,7 @@ const PlaylistFormPage = () => {
                       <span className="text-gray-800 font-medium">{sound.title}</span>
                       <button
                         type="button"
-                        onClick={() => handleRemoveSound(sound._id)}
+                        onMouseDown={() => handleRemoveSound(sound._id)}
                         className="ml-4 text-red-500 hover:text-red-700 transition-colors duration-200"
                       >
                         Remove
