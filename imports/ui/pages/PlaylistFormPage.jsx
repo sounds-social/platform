@@ -5,6 +5,9 @@ import { Meteor } from 'meteor/meteor';
 import { PlaylistsCollection } from '../../api/playlists';
 import { Sounds } from '../../api/sounds';
 import UploadcareWidget from '../components/UploadcareWidget';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 
 const PlaylistFormPage = () => {
@@ -21,7 +24,7 @@ const PlaylistFormPage = () => {
     const handle = Meteor.subscribe('sounds.byIds', soundIds);
     const loading = !handle.ready();
     const fetchedSounds = Sounds.find({ _id: { $in: soundIds } }).fetch();
-    const orderedSounds = [...soundIds].reverse().map(id => fetchedSounds.find(sound => sound._id === id)).filter(Boolean);
+    const orderedSounds = soundIds.map(id => fetchedSounds.find(sound => sound._id === id)).filter(Boolean);
     return { soundsData: orderedSounds, areSoundsLoading: loading };
   }, [soundIds]);
 
@@ -47,6 +50,21 @@ const PlaylistFormPage = () => {
 
   const handleRemoveSound = (idToRemove) => {
     setSoundIds(soundIds.filter(id => id !== idToRemove));
+  };
+
+  const onDragEnd = (event) => {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      setSoundIds((items) => {
+        const oldIndex = items.indexOf(active.id);
+        const newIndex = items.indexOf(over.id);
+        const newItems = [...items];
+        const [removed] = newItems.splice(oldIndex, 1);
+        newItems.splice(newIndex, 0, removed);
+        return newItems;
+      });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -76,6 +94,21 @@ const PlaylistFormPage = () => {
         }
       });
     }
+  };
+
+  const SortableItem = ({ id, children }) => {
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+    };
+
+    return (
+      <li ref={setNodeRef} style={style} {...attributes} {...listeners}>
+        {children}
+      </li>
+    );
   };
 
   if (isLoading || areSoundsLoading) {
@@ -125,24 +158,29 @@ const PlaylistFormPage = () => {
 
         <div className="mb-6">
           <h2 className="text-xl font-bold text-gray-800 mb-3">Sounds in Playlist:</h2>
-          <ul className="bg-gray-100 p-4 rounded-lg border border-gray-200">
-            {soundsData.length === 0 && <p className="text-gray-600 text-center py-4">No sounds added yet.</p>}
-            {soundsData.map((sound) => (
-              <li
-                key={sound._id}
-                className="flex items-center justify-between bg-white p-3 mb-2 rounded-md shadow-sm border border-gray-200 last:mb-0"
+          <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+            <SortableContext items={soundIds} strategy={verticalListSortingStrategy}>
+              <ul
+                className="bg-gray-100 p-4 rounded-lg border border-gray-200 max-h-96 overflow-y-auto list-none p-0 m-0"
               >
-                <span className="text-gray-800 font-medium">{sound.title}</span>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveSound(sound._id)}
-                  className="ml-4 text-red-500 hover:text-red-700 transition-colors duration-200"
-                >
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
+                {soundsData.length === 0 && <p className="text-gray-600 text-center py-4">No sounds added yet.</p>}
+                {soundsData.map((sound, index) => (
+                  <SortableItem key={sound._id} id={sound._id}>
+                    <div className="flex items-center justify-between bg-white p-3 mb-2 rounded-md shadow-sm border border-gray-200 cursor-grab">
+                      <span className="text-gray-800 font-medium">{sound.title}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSound(sound._id)}
+                        className="ml-4 text-red-500 hover:text-red-700 transition-colors duration-200"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </SortableItem>
+                ))}
+              </ul>
+            </SortableContext>
+          </DndContext>
         </div>
 
         <button

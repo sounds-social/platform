@@ -22,7 +22,7 @@ const PlaylistDetailPage = () => {
 
     const loading = !playlistHandle.ready() || !soundsHandle.ready() || !usersHandle.ready();
     const fetchedSounds = playlistData ? Sounds.find({ _id: { $in: playlistData.soundIds } }).fetch() : [];
-    const orderedSounds = playlistData ? [...playlistData.soundIds].reverse().map(id => fetchedSounds.find(sound => sound._id === id)).filter(Boolean) : [];
+    const orderedSounds = playlistData ? playlistData.soundIds.map(id => fetchedSounds.find(sound => sound._id === id)).filter(Boolean) : [];
 
     const owner = playlistData ? Meteor.users.findOne(playlistData.ownerId) : null;
 
