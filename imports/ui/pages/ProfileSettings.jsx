@@ -115,73 +115,76 @@ const ProfileSettings = () => {
               )}
             </div>
 
-            <div>
-              <label htmlFor="website" className="block text-sm font-medium text-gray-700">Website</label>
-              <div className="mt-1">
-                <input
-                  id="website"
-                  name="website"
-                  type="text"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={website}
-                  onChange={(e) => setWebsite(e.target.value)}
-                />
+            <div className="mt-10">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Social Links</h3>
+              <div>
+                <label htmlFor="website" className="block text-sm font-medium text-gray-700">Website</label>
+                <div className="mt-1">
+                  <input
+                    id="website"
+                    name="website"
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="youtube" className="block text-sm font-medium text-gray-700">YouTube</label>
-              <div className="mt-1">
-                <input
-                  id="youtube"
-                  name="youtube"
-                  type="text"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={youtube}
-                  onChange={(e) => setYoutube(e.target.value)}
-                />
+              <div className="mt-6">
+                <label htmlFor="youtube" className="block text-sm font-medium text-gray-700">YouTube</label>
+                <div className="mt-1">
+                  <input
+                    id="youtube"
+                    name="youtube"
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={youtube}
+                    onChange={(e) => setYoutube(e.target.value)}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="twitter" className="block text-sm font-medium text-gray-700">X (formerly Twitter)</label>
-              <div className="mt-1">
-                <input
-                  id="twitter"
-                  name="twitter"
-                  type="text"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={twitter}
-                  onChange={(e) => setTwitter(e.target.value)}
-                />
+              <div className="mt-6">
+                <label htmlFor="twitter" className="block text-sm font-medium text-gray-700">X (formerly Twitter)</label>
+                <div className="mt-1">
+                  <input
+                    id="twitter"
+                    name="twitter"
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={twitter}
+                    onChange={(e) => setTwitter(e.target.value)}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="instagram" className="block text-sm font-medium text-gray-700">Instagram</label>
-              <div className="mt-1">
-                <input
-                  id="instagram"
-                  name="instagram"
-                  type="text"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={instagram}
-                  onChange={(e) => setInstagram(e.target.value)}
-                />
+              <div className="mt-6">
+                <label htmlFor="instagram" className="block text-sm font-medium text-gray-700">Instagram</label>
+                <div className="mt-1">
+                  <input
+                    id="instagram"
+                    name="instagram"
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={instagram}
+                    onChange={(e) => setInstagram(e.target.value)}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="spotify" className="block text-sm font-medium text-gray-700">Spotify</label>
-              <div className="mt-1">
-                <input
-                  id="spotify"
-                  name="spotify"
-                  type="text"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={spotify}
-                  onChange={(e) => setSpotify(e.target.value)}
-                />
+              <div className="mt-6">
+                <label htmlFor="spotify" className="block text-sm font-medium text-gray-700">Spotify</label>
+                <div className="mt-1">
+                  <input
+                    id="spotify"
+                    name="spotify"
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value={spotify}
+                    onChange={(e) => setSpotify(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
 
