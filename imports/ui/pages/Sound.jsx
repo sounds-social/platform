@@ -109,7 +109,11 @@ const Sound = () => {
           />
         </div>
         <div className="mt-6 md:mt-0 md:ml-8 flex-grow">
-          <h1 className="text-4xl font-extrabold text-gray-900">{sound.title}</h1>
+          <h1 className="text-4xl font-extrabold text-gray-900">{sound.title}
+            {sound.isPrivate && (
+              <span className="ml-4 text-sm bg-red-500 text-white px-3 py-1 rounded-full">Private</span>
+            )}
+          </h1>
           <p className="text-lg text-gray-600 mt-2">
             by <Link to={`/profile/${sound.userSlug}`} className="text-blue-500 hover:underline">{sound.userName}</Link>
           </p>

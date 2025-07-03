@@ -47,6 +47,9 @@ const SoundCard = ({ sound, sounds, index }) => {
             <div className="text-white text-shadow-lg">
               <h3 className="text-xl font-bold text-shadow-md">
                 {sound.title}
+                {sound.isPrivate && (
+                  <span className="ml-2 text-sm bg-red-500 text-white px-2 py-0.5 rounded-full">Private</span>
+                )}
               </h3>
               <p className="text-sm text-shadow-sm">
                 <span onClick={handleUserClick} className="hover:underline cursor-pointer">
@@ -83,6 +86,9 @@ const SoundCard = ({ sound, sounds, index }) => {
             <div>
               <h3 className="text-lg font-semibold text-gray-800">
                 {sound.title}
+                {sound.isPrivate && (
+                  <span className="ml-2 text-sm bg-red-500 text-white px-2 py-0.5 rounded-full">Private</span>
+                )}
               </h3>
               <p className="text-sm text-gray-600">
                 <span onClick={handleUserClick} className="hover:underline cursor-pointer">
