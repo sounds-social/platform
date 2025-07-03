@@ -9,6 +9,7 @@ import { PlaylistsCollection as Playlists } from '../../api/playlists';
 import { Comments } from '../../api/comments';
 import { Groups } from '../../api/groups';
 import { FaYoutube, FaSpotify, FaInstagram, FaGlobe } from 'react-icons/fa';
+import { FiTrash2 } from 'react-icons/fi';
 import { BsTwitterX } from 'react-icons/bs';
 import SoundList from '../components/SoundList';
 import SupportModal from '../components/SupportModal';
@@ -173,6 +174,12 @@ const Profile = () => {
       }
     } catch (error) {
       console.error('Failed to toggle follow status:', error);
+    }
+  };
+
+  const handleRemoveComment = async (commentId) => {
+    if (window.confirm('Are you sure you want to remove this comment?')) {
+      await Meteor.callAsync('comments.remove', commentId);
     }
   };
 
@@ -353,10 +360,21 @@ const Profile = () => {
             {comments.length > 0 ? (
               <div className="space-y-4">
                 {comments.map(comment => (
-                  <div key={comment._id} className="bg-white rounded-lg shadow-md p-4">
-                    <p className="text-gray-800 text-sm">{comment.content}</p>
-                    <p className="text-gray-500 text-xs mt-2">On sound: <Link to={`/sound/${comment.soundId}`} className="text-blue-500 hover:underline">{comment.soundTitle || 'Unknown Sound'}</Link></p>
-                    <p className="text-gray-500 text-xs">Created at: {format(new Date(comment.createdAt), "dd.MM.yyyy - HH:mm")}</p>
+                  <div key={comment._id} className="bg-white rounded-lg shadow-md p-4 flex justify-between items-start">
+                    <div>
+                      <p className="text-gray-800 text-sm">{comment.content}</p>
+                      <p className="text-gray-500 text-xs mt-2">On sound: <Link to={`/sound/${comment.soundId}`} className="text-blue-500 hover:underline">{comment.soundTitle || 'Unknown Sound'}</Link></p>
+                      <p className="text-gray-500 text-xs">Created at: {format(new Date(comment.createdAt), "dd.MM.yyyy - HH:mm")}</p>
+                    </div>
+                    {comment.userId === Meteor.userId() && (
+                      <button
+                        onClick={() => handleRemoveComment(comment._id)}
+                        className="text-gray-500 hover:text-red-600 transition-colors duration-200 ml-4"
+                        title="Remove comment"
+                      >
+                        <FiTrash2 />
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>

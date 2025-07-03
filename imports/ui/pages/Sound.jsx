@@ -76,6 +76,12 @@ const Sound = () => {
     }
   };
 
+  const handleRemoveComment = async (commentId) => {
+    if (window.confirm('Are you sure you want to remove this comment?')) {
+      await Meteor.callAsync('comments.remove', commentId);
+    }
+  };
+
   if (loading) {
     return <div className="text-center py-8">Loading...</div>;
   }
@@ -211,16 +217,27 @@ const Sound = () => {
         {comments.length > 0 ? (
           <div className="space-y-6">
             {comments.map(comment => (
-              <div key={comment._id} className="bg-gray-50 p-4 rounded-lg shadow-sm">
-                <div className="flex items-center mb-2">
-                  <p className="font-semibold text-gray-800">
-                    <Link to={`/profile/${comment.userSlug}`} className="text-blue-500 hover:underline">
-                      {comment.userName}
-                    </Link>
-                  </p>
-                  <span className="ml-auto text-sm text-gray-500">{format(new Date(comment.createdAt), "dd.MM.yyyy - HH:mm")}</span>
+              <div key={comment._id} className="bg-gray-50 p-4 rounded-lg shadow-sm flex justify-between items-start">
+                <div>
+                  <div className="flex items-center mb-2">
+                    <p className="font-semibold text-gray-800">
+                      <Link to={`/profile/${comment.userSlug}`} className="text-blue-500 hover:underline">
+                        {comment.userName}
+                      </Link>
+                    </p>
+                    <span className="ml-4 text-sm text-gray-500">{format(new Date(comment.createdAt), "dd.MM.yyyy - HH:mm")}</span>
+                  </div>
+                  <p className="text-gray-700">{comment.content}</p>
                 </div>
-                <p className="text-gray-700">{comment.content}</p>
+                {comment.userId === Meteor.userId() && (
+                  <button
+                    onClick={() => handleRemoveComment(comment._id)}
+                    className="text-gray-500 hover:text-red-600 transition-colors duration-200"
+                    title="Remove comment"
+                  >
+                    <FiTrash2 />
+                  </button>
+                )}
               </div>
             ))}
           </div>

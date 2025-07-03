@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { format } from "date-fns";
+import { FiTrash2 } from 'react-icons/fi';
 import { Comments } from '../../api/comments';
 import { Sounds } from '../../api/sounds';
 
@@ -35,6 +36,12 @@ const AllComments = () => {
     return { comments: commentsWithSoundTitle, loading: false, user: currentUser };
   }, [slug]);
 
+  const handleRemoveComment = async (commentId) => {
+    if (window.confirm('Are you sure you want to remove this comment?')) {
+      await Meteor.callAsync('comments.remove', commentId);
+    }
+  };
+
   if (loading) {
     return <div className="text-center py-8">Loading...</div>;
   }
@@ -49,10 +56,21 @@ const AllComments = () => {
       {comments.length > 0 ? (
         <div className="space-y-4">
           {comments.map(comment => (
-            <div key={comment._id} className="bg-white rounded-lg shadow-md p-4">
-              <p className="text-gray-800">{comment.content}</p>
-              <p className="text-gray-500 text-sm mt-2">On sound: <Link to={`/sound/${comment.soundId}`} className="text-blue-500 hover:underline">{comment.soundTitle || 'Unknown Sound'}</Link></p>
-              <p className="text-gray-500 text-xs">Created at: {format(new Date(comment.createdAt), "dd.MM.yyyy - HH:mm")}</p>
+            <div key={comment._id} className="bg-white rounded-lg shadow-md p-4 flex justify-between items-start">
+              <div>
+                <p className="text-gray-800">{comment.content}</p>
+                <p className="text-gray-500 text-sm mt-2">On sound: <Link to={`/sound/${comment.soundId}`} className="text-blue-500 hover:underline">{comment.soundTitle || 'Unknown Sound'}</Link></p>
+                <p className="text-gray-500 text-xs">Created at: {format(new Date(comment.createdAt), "dd.MM.yyyy - HH:mm")}</p>
+              </div>
+              {comment.userId === Meteor.userId() && (
+                <button
+                  onClick={() => handleRemoveComment(comment._id)}
+                  className="text-gray-500 hover:text-red-600 transition-colors duration-200 ml-4"
+                  title="Remove comment"
+                >
+                  <FiTrash2 />
+                </button>
+              )}
             </div>
           ))}
         </div>
