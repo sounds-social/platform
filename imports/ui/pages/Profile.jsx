@@ -36,17 +36,18 @@ const Profile = () => {
       const groupsHandle = Meteor.subscribe('groups.byUser', currentUser._id);
       const likedSoundsHandle = Meteor.subscribe('sounds.likedByUser', currentUser._id);
 
-      const soundsReady = soundsHandle.ready();
+      const commentsSubscriptionReady = commentsHandle.ready();
+      if (!commentsSubscriptionReady) return { ...noDataAvailable, loading: true };
+
+      const userComments = Comments.find({ userId: currentUser._id }, { sort: { createdAt: -1 }, limit: 3 }).fetch();
+      const soundIdsFromComments = userComments.map(comment => comment.soundId);
+      const soundsByCommentsHandle = Meteor.subscribe('sounds.byIds', soundIdsFromComments);
+
+      const soundsReady = soundsHandle.ready() && soundsByCommentsHandle.ready();
       const playlistsReady = playlistsHandle.ready();
-      const commentsReady = commentsHandle.ready();
       const groupsReady = groupsHandle.ready();
       const likedSoundsReady = likedSoundsHandle.ready();
 
-      const userSounds = Sounds.find({ userId: currentUser._id }, { sort: { createdAt: -1 } }).fetch();
-      const userPlaylists = Playlists.find({ ownerId: currentUser._id }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
-      const totalPlaylistsCount = Playlists.find({ ownerId: currentUser._id }).count();
-      const userComments = Comments.find({ userId: currentUser._id }, { sort: { createdAt: -1 }, limit: 3 }).fetch();
-      const totalCommentsCount = Comments.find({ userId: currentUser._id }).count();
       const commentsWithSoundTitle = userComments.map(comment => {
         const sound = Sounds.findOne(comment.soundId);
         return {
@@ -54,6 +55,11 @@ const Profile = () => {
           soundTitle: sound ? sound.title : 'Unknown Sound',
         };
       });
+
+      const userSounds = Sounds.find({ userId: currentUser._id }, { sort: { createdAt: -1 } }).fetch();
+      const userPlaylists = Playlists.find({ ownerId: currentUser._id }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
+      const totalPlaylistsCount = Playlists.find({ ownerId: currentUser._id }).count();
+      const totalCommentsCount = Comments.find({ userId: currentUser._id }).count();
       const userGroups = Groups.find({ members: currentUser._id }).fetch();
       const likedSounds = Sounds.find({ 'likes.userId': currentUser._id })
         .fetch()
@@ -73,7 +79,7 @@ const Profile = () => {
           playlists: userPlaylists, 
           comments: commentsWithSoundTitle, 
           groups: userGroups, 
-          loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady || !likedSoundsReady, 
+          loading: !soundsReady || !playlistsReady || !commentsSubscriptionReady || !groupsReady || !likedSoundsReady, 
           likedSounds,
           totalLikedSoundsCount,
           totalCommentsCount,
@@ -97,16 +103,18 @@ const Profile = () => {
       const groupsHandle = Meteor.subscribe('groups.byUser', currentUser._id);
       const likedSoundsHandle = Meteor.subscribe('sounds.likedByUser', currentUser._id);
 
-      const soundsReady = soundsHandle.ready();
+      const commentsSubscriptionReady = commentsHandle.ready();
+      if (!commentsSubscriptionReady) return { ...noDataAvailable, loading: true };
+
+      const otherUserComments = Comments.find({ userId: currentUser._id }, { sort: { createdAt: -1 }, limit: 3 }).fetch();
+      const soundIdsFromComments = otherUserComments.map(comment => comment.soundId);
+      const soundsByCommentsHandle = Meteor.subscribe('sounds.byIds', soundIdsFromComments);
+
+      const soundsReady = soundsHandle.ready() && soundsByCommentsHandle.ready();
       const playlistsReady = playlistsHandle.ready();
-      const commentsReady = commentsHandle.ready();
       const groupsReady = groupsHandle.ready();
       const likedSoundsReady = likedSoundsHandle.ready();
 
-      const userSounds = Sounds.find({ userId: currentUser._id, isPrivate: false }, { sort: { createdAt: -1 } }).fetch();
-      const userPlaylists = Playlists.find({ ownerId: currentUser._id, isPublic: true }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
-      const totalPlaylistsCount = Playlists.find({ ownerId: currentUser._id, isPublic: true }).count();
-      const otherUserComments = Comments.find({ userId: currentUser._id }, { sort: { createdAt: -1 }, limit: 3 }).fetch();
       const otherCommentsWithSoundTitle = otherUserComments.map(comment => {
         const sound = Sounds.findOne(comment.soundId);
 
@@ -115,6 +123,11 @@ const Profile = () => {
           soundTitle: sound ? sound.title : 'Unknown Sound',
         };
       });
+
+      const userSounds = Sounds.find({ userId: currentUser._id, isPrivate: false }, { sort: { createdAt: -1 } }).fetch();
+      const userPlaylists = Playlists.find({ ownerId: currentUser._id, isPublic: true }, { sort: { createdAt: -1 }, limit: 4 }).fetch();
+      const totalPlaylistsCount = Playlists.find({ ownerId: currentUser._id, isPublic: true }).count();
+      const totalCommentsCount = Comments.find({ userId: currentUser._id }).count();
       const userGroups = Groups.find({ members: currentUser._id }).fetch();
       const likedSounds = Sounds.find({ 'likes.userId': currentUser._id })
         .fetch()
@@ -126,7 +139,6 @@ const Profile = () => {
         .slice(0, 4);
 
       const totalLikedSoundsCount = Sounds.find({ 'likes.userId': currentUser._id }).count();
-      const totalCommentsCount = Comments.find({ userId: currentUser._id }).count();
       const followerCount = currentUser.profile.followers?.length || 0;
 
       return { 
@@ -135,7 +147,7 @@ const Profile = () => {
           playlists: userPlaylists, 
           comments: otherCommentsWithSoundTitle, 
           groups: userGroups, 
-          loading: !soundsReady || !playlistsReady || !commentsReady || !groupsReady || !likedSoundsReady, 
+          loading: !soundsReady || !playlistsReady || !commentsSubscriptionReady || !groupsReady || !likedSoundsReady, 
           likedSounds, 
           totalLikedSoundsCount,
           totalCommentsCount,
