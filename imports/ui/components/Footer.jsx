@@ -9,8 +9,11 @@ const Footer = () => {
           {new Date().getFullYear()} Sounds Social
         </div>
         <div>
-          <Link to="/terms-of-service" className="text-blue-500 hover:underline text-sm">
+          <Link to="/terms-of-service" className="text-blue-500 hover:underline text-sm mr-4">
             Terms of Service
+          </Link>
+          <Link to="/privacy-policy" className="text-blue-500 hover:underline text-sm">
+            Privacy Policy
           </Link>
         </div>
       </div>

@@ -35,6 +35,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AudioPlayer from './components/AudioPlayer';
 import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 // Import AudioPlayerContext
 import { AudioPlayerProvider, useAudioPlayer } from './contexts/AudioPlayerContext';
@@ -104,6 +105,7 @@ export const App = () => {
           <NotificationsPage />
         </Route>
         <Route path="/terms-of-service" component={TermsOfService} />
+        <Route path="/privacy-policy" component={PrivacyPolicy} />
         <Route path="/logout" component={() => {
           Meteor.logout();
           window.location.href = '/';
