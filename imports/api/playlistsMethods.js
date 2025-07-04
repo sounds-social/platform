@@ -80,9 +80,17 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
-    return await PlaylistsCollection.updateAsync(playlistId, {
-      $addToSet: { soundIds: soundId },
-    });
+    return await PlaylistsCollection.updateAsync(
+      { _id: playlistId, soundIds: { $ne: soundId } },
+      {
+        $push: {
+          soundIds: {
+            $each: [soundId],
+            $position: 0,
+          },
+        },
+      },
+    );
   },
 
   async 'playlists.removeSound'(playlistId, soundId) {
