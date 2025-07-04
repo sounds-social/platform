@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
+import { FiLoader } from 'react-icons/fi';
 
 import AllComments from './pages/AllComments';
 import AllLikes from './pages/AllLikes';
@@ -39,8 +40,19 @@ import TermsOfService from './pages/TermsOfService';
 import { AudioPlayerProvider, useAudioPlayer } from './contexts/AudioPlayerContext';
 
 export const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const user = useTracker(() => Meteor.user());
-  const { currentSound, setCurrentSound } = useAudioPlayer();
+  const { currentSound } = useAudioPlayer();
+
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 500);
+
+  if (isLoading) {
+    return (<div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100">
+      <div className="animate-spin"><FiLoader size={30} /></div>
+    </div>);
+  }
 
   return (
     <Router>
