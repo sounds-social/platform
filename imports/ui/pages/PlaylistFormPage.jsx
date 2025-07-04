@@ -60,11 +60,17 @@ const PlaylistFormPage = () => {
       const { active, over } = event;
 
       if (active && over && active.id !== over.id) {
+        const { scrollY } = window;
+
         setSoundIds((items) => {
           const oldIndex = items.indexOf(active.id);
           const newIndex = items.indexOf(over.id);
           return arrayMove(items, oldIndex, newIndex);
         });
+
+        setTimeout(() => {
+          window.scrollTo(0, scrollY)
+        }, 500);
       }
     } catch (error) {
       console.error("Error during drag end:", error);
