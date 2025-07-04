@@ -14,14 +14,18 @@ const About = () => {
                   <span className="block xl:inline">Sounds Social</span>
                 </h1>
                 <p className="mt-3 text-base text-gray-200 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                  Share your sound with the world. Connect with other musicians and get discovered.
+                  Share your sound with the world.<br/>Connect with other musicians and get discovered.
                 </p>
               </div>
             </main>
           </div>
         </div>
         <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-          <img className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="" />
+          <img 
+            className="h-40 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" 
+            src="https://plus.unsplash.com/premium_photo-1682125896993-12a1758b6cb3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            alt=""
+          />
         </div>
       </div>
 
