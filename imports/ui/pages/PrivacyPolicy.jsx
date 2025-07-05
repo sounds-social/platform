@@ -1,8 +1,12 @@
 import React from 'react';
+import { HeadProvider, Title } from 'react-head';
 
 const PrivacyPolicy = () => {
   return (
     <div className="container mx-auto p-8 prose">
+      <HeadProvider>
+        <Title>Privacy Policy - Sounds Social</Title>
+      </HeadProvider>
       <h1>Privacy Policy (Placeholder)</h1>
       <p>
         Your privacy is important to us. It is Sounds Social's policy to respect your privacy regarding any information we may collect from you across our website, and other sites we own and operate.

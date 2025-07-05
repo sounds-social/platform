@@ -1,8 +1,12 @@
 import React from 'react';
+import { HeadProvider, Title } from 'react-head';
 
 const TermsOfService = () => {
   return (
     <div className="container mx-auto p-8 prose">
+      <HeadProvider>
+        <Title>Terms of Service - Sounds Social</Title>
+      </HeadProvider>
       <h1>Terms of Service (Placeholder)</h1>
       <p >
         Welcome to Sounds Social! These terms and conditions outline the rules and regulations for the use of Sounds Social's Website.

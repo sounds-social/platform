@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
@@ -92,6 +93,9 @@ const Sound = () => {
 
   return (
     <div className="py-8">
+      <HeadProvider>
+        <title>{sound.title} - Sounds Social</title>
+      </HeadProvider>
       {sound.backgroundImage && (
         <div
           className="relative w-full h-64 bg-cover bg-center rounded-lg shadow-md mb-8"

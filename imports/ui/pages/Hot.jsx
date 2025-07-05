@@ -1,4 +1,5 @@
 import React from 'react';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
@@ -33,6 +34,9 @@ const Hot = () => {
 
   return (
     <div className="my-8">
+      <HeadProvider>
+        <Title>Hottest Sounds - Sounds Social</Title>
+      </HeadProvider>
       <h2 className="text-3xl font-bold text-gray-800 mb-2">Hottest Sounds</h2>
       <p className="text-gray-500 mb-6">Sounds with the most plays in the last 30 days.</p>
       <SoundList sounds={sounds} loading={loading} noSoundsMessage="No hot sounds to display yet." />

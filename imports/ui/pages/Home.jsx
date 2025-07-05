@@ -1,4 +1,5 @@
 import React from 'react';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
@@ -35,6 +36,9 @@ const Home = () => {
 
   return (
     <div className="my-8">
+      <HeadProvider>
+        <Title>Latest Sounds - Sounds Social</Title>
+      </HeadProvider>
       <h2 className="text-3xl font-bold text-gray-800 mb-2">Latest Sounds</h2>
       <p className="text-gray-500 mb-6">See the latest sounds from users you follow and your own uploads.</p>
       <SoundList sounds={sounds} loading={loading} noSoundsMessage="No sounds found. Upload your first sound or follow other users." />

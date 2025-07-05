@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { PlaylistsCollection } from '../../api/playlists';
@@ -120,6 +121,9 @@ const PlaylistFormPage = () => {
 
   return (
     <div className="container mx-auto p-4 bg-gray-50 min-h-screen">
+      <HeadProvider>
+        <title>{playlistId ? 'Edit Playlist' : 'Create New Playlist'} - Sounds Social</title>
+      </HeadProvider>
       <h1 className="text-3xl font-bold text-gray-900 mb-6">{playlistId ? 'Edit Playlist' : 'Create New Playlist'}</h1>
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
         <div className="mb-5">

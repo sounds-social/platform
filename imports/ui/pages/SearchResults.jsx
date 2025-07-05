@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
@@ -71,6 +72,9 @@ const SearchResults = () => {
 
   return (
     <div className="py-8">
+      <HeadProvider>
+        <title>Search Results for "{searchQuery}" - Sounds Social</title>
+      </HeadProvider>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Search Results for "{searchQuery}"</h1>
 
       <div className="flex space-x-4 mb-6">

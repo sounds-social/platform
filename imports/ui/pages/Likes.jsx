@@ -1,4 +1,5 @@
 import React from 'react';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
@@ -20,6 +21,9 @@ const Likes = () => {
 
   return (
     <div className="py-8">
+      <HeadProvider>
+        <Title>Liked Sounds - Sounds Social</Title>
+      </HeadProvider>
       <h1 className="text-3xl font-bold text-gray-800 mb-8">Liked Sounds</h1>
       <SoundList sounds={likedSounds} loading={loading} noSoundsMessage="You haven't liked any sounds yet." />
     </div>
