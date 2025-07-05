@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
@@ -40,6 +41,9 @@ const Explore = () => {
 
   return (
     <div className="my-8">
+      <HeadProvider>
+        <Title>Explore Sounds - Sounds Social</Title>
+      </HeadProvider>
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-3xl font-bold text-gray-800">Explore Sounds</h2>
         <button

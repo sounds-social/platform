@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { PlaylistsCollection } from '../../api/playlists';
@@ -58,6 +59,9 @@ const PlaylistDetailPage = () => {
 
   return (
     <div className="container mx-auto p-4 bg-gray-50 min-h-screen">
+      <HeadProvider>
+        <Title>{playlist.name} - Sounds Social</Title>
+      </HeadProvider>
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 flex flex-col md:flex-row items-center md:items-start">
         {playlist.coverImageUrl ? (
           <img

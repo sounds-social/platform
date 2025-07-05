@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { format } from "date-fns";
@@ -197,6 +198,9 @@ const Profile = () => {
 
   return (
     <div className="py-8">
+      <HeadProvider>
+        <Title>{user.profile.displayName} - Sounds Social</Title>
+      </HeadProvider>
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 flex flex-col md:flex-row items-center md:items-start">
         {user.profile.avatar ? (
           <img

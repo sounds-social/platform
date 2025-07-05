@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import UploadcareWidget from '../components/UploadcareWidget';
 import { useParams, useHistory } from 'react-router-dom';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
@@ -57,6 +58,9 @@ const SoundEdit = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <HeadProvider>
+        <Title>Edit {sound.title} - Sounds Social</Title>
+      </HeadProvider>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Edit Sound</h2>
       </div>

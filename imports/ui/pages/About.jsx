@@ -1,9 +1,13 @@
 import React from 'react';
+import { HeadProvider, Title } from 'react-head';
 import { FiShare2, FiDollarSign, FiCode, FiUploadCloud, FiZap, FiMusic } from 'react-icons/fi';
 
 const About = () => {
   return (
     <div className="bg-gray-50">
+      <HeadProvider>
+        <Title>About - Sounds Social</Title>
+      </HeadProvider>
       {/* Hero Section */}
       <div className="relative rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white overflow-hidden">
         <div className="max-w-7xl mx-auto">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { format } from "date-fns";
@@ -52,6 +53,9 @@ const AllComments = () => {
 
   return (
     <div className="py-8">
+      <HeadProvider>
+        <Title>All Comments by {user.profile.displayName} - Sounds Social</Title>
+      </HeadProvider>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">All Comments by {user.profile.displayName}</h1>
       {comments.length > 0 ? (
         <div className="space-y-4">

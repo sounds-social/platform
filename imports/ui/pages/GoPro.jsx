@@ -1,8 +1,12 @@
 import React from 'react';
+import { HeadProvider, Title } from 'react-head';
 
 const GoPro = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
+      <HeadProvider>
+        <Title>Go PRO - Sounds Social</Title>
+      </HeadProvider>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">Choose your plan</h2>

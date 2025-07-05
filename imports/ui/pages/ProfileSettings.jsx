@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
+import { HeadProvider, Title } from 'react-head';
 import { Meteor } from 'meteor/meteor';
 import UploadcareWidget from '../components/UploadcareWidget';
 
@@ -66,6 +67,9 @@ const ProfileSettings = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <HeadProvider>
+        <Title>Profile Settings - Sounds Social</Title>
+      </HeadProvider>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Profile Settings</h2>
       </div>

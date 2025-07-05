@@ -4,6 +4,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Notifications as NotificationsCollection } from '../../api/notifications';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
+import { HeadProvider, Title } from 'react-head';
 
 export const NotificationsPage = () => {
   const { notifications, isLoading } = useTracker(() => {
@@ -25,6 +26,9 @@ export const NotificationsPage = () => {
 
   return (
     <div className="container mx-auto py-8">
+      <HeadProvider>
+        <Title>Notifications - Sounds Social</Title>
+      </HeadProvider>
       <h1 className="text-2xl font-bold mb-4">Notifications</h1>
       {notifications.some(notification => !notification.isRead) && (
         <button

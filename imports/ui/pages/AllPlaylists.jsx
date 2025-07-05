@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { PlaylistsCollection as Playlists } from '../../api/playlists';
@@ -45,6 +46,9 @@ const AllPlaylists = () => {
 
   return (
     <div className="py-8">
+      <HeadProvider>
+        <Title>All Playlists by {user.profile.displayName} - Sounds Social</Title>
+      </HeadProvider>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">
         All Playlists by <Link to={`/profile/${user.profile.slug}`} className="text-blue-500 hover:underline">{user.profile.displayName}</Link>
       </h1>
