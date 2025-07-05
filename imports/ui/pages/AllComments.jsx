@@ -54,7 +54,7 @@ const AllComments = () => {
   return (
     <div className="py-8">
       <HeadProvider>
-        <title>All Comments by {user.profile.displayName} - Sounds Social</title>
+        <Title>All Comments by {user.profile.displayName} - Sounds Social</Title>
       </HeadProvider>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">All Comments by {user.profile.displayName}</h1>
       {comments.length > 0 ? (

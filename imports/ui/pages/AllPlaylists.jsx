@@ -47,7 +47,7 @@ const AllPlaylists = () => {
   return (
     <div className="py-8">
       <HeadProvider>
-        <title>All Playlists by {user.profile.displayName} - Sounds Social</title>
+        <Title>All Playlists by {user.profile.displayName} - Sounds Social</Title>
       </HeadProvider>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">
         All Playlists by <Link to={`/profile/${user.profile.slug}`} className="text-blue-500 hover:underline">{user.profile.displayName}</Link>

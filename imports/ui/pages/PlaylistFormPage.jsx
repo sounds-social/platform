@@ -122,7 +122,7 @@ const PlaylistFormPage = () => {
   return (
     <div className="container mx-auto p-4 bg-gray-50 min-h-screen">
       <HeadProvider>
-        <title>{playlistId ? 'Edit Playlist' : 'Create New Playlist'} - Sounds Social</title>
+        <Title>{playlistId ? 'Edit Playlist' : 'Create New Playlist'} - Sounds Social</Title>
       </HeadProvider>
       <h1 className="text-3xl font-bold text-gray-900 mb-6">{playlistId ? 'Edit Playlist' : 'Create New Playlist'}</h1>
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">

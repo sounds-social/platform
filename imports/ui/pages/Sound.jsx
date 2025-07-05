@@ -94,7 +94,7 @@ const Sound = () => {
   return (
     <div className="py-8">
       <HeadProvider>
-        <title>{sound.title} - Sounds Social</title>
+        <Title>{sound.title} - Sounds Social</Title>
       </HeadProvider>
       {sound.backgroundImage && (
         <div

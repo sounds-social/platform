@@ -73,7 +73,7 @@ const SearchResults = () => {
   return (
     <div className="py-8">
       <HeadProvider>
-        <title>Search Results for "{searchQuery}" - Sounds Social</title>
+        <Title>Search Results for "{searchQuery}" - Sounds Social</Title>
       </HeadProvider>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Search Results for "{searchQuery}"</h1>
 

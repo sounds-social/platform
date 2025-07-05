@@ -48,7 +48,7 @@ const Group = () => {
   return (
     <div className="py-8">
       <HeadProvider>
-        <title>{group.name} - Sounds Social</title>
+        <Title>{group.name} - Sounds Social</Title>
       </HeadProvider>
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 flex flex-col md:flex-row items-center md:items-start">
         <div className="text-center md:text-left flex-grow">

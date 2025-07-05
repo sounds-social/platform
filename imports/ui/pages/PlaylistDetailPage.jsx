@@ -60,7 +60,7 @@ const PlaylistDetailPage = () => {
   return (
     <div className="container mx-auto p-4 bg-gray-50 min-h-screen">
       <HeadProvider>
-        <title>{playlist.name} - Sounds Social</title>
+        <Title>{playlist.name} - Sounds Social</Title>
       </HeadProvider>
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 flex flex-col md:flex-row items-center md:items-start">
         {playlist.coverImageUrl ? (
