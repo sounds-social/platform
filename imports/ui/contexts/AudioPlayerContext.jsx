@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 const AudioPlayerContext = createContext();
 
 export const AudioPlayerProvider = ({ children }) => {
-  const [currentSound, setCurrentSound] = useState(null); // { src, title, id }
+  const [currentSound, setCurrentSound] = useState(null); // { src, title, id, hideTitle? }
   const [playlist, setPlaylist] = useState([]); // Array of { src, title, id }
   const [playlistIndex, setPlaylistIndex] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);

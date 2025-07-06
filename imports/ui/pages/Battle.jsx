@@ -50,7 +50,7 @@ const Battle = () => {
   };
 
   const handlePlay = (sound) => {
-    playSingleSound({ src: sound.audioFile, title: sound.title, id: sound._id });
+    playSingleSound({ src: sound.audioFile, title: sound.title, id: sound._id, hideTitle: true });
   }
 
   if (step === 'intro') {
