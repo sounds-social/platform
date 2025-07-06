@@ -1,2 +1,24 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@layer utilities {
+  .shadow-neon-blue {
+    box-shadow: 0 0 2px #60a5fa, 0 0 5px #60a5fa, 0 0 8px #60a5fa, 0 0 10px #60a5fa;
+  }
+  .shadow-neon-pink {
+    box-shadow: 0 0 2px #f472b6, 0 0 5px #f472b6, 0 0 8px #f472b6, 0 0 10px #f472b6;
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s infinite ease-in-out;
+}

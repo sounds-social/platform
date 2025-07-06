@@ -55,10 +55,10 @@ const Battle = () => {
 
   if (step === 'intro') {
     return (
-      <div className="text-center my-20">
-        <h1 className="text-6xl w-full text-transparent bg-clip-text font-extrabold bg-linear-65 bg-gradient-to-r from-purple-500 to-pink-500 p-2 mb-4">Sounds Battle</h1>
-        <p className="mb-8 font-medium text-lg">Which sound slaps harder? You decide.<br/>Press the thumbs up button to choose the winner.</p>
-        <button onClick={handleStart} className="bg-linear-65 from-purple-500 to-pink-500 cursor-pointer hover:animate-pulse text-white px-6 py-3 rounded-md">Continue</button>
+      <div className="text-center my-20 p-8 rounded-lg">
+        <h1 className="text-6xl w-full text-transparent bg-clip-text font-extrabold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-2 mb-4 animate-pulse-slow">Sounds Battle</h1>
+        <p className="mb-8 font-medium text-xl text-purple-950">Which sound slaps harder? You decide.<br/>Press the thumbs up button to choose the winner.</p>
+        <button onClick={handleStart} className="cursor-pointer bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full text-lg font-bold uppercase tracking-wide shadow-lg hover:shadow-neon-pink transition-all duration-300 ease-in-out transform hover:scale-105">Enter the Battle</button>
       </div>
     );
   }
@@ -68,25 +68,29 @@ const Battle = () => {
       return <div>Loading sounds...</div>;
     }
     return (
-      <div className="flex justify-center items-center">
-        <div className="text-center mx-4">
-          <img src={sounds[0].coverImage} alt={sounds[0].title} className="rounded-lg w-64 h-64 object-cover mb-4 shadow-xl" />
-          <button onClick={() => handlePlay(sounds[0])} className="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-md mr-2">
-            <FiPlay size={20} />
-          </button>
-          <button onClick={() => handleVote(sounds[0]._id)} className="cursor-pointer bg-linear-65 from-purple-500 to-pink-500 text-white px-6 py-3 rounded-md">
-            <FiThumbsUp size={20} />
-          </button>
+      <div className="flex flex-col md:flex-row justify-center items-center min-h-[60vh]">
+        <div className="flex flex-col items-center mx-4 p-6 bg-gray-900 rounded-lg shadow-neon-blue transform hover:scale-105 transition-all duration-300">
+          <img src={sounds[0].coverImage} alt={sounds[0].title} className="rounded-lg w-64 h-64 object-cover mb-4 shadow-lg shadow-purple-500/50" />
+          <div className="flex space-x-2">
+            <button onClick={() => handlePlay(sounds[0])} className="cursor-pointer bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full text-lg font-bold uppercase tracking-wide shadow-lg hover:shadow-neon-blue transition-all duration-300 ease-in-out">
+              <FiPlay size={20} />
+            </button>
+            <button onClick={() => handleVote(sounds[0]._id)} className="cursor-pointer bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full text-lg font-bold uppercase tracking-wide shadow-lg hover:shadow-neon-pink transition-all duration-300 ease-in-out">
+              <FiThumbsUp size={20} />
+            </button>
+          </div>
         </div>
-        <div className="text-2xl font-bold mx-10">versus</div>
-        <div className="text-center mx-4">
-          <img src={sounds[1].coverImage} alt={sounds[1].title} className="rounded-lg w-64 h-64 object-cover mb-4 shadow-xl" />
-          <button onClick={() => handlePlay(sounds[1])} className="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-md mr-2">
-            <FiPlay size={20} />
-          </button>
-          <button onClick={() => handleVote(sounds[1]._id)} className="cursor-pointer bg-linear-65 from-purple-500 to-pink-500 text-white px-6 py-3 rounded-md">
-            <FiThumbsUp size={20} />
-          </button>
+        <div className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 mx-10 my-8 md:my-0">VS</div>
+        <div className="flex flex-col items-center mx-4 p-6 bg-gray-900 rounded-lg shadow-neon-blue transform hover:scale-105 transition-all duration-300">
+          <img src={sounds[1].coverImage} alt={sounds[1].title} className="rounded-lg w-64 h-64 object-cover mb-4 shadow-lg shadow-purple-500/50" />
+          <div className="flex space-x-2">
+            <button onClick={() => handlePlay(sounds[1])} className="cursor-pointer bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-full text-lg font-bold uppercase tracking-wide shadow-lg hover:shadow-neon-blue transition-all duration-300 ease-in-out">
+              <FiPlay size={20} />
+            </button>
+            <button onClick={() => handleVote(sounds[1]._id)} className="cursor-pointer bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full text-lg font-bold uppercase tracking-wide shadow-lg hover:shadow-neon-pink transition-all duration-300 ease-in-out">
+              <FiThumbsUp size={20} />
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -94,18 +98,18 @@ const Battle = () => {
 
   if (step === 'result') {
     return (
-      <div className="text-center">
-        <h2 className="text-3xl font-bold mb-4">Winner!</h2>
+      <div className="text-center mb-14 rounded-lg shadow-neon-purple">
+        <h2 className="text-4xl font-bold mb-10 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Winner!</h2>
         {winner && (
-          <div>
+          <div className="p-6 bg-gray-900 rounded-lg shadow-neon-blue inline-block transform hover:scale-105 transition-all duration-300">
             <Link to={`/sound/${winner._id}`} target="_blank" rel="noopener noreferrer">
-              <img src={winner.coverImage} alt={winner.title} className="rounded-lg shadow-xl w-64 h-64 object-cover mx-auto mb-4" />
-              <h3 className="text-xl font-bold">{winner.title}</h3>
+              <img src={winner.coverImage} alt={winner.title} className="rounded-lg w-64 h-64 object-cover mx-auto mb-4 shadow-lg shadow-purple-500/50" />
+              <h3 className="text-xl font-bold text-pink-400 text-shadow-neon">{winner.title}</h3>
             </Link>
-            <p>by {winner.userName}</p>
+            <p className="text-purple-300">by {winner.userName}</p>
           </div>
         )}
-        <button onClick={handleNext} className="bg-linear-65 from-purple-500 to-pink-500 text-white px-6 py-3 rounded-md mt-8">Next Battle</button>
+        <button onClick={handleNext} className="block mx-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full text-lg font-bold uppercase tracking-wide shadow-lg hover:shadow-neon-pink transition-all duration-300 ease-in-out transform hover:scale-105 mt-8">Next Battle</button>
       </div>
     );
   }
