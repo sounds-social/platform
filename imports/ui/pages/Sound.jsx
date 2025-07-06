@@ -5,7 +5,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
 import { Comments } from '../../api/comments';
-import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2 } from 'react-icons/fi';
+import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2, FiAward } from 'react-icons/fi';
 import { format, formatDistanceToNow } from "date-fns";
 import AddPlaylistModal from '../components/AddPlaylistModal';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
@@ -149,6 +149,10 @@ const Sound = () => {
             <div className="flex items-center text-gray-600">
               <FiMessageSquare className="mr-2 text-xl" />
               <span>{comments.length}  {comments.length === 1 ? 'Comment' : 'Comments'}</span>
+            </div>
+            <div className="flex items-center text-gray-600">
+              <FiAward className="mr-2 text-xl" />
+              <span>Battles Won: {sound.battlesWonCount || 0}</span>
             </div>
           </div>
 

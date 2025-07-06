@@ -22,7 +22,7 @@ const Navbar = ({ user }) => {
     <>
       <Link onClick={handleDropdownClick} to="/" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Latest</Link>
       <Link onClick={handleDropdownClick} to="/hot" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</Link>
-      <Link onClick={handleDropdownClick} to="/explore" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Explore</Link>
+      <Link onClick={handleDropdownClick} to="/battle" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Battle</Link>
       <Link onClick={handleDropdownClick} to="/sound/add" className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Upload</Link>
     </>
   );
@@ -44,6 +44,7 @@ const Navbar = ({ user }) => {
         <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50">
           
           {/* <Link onClick={handleDropdownClick} to="/support-overview" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support Overview</Link> */}
+          <Link onClick={handleDropdownClick}  to="/explore" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Explore</Link>
           <Link onClick={handleDropdownClick}  to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</Link>
           <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Donate</a>
           <a onClick={handleDropdownClick} href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Github</a>
@@ -135,6 +136,7 @@ const Navbar = ({ user }) => {
             <div className="pt-4 pb-3 border-t border-gray-200">
               <div className="px-2 space-y-1">
                 {/* <Link onClick={handleDropdownClick} to="/support-overview" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Support Overview</Link> */}
+                <Link onClick={handleDropdownClick} to="/explore" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Explore</Link>
                 <Link onClick={handleDropdownClick} to="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Profile</Link>
                 <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Donate</a>
                 <a onClick={handleDropdownClick} href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Github</a>

@@ -68,6 +68,10 @@ const SoundsSchema = new SimpleSchema({
     type: SimpleSchema.Integer,
     defaultValue: 0,
   },
+  battlesWonCount: {
+    type: SimpleSchema.Integer,
+    defaultValue: 0,
+  },
   userId: {
     type: String,
   },

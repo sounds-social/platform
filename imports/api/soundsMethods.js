@@ -131,7 +131,19 @@ Meteor.methods({
   async 'sounds.getLikedSoundsCount'(userId) {
     check(userId, String);
     return await Sounds.find({ likes: userId }).countAsync();
-  }
+  },
+
+  async 'sounds.winBattle'(soundId) {
+    check(soundId, String);
+
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    return await Sounds.updateAsync(soundId, {
+      $inc: { battlesWonCount: 1 },
+    });
+  },
 });
 
 if (Meteor.isServer) {

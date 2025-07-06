@@ -48,3 +48,7 @@ Meteor.publish('sounds.singleSound', async function (soundId) {
     return this.ready();
   }
 });
+
+Meteor.publish('sounds.random', function () {
+  return Sounds.find({ isPrivate: false }, { limit: 2, sort: { createdAt: -1 } });
+});
