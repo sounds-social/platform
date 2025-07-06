@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FiPlay, FiHeart } from 'react-icons/fi';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
+import { formatDistanceToNow } from 'date-fns';
 
 const SoundCard = ({ sound, sounds, index }) => {
   const isPrivate = sound.isPrivate && sound.userId !== Meteor.userId();
@@ -44,17 +45,22 @@ const SoundCard = ({ sound, sounds, index }) => {
                 <FiHeart className="mr-1" /> {sound.likes ? sound.likes.length : 0}
               </div>
             </div>
-            <div className="text-white text-shadow-lg">
-              <h3 className="text-xl font-bold text-shadow-md">
-                {sound.title}
-                {sound.isPrivate && (
-                  <span className="ml-2 text-sm bg-red-500 text-white px-2 py-0.5 rounded-full">Private</span>
-                )}
-              </h3>
-              <p className="text-sm text-shadow-sm">
-                <span onClick={handleUserClick} className="hover:underline cursor-pointer">
-                  {sound.userName}
-                </span>
+            <div className="flex justify-between items-end">
+              <div className="text-white text-shadow-lg">
+                <h3 className="text-xl font-bold text-shadow-md">
+                  {sound.title}
+                  {sound.isPrivate && (
+                    <span className="ml-2 text-sm bg-red-500 text-white px-2 py-0.5 rounded-full">Private</span>
+                  )}
+                </h3>
+                <p className="text-sm text-shadow-sm">
+                  <span onClick={handleUserClick} className="hover:underline cursor-pointer">
+                    {sound.userName}
+                  </span>
+                </p>
+              </div>
+              <p className="text-xs text-gray-200">
+                {formatDistanceToNow(new Date(sound.createdAt))} ago
               </p>
             </div>
           </div>
@@ -84,17 +90,24 @@ const SoundCard = ({ sound, sounds, index }) => {
           </div>
           <div className="flex-grow p-4 flex flex-col justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800">
-                {sound.title}
-                {sound.isPrivate && (
-                  <span className="ml-2 text-sm bg-red-500 text-white px-2 py-0.5 rounded-full">Private</span>
-                )}
-              </h3>
-              <p className="text-sm text-gray-600">
-                <span onClick={handleUserClick} className="hover:underline cursor-pointer">
-                  {sound.userName}
-                </span>
-              </p>
+              <div className="flex justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {sound.title}
+                    {sound.isPrivate && (
+                      <span className="ml-2 text-sm bg-red-500 text-white px-2 py-0.5 rounded-full">Private</span>
+                    )}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    <span onClick={handleUserClick} className="hover:underline cursor-pointer">
+                      {sound.userName}
+                    </span>
+                  </p>
+                </div>
+                <p className="text-xs text-gray-500 ml-4">
+                  {formatDistanceToNow(new Date(sound.createdAt))} ago
+                </p>
+              </div>
             </div>
             <div className="flex items-center space-x-4 mt-2">
               <div className="flex items-center text-gray-500 text-sm">

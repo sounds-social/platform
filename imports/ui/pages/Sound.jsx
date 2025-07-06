@@ -6,7 +6,7 @@ import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
 import { Comments } from '../../api/comments';
 import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2 } from 'react-icons/fi';
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import AddPlaylistModal from '../components/AddPlaylistModal';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 
@@ -119,7 +119,7 @@ const Sound = () => {
             )}
           </h1>
           <p className="text-lg text-gray-600 mt-2">
-            by <Link to={`/profile/${sound.userSlug}`} className="text-blue-500 hover:underline">{sound.userName}</Link>
+            by <Link to={`/profile/${sound.userSlug}`} className="text-blue-500 hover:underline">{sound.userName}</Link> &bull; {formatDistanceToNow(new Date(sound.createdAt))} ago
           </p>
           <p className="text-gray-700 mt-4">{sound.description}</p>
 
