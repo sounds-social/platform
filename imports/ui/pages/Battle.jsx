@@ -2,21 +2,27 @@
 import React, { useState, useEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
-import { FiThumbsUp } from "react-icons/fi";
+import { FiThumbsUp, FiPlay } from "react-icons/fi";
 import { Sounds } from '../../api/sounds';
+import { useAudioPlayer } from '../contexts/AudioPlayerContext';
+import { Link } from 'react-router-dom';
 
 const Battle = () => {
   const [step, setStep] = useState('intro'); // intro, battle, result
   const [sounds, setSounds] = useState([]);
   const [winner, setWinner] = useState(null);
+  const [battleCounter, setBattleCounter] = useState(0); // New state to force re-subscription
+  const { playSingleSound } = useAudioPlayer();
 
   const { soundsReady, randomSounds } = useTracker(() => {
-    const handle = Meteor.subscribe('sounds.random');
+    // Re-subscribe to sounds.random whenever battleCounter changes
+    const handle = Meteor.subscribe('sounds.random', battleCounter);
+    const usersHandle = Meteor.subscribe('users.public');
     return {
-      soundsReady: handle.ready(),
+      soundsReady: handle.ready() && usersHandle.ready(),
       randomSounds: Sounds.find().fetch(),
     };
-  }, []);
+  }, [battleCounter]); // Add battleCounter to dependencies
 
   useEffect(() => {
     if (soundsReady && randomSounds.length >= 2) {
@@ -30,6 +36,8 @@ const Battle = () => {
 
   const handleVote = (winnerId) => {
     const winnerSound = sounds.find(s => s._id === winnerId);
+    const user = Meteor.users.findOne(winnerSound.userId);
+    winnerSound.userName = user.profile.displayName;
     setWinner(winnerSound);
     Meteor.callAsync('sounds.winBattle', winnerId);
     setStep('result');
@@ -37,12 +45,13 @@ const Battle = () => {
 
   const handleNext = () => {
     setWinner(null);
-    const newSounds = Sounds.find().fetch();
-    if (newSounds.length >= 2) {
-        setSounds([newSounds[0], newSounds[1]]);
-    }
+    setBattleCounter(prev => prev + 1); // Increment to force re-subscription
     setStep('battle');
   };
+
+  const handlePlay = (sound) => {
+    playSingleSound({ src: sound.audioFile, title: sound.title, id: sound._id });
+  }
 
   if (step === 'intro') {
     return (
@@ -61,14 +70,20 @@ const Battle = () => {
     return (
       <div className="flex justify-center items-center">
         <div className="text-center mx-4">
-          <img src={sounds[0].coverImage} alt={sounds[0].title} className="w-64 h-64 object-cover mb-4 shadow-xl" />
+          <img src={sounds[0].coverImage} alt={sounds[0].title} className="rounded-lg w-64 h-64 object-cover mb-4 shadow-xl" />
+          <button onClick={() => handlePlay(sounds[0])} className="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-md mr-2">
+            <FiPlay size={20} />
+          </button>
           <button onClick={() => handleVote(sounds[0]._id)} className="cursor-pointer bg-linear-65 from-purple-500 to-pink-500 text-white px-6 py-3 rounded-md">
             <FiThumbsUp size={20} />
           </button>
         </div>
         <div className="text-2xl font-bold mx-10">versus</div>
         <div className="text-center mx-4">
-          <img src={sounds[1].coverImage} alt={sounds[1].title} className="w-64 h-64 object-cover mb-4 shadow-xl" />
+          <img src={sounds[1].coverImage} alt={sounds[1].title} className="rounded-lg w-64 h-64 object-cover mb-4 shadow-xl" />
+          <button onClick={() => handlePlay(sounds[1])} className="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-md mr-2">
+            <FiPlay size={20} />
+          </button>
           <button onClick={() => handleVote(sounds[1]._id)} className="cursor-pointer bg-linear-65 from-purple-500 to-pink-500 text-white px-6 py-3 rounded-md">
             <FiThumbsUp size={20} />
           </button>
@@ -80,15 +95,17 @@ const Battle = () => {
   if (step === 'result') {
     return (
       <div className="text-center">
-        <h2 className="text-2xl font-bold mb-4">Winner!</h2>
+        <h2 className="text-3xl font-bold mb-4">Winner!</h2>
         {winner && (
           <div>
-            <img src={winner.coverImage} alt={winner.title} className="w-64 h-64 object-cover mx-auto mb-4" />
-            <h3 className="text-xl font-bold">{winner.title}</h3>
-            <p>by {winner.userId}</p>
+            <Link to={`/sound/${winner._id}`} target="_blank" rel="noopener noreferrer">
+              <img src={winner.coverImage} alt={winner.title} className="rounded-lg shadow-xl w-64 h-64 object-cover mx-auto mb-4" />
+              <h3 className="text-xl font-bold">{winner.title}</h3>
+            </Link>
+            <p>by {winner.userName}</p>
           </div>
         )}
-        <button onClick={handleNext} className="bg-blue-500 text-white px-6 py-3 rounded-md mt-8">Next Battle</button>
+        <button onClick={handleNext} className="bg-linear-65 from-purple-500 to-pink-500 text-white px-6 py-3 rounded-md mt-8">Next Battle</button>
       </div>
     );
   }
