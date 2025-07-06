@@ -48,3 +48,19 @@ Meteor.publish('sounds.singleSound', async function (soundId) {
     return this.ready();
   }
 });
+
+Meteor.publish('sounds.random', async function (battleCounter) {
+  check(battleCounter, Number);
+  const pipeline = [
+    { $match: { isPrivate: false } },
+    { $sample: { size: 2 } }
+  ];
+
+  const randomSounds = await Sounds.rawCollection().aggregate(pipeline).toArray();
+
+  randomSounds.forEach(sound => {
+    this.added('sounds', sound._id, sound);
+  });
+
+  this.ready();
+});

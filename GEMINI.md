@@ -293,3 +293,24 @@ Users have the ability to get and read notifications.
 Create a notification if:
   * The currently logged in user gets a comment on one of their sounds
   * The currently logged in user gets a new follower
+
+### Battle
+
+Users can participate in a "Sounds Battle" where two tracks are shown and the user selects which sound slaps harder.
+
+* Move the "Explore" menu item into the menu dropdown. Same for mobile
+* Create a new "Battle" menu item that replaces the "Explore" menu item
+* That "Battle" link routes to a new "Battle.jsx" page which shows following:
+  * On first view the page shows a page where it explains how the battle works:
+    * The title is "Sounds Battle"
+    * The description is: "Which sound slaps harder? You decide. Press the thumbs up button to choose the winner". Or something along the lines.
+  * After pressing "Continue" the page loads two random sounds with "versus" label in the middle of them.
+    * The sounds only display the cover image, so it doesn't spoil information about the sounds.
+    * Each sound has a thumbs up button beneath them. 
+  * After the thumbs up button is pressed it reveals the title and sound owner
+    * Now there's a button called "Next" which loads two more random sounds and repeats the process indefinitely
+  * Don't forget to increment the play count when a sound is being played (single sound)
+* Add a "battlesWonCount" field to Sounds collection which counts the amount of battles that the sound has won.
+  * By default it's value is 0
+  * Display the battles won count on the Sound detail page with label: "Battles Won: {x}" (x = battlesWonCount)
+  * When pressing the thumbs up button it should increase the battlesWonCount by 1 for the sound that has been upvoted

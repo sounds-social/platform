@@ -67,7 +67,7 @@ const AudioPlayer = () => {
           <FiSkipForward size={20} className="sm:w-6 sm:h-6" />
         </button>
         <div className="flex-grow flex items-center space-x-2 sm:space-x-4">
-          {currentSound.title && currentSound.id && (
+          {currentSound.title && currentSound.id && !currentSound.hideTitle && (
             <div className="grow hidden sm:block">
               <Link to={`/sound/${currentSound.id}`} className="text-blue-300 hover:underline text-xs sm:text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis block">
                 {currentSound.title}
