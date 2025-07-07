@@ -174,10 +174,6 @@ Meteor.methods({
       // If status is 200 and no Content-Range, assume the whole file is sent
       totalSize = parseInt(contentLengthHeader, 10);
     }
-    console.log('Server: totalSizeHeader', totalSizeHeader);
-    console.log('Server: contentLengthHeader', contentLengthHeader);
-    console.log('Server: calculated totalSize', totalSize);
-    console.log('Server: contentTypeHeader', contentTypeHeader);
 
     return { chunk: new Uint8Array(buffer), totalSize, contentType: contentTypeHeader };
   },

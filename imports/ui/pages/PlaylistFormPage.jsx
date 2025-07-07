@@ -46,7 +46,6 @@ const PlaylistFormPage = () => {
   }, [playlist]);
 
   const handleRemoveSound = (idToRemove) => {
-    console.log("Removing sound with ID:", idToRemove);
     setSoundIds(soundIds.filter(id => id !== idToRemove));
   };
 

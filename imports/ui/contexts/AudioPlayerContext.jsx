@@ -71,7 +71,6 @@ export const AudioPlayerProvider = ({ children }) => {
     const handlePlayEvent = () => setIsPlaying(true);
     const handlePauseEvent = () => setIsPlaying(false);
     const handleDurationChange = () => {
-      console.log('Duration changed:', audio.duration);
       if (audio.duration && !isNaN(audio.duration)) {
         setDuration(audio.duration);
       }
@@ -148,7 +147,6 @@ export const AudioPlayerProvider = ({ children }) => {
                     sourceBuffer.addEventListener('updateend', () => {
                       if (!sourceBuffer.updating) {
                         if (totalSize && fetchedSize >= totalSize) {
-                          console.log('Client: Calling endOfStream. totalSize:', totalSize, 'fetchedSize:', fetchedSize);
                           if (mediaSource.readyState === 'open') {
                             mediaSource.endOfStream();
                           }
