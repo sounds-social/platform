@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { HeadProvider, Title } from 'react-head';
 import { Meteor } from 'meteor/meteor';
+import { FiLoader } from 'react-icons/fi';
 import BytescaleWidget from '../components/BytescaleWidget';
 
 const SoundAdd = () => {
@@ -15,11 +16,13 @@ const SoundAdd = () => {
   const [audioFile, setAudioFile] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setLoading(true);
     Meteor.callAsync('sounds.insert', title, description, tags.split(',').map(tag => tag.trim()), coverImage, isPrivate, backgroundImage, audioFile)
       .then(() => {
         setSuccess('Sound added successfully!');
@@ -30,9 +33,13 @@ const SoundAdd = () => {
         setIsPrivate(false);
         setBackgroundImage('');
         setAudioFile('');
+        setLoading(false);
         history.push('/'); // Redirect to home after successful addition
       })
-      .catch(err => setError(err.reason));
+      .catch(err => { 
+        setError(err.reason);
+        setLoading(false);
+      });
   };
 
   return (
@@ -134,6 +141,12 @@ const SoundAdd = () => {
                 Add Sound
               </button>
             </div>
+
+            {loading && (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin"><FiLoader size={30} /></div>
+              </div>
+            )}
           </form>
         </div>
       </div>
