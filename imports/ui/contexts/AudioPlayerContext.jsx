@@ -9,6 +9,7 @@ export const AudioPlayerProvider = ({ children }) => {
   const [playlistIndex, setPlaylistIndex] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLooping, setIsLooping] = useState(false); // New state for looping
+  const [duration, setDuration] = useState(0); // New state for duration
   const audioRef = useRef(null);
 
   const playSingleSound = useCallback((sound) => {
@@ -69,6 +70,12 @@ export const AudioPlayerProvider = ({ children }) => {
 
     const handlePlayEvent = () => setIsPlaying(true);
     const handlePauseEvent = () => setIsPlaying(false);
+    const handleDurationChange = () => {
+      console.log('Duration changed:', audio.duration);
+      if (audio.duration && !isNaN(audio.duration)) {
+        setDuration(audio.duration);
+      }
+    };
 
     // Only add ended listener if there's a playlist to navigate
     if (playlist.length > 0) {
@@ -76,6 +83,7 @@ export const AudioPlayerProvider = ({ children }) => {
     }
     audio.addEventListener('play', handlePlayEvent);
     audio.addEventListener('pause', handlePauseEvent);
+    audio.addEventListener('durationchange', handleDurationChange);
 
     return () => {
       if (playlist.length > 0) {
@@ -83,6 +91,7 @@ export const AudioPlayerProvider = ({ children }) => {
       }
       audio.removeEventListener('play', handlePlayEvent);
       audio.removeEventListener('pause', handlePauseEvent);
+      audio.removeEventListener('durationchange', handleDurationChange);
     };
   }, [handleNext, playlist.length]);
 
@@ -94,12 +103,89 @@ export const AudioPlayerProvider = ({ children }) => {
 
   useEffect(() => {
     if (currentSound && audioRef.current) {
-      audioRef.current.src = currentSound.src;
-      audioRef.current.load();
-      audioRef.current.play();
-      // Increment play count here, as this is where the sound actually starts playing
+      setDuration(0); // Reset duration when a new sound is loaded
       if (currentSound.id && Meteor.isClient) {
-        Meteor.call('sounds.incrementPlayCount', currentSound.id);
+        
+
+        Meteor.call('sounds.getAudioChunk', { soundId: currentSound.id, range: 'bytes=0-1' }, (error, result) => {
+          if (error) {
+            console.error('Error fetching initial audio chunk:', error);
+            return;
+          }
+
+          const { contentType } = result;
+
+          if (contentType && contentType.toLowerCase().includes('audio/wav')) {
+            // If it's a WAV, play directly without MediaSource chunking
+            audioRef.current.src = currentSound.audioFile;
+            audioRef.current.load();
+            audioRef.current.play();
+            Meteor.call('sounds.incrementPlayCount', currentSound.id);
+          } else {
+            // For other audio types, use MediaSource chunking
+            const mediaSource = new MediaSource();
+            audioRef.current.src = URL.createObjectURL(mediaSource);
+
+            mediaSource.addEventListener('sourceopen', () => {
+              let sourceBuffer;
+              let totalSize = 0;
+              let fetchedSize = 0;
+
+              const fetchChunk = (range) => {
+                Meteor.call('sounds.getAudioChunk', { soundId: currentSound.id, range }, (error, result) => {
+                  if (error) {
+                    console.error(error);
+                    if (mediaSource.readyState === 'open') {
+                      mediaSource.endOfStream();
+                    }
+                    return;
+                  }
+
+                  const { chunk, totalSize: newTotalSize, contentType: chunkContentType } = result;
+
+                  if (!sourceBuffer) {
+                    sourceBuffer = mediaSource.addSourceBuffer(chunkContentType || 'audio/mpeg');
+                    sourceBuffer.addEventListener('updateend', () => {
+                      if (!sourceBuffer.updating) {
+                        if (totalSize && fetchedSize >= totalSize) {
+                          console.log('Client: Calling endOfStream. totalSize:', totalSize, 'fetchedSize:', fetchedSize);
+                          if (mediaSource.readyState === 'open') {
+                            mediaSource.endOfStream();
+                          }
+                        } else {
+                          const nextRange = `bytes=${fetchedSize}-${fetchedSize + 1000000}`;
+                          fetchChunk(nextRange);
+                        }
+                      }
+                    });
+                  }
+
+                  if (newTotalSize !== null) {
+                    totalSize = newTotalSize;
+                  }
+
+                  fetchedSize += chunk.length;
+                  if (chunk.length > 0) {
+                    sourceBuffer.appendBuffer(chunk);
+                  }
+                });
+              };
+
+              // Initial fetch for the first part of the file
+              fetchChunk('bytes=0-1000000'); // Fetch first 1MB
+            });
+
+            audioRef.current.load();
+
+            const handleCanPlayThrough = () => {
+              audioRef.current.play();
+              Meteor.call('sounds.incrementPlayCount', currentSound.id);
+              audioRef.current.removeEventListener('canplaythrough', handleCanPlayThrough);
+            };
+
+            audioRef.current.addEventListener('canplaythrough', handleCanPlayThrough);
+          }
+        });
       }
     } else if (audioRef.current) {
       audioRef.current.pause();
@@ -138,6 +224,7 @@ export const AudioPlayerProvider = ({ children }) => {
     playlistIndex,
     isPlaying,
     isLooping, // Expose isLooping
+    duration, // Expose duration
     audioRef,
     playSingleSound,
     playPlaylist,

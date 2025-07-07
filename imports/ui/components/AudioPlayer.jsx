@@ -4,26 +4,18 @@ import { FiPlay, FiPause, FiX, FiSkipForward, FiSkipBack, FiRepeat } from 'react
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 
 const AudioPlayer = () => {
-  const { currentSound, isPlaying, audioRef, handleNext, handlePrevious, togglePlayPause, setCurrentSound, isLooping, toggleLoop, playlist, playlistIndex } = useAudioPlayer();
+  const { currentSound, isPlaying, audioRef, handleNext, handlePrevious, togglePlayPause, setCurrentSound, isLooping, toggleLoop, playlist, playlistIndex, duration } = useAudioPlayer();
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
 
   useEffect(() => {
     if (audioRef.current) {
       const audio = audioRef.current;
 
-      const setAudioData = () => {
-        setDuration(audio.duration);
-        setCurrentTime(audio.currentTime);
-      };
-
       const setAudioTime = () => setCurrentTime(audio.currentTime);
 
-      audio.addEventListener('loadeddata', setAudioData);
       audio.addEventListener('timeupdate', setAudioTime);
 
       return () => {
-        audio.removeEventListener('loadeddata', setAudioData);
         audio.removeEventListener('timeupdate', setAudioTime);
       };
     }
@@ -37,6 +29,9 @@ const AudioPlayer = () => {
   };
 
   const formatTime = (time) => {
+    if (isNaN(time) || time === 0 || !isFinite(time)) {
+      return "0:00";
+    }
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
