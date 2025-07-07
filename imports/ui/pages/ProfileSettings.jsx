@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import { HeadProvider, Title } from 'react-head';
 import { Meteor } from 'meteor/meteor';
-import UploadcareWidget from '../components/UploadcareWidget';
+import BytescaleWidget from '../components/BytescaleWidget';
 
 const ProfileSettings = () => {
   const user = useTracker(() => Meteor.user(), []);
@@ -113,7 +113,7 @@ const ProfileSettings = () => {
 
             <div>
               <label htmlFor="avatar" className="block text-sm font-medium text-gray-700">Avatar Image</label>
-              <UploadcareWidget onUpload={setAvatar} />  
+              <BytescaleWidget onUpload={setAvatar} initialUrl={avatar} />  
               {avatar && (
                 <img src={avatar} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
               )}

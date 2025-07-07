@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { HeadProvider, Title } from 'react-head';
 import { Meteor } from 'meteor/meteor';
-import UploadcareWidget from '../components/UploadcareWidget';
+import BytescaleWidget from '../components/BytescaleWidget';
 
 const SoundAdd = () => {
   const history = useHistory();
@@ -95,7 +95,7 @@ const SoundAdd = () => {
 
             <div>
               <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">Cover Image</label>
-              <UploadcareWidget onUpload={setCoverImage} />
+              <BytescaleWidget onUpload={setCoverImage} initialUrl={coverImage} />
               {coverImage && (
                 <img src={coverImage} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
               )}
@@ -103,7 +103,7 @@ const SoundAdd = () => {
 
             <div>
               <label htmlFor="backgroundImage" className="block text-sm font-medium text-gray-700">Background Image (Optional)</label>
-              <UploadcareWidget onUpload={setBackgroundImage} />
+              <BytescaleWidget onUpload={setBackgroundImage} initialUrl={backgroundImage} />
               {backgroundImage && (
                 <img src={backgroundImage} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
               )}
@@ -111,7 +111,7 @@ const SoundAdd = () => {
 
             <div>
               <label htmlFor="audioFile" className="block text-sm font-medium text-gray-700">Audio File</label>
-              <UploadcareWidget onUpload={setAudioFile} accept="audio/*" />
+              <BytescaleWidget onUpload={setAudioFile} accept="audio/*" />
               {audioFile && (
                 <audio controls src={audioFile}></audio>
               )}
