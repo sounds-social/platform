@@ -59,10 +59,6 @@ Meteor.methods({
     const snippetFileName = `snippet-${soundId}.mp4`;
     const tempSnippetPath = path.join(tempDir, snippetFileName);
 
-    console.log('Audio Path:', audioPath);
-    console.log('Image Path:', imagePath);
-    console.log('Temp Snippet Path:', tempSnippetPath);
-
     try {
       await downloadFile(sound.audioFile, audioPath);
       await downloadFile(sound.coverImage, imagePath);
