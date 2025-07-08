@@ -5,10 +5,13 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
 import { Comments } from '../../api/comments';
-import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2, FiAward } from 'react-icons/fi';
+import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2, FiAward, FiShare2, FiLoader } from 'react-icons/fi';
+import Modal from 'react-modal';
 import { format, formatDistanceToNow } from "date-fns";
 import AddPlaylistModal from '../components/AddPlaylistModal';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
+
+Modal.setAppElement('#react-target');
 
 const Sound = () => {
   const { soundId } = useParams();
@@ -16,6 +19,11 @@ const Sound = () => {
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
+  const [isCreateSnippetModalOpen, setIsCreateSnippetModalOpen] = useState(false);
+  const [snippetStartTime, setSnippetStartTime] = useState(0);
+  const [snippetEndTime, setSnippetEndTime] = useState(30);
+  const [snippetUrl, setSnippetUrl] = useState(null);
+  const [isCreatingSnippet, setIsCreatingSnippet] = useState(false);
   const { playSingleSound } = useAudioPlayer();
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
@@ -80,6 +88,20 @@ const Sound = () => {
   const handleRemoveComment = async (commentId) => {
     if (window.confirm('Are you sure you want to remove this comment?')) {
       await Meteor.callAsync('comments.remove', commentId);
+    }
+  };
+
+  const handleCreateSnippet = async () => {
+    if (sound) {
+      setIsCreatingSnippet(true);
+      try {
+        const result = await Meteor.callAsync('snippets.create', sound._id, parseFloat(snippetStartTime), parseFloat(snippetEndTime));
+        setSnippetUrl(result);
+      } catch (error) {
+        console.error('Error creating snippet:', error);
+      } finally {
+        setIsCreatingSnippet(false);
+      }
     }
   };
 
@@ -177,6 +199,14 @@ const Sound = () => {
             )}
             {Meteor.userId() && (
               <button
+                onClick={() => setIsCreateSnippetModalOpen(true)}
+                className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
+              >
+                <FiShare2 className="mr-2" /> Share Snippet
+              </button>
+            )}
+            {Meteor.userId() && (
+              <button
                 onClick={() => setIsAddPlaylistModalOpen(true)}
                 className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
               >
@@ -184,24 +214,82 @@ const Sound = () => {
               </button>
             )}
             {Meteor.userId() === sound.userId && (
-              <Link
-                to={`/sounds/${soundId}/edit`}
-                className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
-              >
-                <FiEdit className="mr-2" /> Edit
-              </Link>
-            )}
-            {Meteor.userId() === sound.userId && (
-              <button
-                onClick={handleRemove}
-                className="cursor-pointer flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
-              >
-                <FiTrash2 className="mr-2" /> Remove
-              </button>
+              <div className="flex space-x-4 mb-4">
+                <Link
+                  to={`/sounds/${soundId}/edit`}
+                  className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 flex-shrink-0"
+                >
+                  <FiEdit className="mr-2" /> Edit
+                </Link>
+                <button
+                  onClick={handleRemove}
+                  className="cursor-pointer flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 flex-shrink-0"
+                >
+                  <FiTrash2 className="mr-2" /> Remove
+                </button>
+              </div>
             )}
           </div>
         </div>
-      </div>
+      <AddPlaylistModal
+        isOpen={isAddPlaylistModalOpen}
+        onRequestClose={() => setIsAddPlaylistModalOpen(false)}
+        soundId={soundId}
+      />
+
+      <Modal
+        isOpen={isCreateSnippetModalOpen}
+        onRequestClose={() => setIsCreateSnippetModalOpen(false)}
+        contentLabel="Create Audio Snippet"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <div className="bg-white rounded-lg p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Create Audio Snippet</h2>
+          <div className="flex items-center space-x-4">
+            <div>
+              <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">Start Time (seconds)</label>
+              <input
+                type="number"
+                id="startTime"
+                value={snippetStartTime}
+                onChange={(e) => setSnippetStartTime(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">End Time (seconds)</label>
+              <input
+                type="number"
+                id="endTime"
+                value={snippetEndTime}
+                onChange={(e) => setSnippetEndTime(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+            </div>
+            <button
+              onClick={handleCreateSnippet}
+              className="self-end bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200 w-full md:w-auto flex items-center justify-center"
+              disabled={isCreatingSnippet}
+            >
+              {isCreatingSnippet ? (
+                <FiLoader className="animate-spin" />
+              ) : (
+                'Create Snippet'
+              )}
+            </button>
+          </div>
+          {snippetUrl && (
+            <div className="mt-6">
+              <video src={snippetUrl} controls className="w-full rounded-lg shadow-md max-h-[300px]"></video>
+              <div className="mt-4 flex space-x-4">
+                <a href={snippetUrl} download={`snippet-${sound.title}.mp4`} className="text-blue-500 hover:underline">Download & Share</a>
+              </div>
+            </div>
+          )}
+        </div>
+      </Modal>
+    </div>
 
       {/* Comments Section */}
       <div className="bg-white rounded-lg shadow-md p-6">

@@ -115,7 +115,10 @@ const ProfileSettings = () => {
               <label htmlFor="avatar" className="block text-sm font-medium text-gray-700">Avatar Image</label>
               <BytescaleWidget onUpload={setAvatar} initialUrl={avatar} />  
               {avatar && (
-                <img src={avatar} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
+                <div className="mt-3">
+                  <img src={avatar} alt="Avatar" className="w-48 h-48 object-cover rounded-lg shadow-md" />
+                  <button type="button" onClick={() => setAvatar('')} className="mt-2 text-sm text-red-600">Remove Image</button>
+                </div>
               )}
             </div>
 
