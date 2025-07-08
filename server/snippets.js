@@ -91,7 +91,7 @@ Meteor.methods({
           .setDuration(endTime - startTime)
           .input(imagePath)
           .complexFilter([
-            '[1:v]scale=1280:720[bg]',
+            '[1:v]scale=1000:1000[bg]',
             '[0:a]showwaves=s=1280x100:mode=line:rate=25,colorkey=0x000000:0.01:0.1[waveform]',
             '[bg][waveform]overlay=0:H-h-20[bg_waveform]',
             {

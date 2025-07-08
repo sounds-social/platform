@@ -5,7 +5,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
 import { Comments } from '../../api/comments';
-import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2, FiAward, FiShare2 } from 'react-icons/fi';
+import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2, FiAward, FiShare2, FiLoader } from 'react-icons/fi';
 import Modal from 'react-modal';
 import { format, formatDistanceToNow } from "date-fns";
 import AddPlaylistModal from '../components/AddPlaylistModal';
@@ -23,6 +23,7 @@ const Sound = () => {
   const [snippetStartTime, setSnippetStartTime] = useState(0);
   const [snippetEndTime, setSnippetEndTime] = useState(30);
   const [snippetUrl, setSnippetUrl] = useState(null);
+  const [isCreatingSnippet, setIsCreatingSnippet] = useState(false);
   const { playSingleSound } = useAudioPlayer();
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
@@ -92,11 +93,14 @@ const Sound = () => {
 
   const handleCreateSnippet = async () => {
     if (sound) {
+      setIsCreatingSnippet(true);
       try {
         const result = await Meteor.callAsync('snippets.create', sound._id, parseFloat(snippetStartTime), parseFloat(snippetEndTime));
         setSnippetUrl(result);
       } catch (error) {
         console.error('Error creating snippet:', error);
+      } finally {
+        setIsCreatingSnippet(false);
       }
     }
   };
@@ -265,17 +269,21 @@ const Sound = () => {
             </div>
             <button
               onClick={handleCreateSnippet}
-              className="self-end bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
+              className="self-end bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200 w-full md:w-auto flex items-center justify-center"
+              disabled={isCreatingSnippet}
             >
-              Create Snippet
+              {isCreatingSnippet ? (
+                <FiLoader className="animate-spin" />
+              ) : (
+                'Create Snippet'
+              )}
             </button>
           </div>
           {snippetUrl && (
             <div className="mt-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Your Snippet</h3>
-              <video src={snippetUrl} controls className="w-full rounded-lg shadow-md"></video>
+              <video src={snippetUrl} controls className="w-full rounded-lg shadow-md max-h-[300px]"></video>
               <div className="mt-4 flex space-x-4">
-                <a href={snippetUrl} download={`snippet-${sound.title}.mp4`} className="text-blue-500 hover:underline">Download</a>
+                <a href={snippetUrl} download={`snippet-${sound.title}.mp4`} className="text-blue-500 hover:underline">Download & Share</a>
               </div>
             </div>
           )}
