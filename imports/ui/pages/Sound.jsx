@@ -5,10 +5,13 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
 import { Comments } from '../../api/comments';
-import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2, FiAward } from 'react-icons/fi';
+import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2, FiAward, FiShare2 } from 'react-icons/fi';
+import Modal from 'react-modal';
 import { format, formatDistanceToNow } from "date-fns";
 import AddPlaylistModal from '../components/AddPlaylistModal';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
+
+Modal.setAppElement('#react-target');
 
 const Sound = () => {
   const { soundId } = useParams();
@@ -16,8 +19,9 @@ const Sound = () => {
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
-  const [snippetStartTime, setSnippetStartTime] = useState('');
-  const [snippetEndTime, setSnippetEndTime] = useState('');
+  const [isCreateSnippetModalOpen, setIsCreateSnippetModalOpen] = useState(false);
+  const [snippetStartTime, setSnippetStartTime] = useState(0);
+  const [snippetEndTime, setSnippetEndTime] = useState(30);
   const [snippetUrl, setSnippetUrl] = useState(null);
   const { playSingleSound } = useAudioPlayer();
 
@@ -191,6 +195,14 @@ const Sound = () => {
             )}
             {Meteor.userId() && (
               <button
+                onClick={() => setIsCreateSnippetModalOpen(true)}
+                className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
+              >
+                <FiShare2 className="mr-2" /> Share Snippet
+              </button>
+            )}
+            {Meteor.userId() && (
+              <button
                 onClick={() => setIsAddPlaylistModalOpen(true)}
                 className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
               >
@@ -215,49 +227,61 @@ const Sound = () => {
             )}
           </div>
         </div>
-      </div>
+      <AddPlaylistModal
+        isOpen={isAddPlaylistModalOpen}
+        onRequestClose={() => setIsAddPlaylistModalOpen(false)}
+        soundId={soundId}
+      />
 
-      {/* Snippet Creation Section */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Create Audio Snippet</h2>
-        <div className="flex items-center space-x-4">
-          <div>
-            <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">Start Time (seconds)</label>
-            <input
-              type="number"
-              id="startTime"
-              value={snippetStartTime}
-              onChange={(e) => setSnippetStartTime(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
-          </div>
-          <div>
-            <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">End Time (seconds)</label>
-            <input
-              type="number"
-              id="endTime"
-              value={snippetEndTime}
-              onChange={(e) => setSnippetEndTime(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
-          </div>
-          <button
-            onClick={handleCreateSnippet}
-            className="self-end bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
-          >
-            Create Snippet
-          </button>
-        </div>
-        {snippetUrl && (
-          <div className="mt-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Your Snippet</h3>
-            <video src={snippetUrl} controls className="w-full rounded-lg shadow-md"></video>
-            <div className="mt-4 flex space-x-4">
-              <a href={snippetUrl} download={`snippet-${sound.title}.mp4`} className="text-blue-500 hover:underline">Download</a>
+      <Modal
+        isOpen={isCreateSnippetModalOpen}
+        onRequestClose={() => setIsCreateSnippetModalOpen(false)}
+        contentLabel="Create Audio Snippet"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <div className="bg-white rounded-lg p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Create Audio Snippet</h2>
+          <div className="flex items-center space-x-4">
+            <div>
+              <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">Start Time (seconds)</label>
+              <input
+                type="number"
+                id="startTime"
+                value={snippetStartTime}
+                onChange={(e) => setSnippetStartTime(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
             </div>
+            <div>
+              <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">End Time (seconds)</label>
+              <input
+                type="number"
+                id="endTime"
+                value={snippetEndTime}
+                onChange={(e) => setSnippetEndTime(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+            </div>
+            <button
+              onClick={handleCreateSnippet}
+              className="self-end bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
+            >
+              Create Snippet
+            </button>
           </div>
-        )}
-      </div>
+          {snippetUrl && (
+            <div className="mt-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Your Snippet</h3>
+              <video src={snippetUrl} controls className="w-full rounded-lg shadow-md"></video>
+              <div className="mt-4 flex space-x-4">
+                <a href={snippetUrl} download={`snippet-${sound.title}.mp4`} className="text-blue-500 hover:underline">Download</a>
+              </div>
+            </div>
+          )}
+        </div>
+      </Modal>
+    </div>
 
       {/* Comments Section */}
       <div className="bg-white rounded-lg shadow-md p-6">

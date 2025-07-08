@@ -67,13 +67,19 @@ Meteor.methods({
       await downloadFile(sound.audioFile, audioPath);
       await downloadFile(sound.coverImage, imagePath);
 
-      const fontPath = Assets.absoluteFilePath('fonts/Roboto-Regular.ttf');
-      if (!fs.existsSync(fontPath)) {
+      const regularFontPath = Assets.absoluteFilePath('fonts/Roboto-Regular.ttf');
+      if (!fs.existsSync(regularFontPath)) {
         throw new Meteor.Error('font-not-found', 'Font file not found. Please add Roboto-Regular.ttf to the private/fonts directory.');
       }
+      const boldFontPath = Assets.absoluteFilePath('fonts/Roboto-Bold.ttf');
+      if (!fs.existsSync(boldFontPath)) {
+        throw new Meteor.Error('font-not-found', 'Font file not found. Please add Roboto-Bold.ttf to the private/fonts directory.');
+      }
 
-      const tempFontPath = path.join(tempDir, 'Roboto-Regular.ttf');
-      await fs.copy(fontPath, tempFontPath);
+      const tempRegularFontPath = path.join(tempDir, 'Roboto-Regular.ttf');
+      await fs.copy(regularFontPath, tempRegularFontPath);
+      const tempBoldFontPath = path.join(tempDir, 'Roboto-Bold.ttf');
+      await fs.copy(boldFontPath, tempBoldFontPath);
 
       return new Promise((resolve, reject) => {
         ffmpeg()
@@ -91,12 +97,15 @@ Meteor.methods({
             {
               filter: 'drawtext',
               options: {
-                fontfile: tempFontPath,
+                fontfile: tempBoldFontPath,
                 text: sound.title,
                 fontcolor: 'white',
                 fontsize: 50,
                 x: '(w-text_w)/2',
-                y: 50
+                y: 50,
+                shadowcolor: 'black',
+                shadowx: 2,
+                shadowy: 2
               },
               inputs: 'bg_waveform',
               outputs: 'bg_waveform_text'
@@ -104,12 +113,15 @@ Meteor.methods({
             {
               filter: 'drawtext',
               options: {
-                fontfile: tempFontPath,
+                fontfile: tempRegularFontPath,
                 text: `by ${userName}`,
                 fontcolor: 'white',
                 fontsize: 30,
                 x: '(w-text_w)/2',
-                y: 120
+                y: 120,
+                shadowcolor: 'black',
+                shadowx: 2,
+                shadowy: 2
               },
               inputs: 'bg_waveform_text',
               outputs: 'bg_waveform_text_2'
@@ -117,12 +129,15 @@ Meteor.methods({
             {
               filter: 'drawtext',
               options: {
-                fontfile: tempFontPath,
+                fontfile: tempRegularFontPath,
                 text: 'Sounds Social',
                 fontcolor: 'white',
                 fontsize: 20,
                 x: 'w-text_w-20',
-                y: 'h-text_h-20'
+                y: 'h-text_h-20',
+                shadowcolor: 'black',
+                shadowx: 2,
+                shadowy: 2
               },
               inputs: 'bg_waveform_text_2',
             }
