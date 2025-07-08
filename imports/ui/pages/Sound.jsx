@@ -16,6 +16,9 @@ const Sound = () => {
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
+  const [snippetStartTime, setSnippetStartTime] = useState('');
+  const [snippetEndTime, setSnippetEndTime] = useState('');
+  const [snippetUrl, setSnippetUrl] = useState(null);
   const { playSingleSound } = useAudioPlayer();
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
@@ -80,6 +83,17 @@ const Sound = () => {
   const handleRemoveComment = async (commentId) => {
     if (window.confirm('Are you sure you want to remove this comment?')) {
       await Meteor.callAsync('comments.remove', commentId);
+    }
+  };
+
+  const handleCreateSnippet = async () => {
+    if (sound) {
+      try {
+        const result = await Meteor.callAsync('snippets.create', sound._id, parseFloat(snippetStartTime), parseFloat(snippetEndTime));
+        setSnippetUrl(result);
+      } catch (error) {
+        console.error('Error creating snippet:', error);
+      }
     }
   };
 
@@ -201,6 +215,48 @@ const Sound = () => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Snippet Creation Section */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Create Audio Snippet</h2>
+        <div className="flex items-center space-x-4">
+          <div>
+            <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">Start Time (seconds)</label>
+            <input
+              type="number"
+              id="startTime"
+              value={snippetStartTime}
+              onChange={(e) => setSnippetStartTime(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
+          <div>
+            <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">End Time (seconds)</label>
+            <input
+              type="number"
+              id="endTime"
+              value={snippetEndTime}
+              onChange={(e) => setSnippetEndTime(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
+          <button
+            onClick={handleCreateSnippet}
+            className="self-end bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
+          >
+            Create Snippet
+          </button>
+        </div>
+        {snippetUrl && (
+          <div className="mt-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Your Snippet</h3>
+            <video src={snippetUrl} controls className="w-full rounded-lg shadow-md"></video>
+            <div className="mt-4 flex space-x-4">
+              <a href={snippetUrl} download={`snippet-${sound.title}.mp4`} className="text-blue-500 hover:underline">Download</a>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Comments Section */}
