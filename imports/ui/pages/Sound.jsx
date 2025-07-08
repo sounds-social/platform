@@ -214,20 +214,20 @@ const Sound = () => {
               </button>
             )}
             {Meteor.userId() === sound.userId && (
-              <Link
-                to={`/sounds/${soundId}/edit`}
-                className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
-              >
-                <FiEdit className="mr-2" /> Edit
-              </Link>
-            )}
-            {Meteor.userId() === sound.userId && (
-              <button
-                onClick={handleRemove}
-                className="cursor-pointer flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
-              >
-                <FiTrash2 className="mr-2" /> Remove
-              </button>
+              <div className="flex space-x-4 mb-4">
+                <Link
+                  to={`/sounds/${soundId}/edit`}
+                  className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 flex-shrink-0"
+                >
+                  <FiEdit className="mr-2" /> Edit
+                </Link>
+                <button
+                  onClick={handleRemove}
+                  className="cursor-pointer flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-md transition duration-200 flex-shrink-0"
+                >
+                  <FiTrash2 className="mr-2" /> Remove
+                </button>
+              </div>
             )}
           </div>
         </div>
