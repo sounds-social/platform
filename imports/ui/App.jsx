@@ -51,9 +51,11 @@ export const App = () => {
   }, 500);
 
   if (isLoading) {
-    return (<div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100">
-      <div className="animate-spin"><FiLoader size={30} /></div>
-    </div>);
+    return (
+      <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100">
+        <div className="animate-spin"><FiLoader size={30} /></div>
+      </div>
+    );
   }
 
   return (
