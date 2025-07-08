@@ -5,7 +5,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { PlaylistsCollection } from '../../api/playlists';
 import { Sounds } from '../../api/sounds';
-import UploadcareWidget from '../components/UploadcareWidget';
+import BytescaleWidget from '../components/BytescaleWidget';
 import { DndContext, closestCenter, useSensors, useSensor, PointerSensor } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -46,7 +46,6 @@ const PlaylistFormPage = () => {
   }, [playlist]);
 
   const handleRemoveSound = (idToRemove) => {
-    console.log("Removing sound with ID:", idToRemove);
     setSoundIds(soundIds.filter(id => id !== idToRemove));
   };
 
@@ -157,7 +156,7 @@ const PlaylistFormPage = () => {
           <label className="block text-gray-700 text-sm font-semibold mb-2">
             Cover Image:
           </label>
-          <UploadcareWidget onUpload={setCoverImageUrl} />  
+          <BytescaleWidget onUpload={setCoverImageUrl} initialUrl={coverImageUrl} />  
           {coverImageUrl && (
             <img src={coverImageUrl} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
           )}

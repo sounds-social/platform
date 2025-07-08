@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import UploadcareWidget from '../components/UploadcareWidget';
+import BytescaleWidget from '../components/BytescaleWidget';
 import { useParams, useHistory } from 'react-router-dom';
 import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
@@ -45,7 +45,10 @@ const SoundEdit = () => {
         setSuccess('Sound updated successfully!');
         history.push(`/sound/${soundId}`);
       })
-      .catch(err => setError(err.reason));
+      .catch(err => {
+        setError(err.reason);
+        window.scrollTo(0, 0); // Scroll to top on error
+      });
   };
 
   if (loading) {
@@ -116,17 +119,23 @@ const SoundEdit = () => {
 
             <div>
               <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">Cover Image</label>
-              <UploadcareWidget onUpload={setCoverImage} initialUrl={coverImage} />
+              <BytescaleWidget onUpload={setCoverImage} initialUrl={coverImage} />
               {coverImage && (
-                <img src={coverImage} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
+                <div className="mt-3">
+                  <img src={coverImage} alt="Cover" className="w-48 h-48 object-cover rounded-lg shadow-md" />
+                  <button type="button" onClick={() => setCoverImage('')} className="mt-2 text-sm text-red-600">Remove Image</button>
+                </div>
               )}
             </div>
 
             <div>
               <label htmlFor="backgroundImage" className="block text-sm font-medium text-gray-700">Background Image (Optional)</label>
-              <UploadcareWidget onUpload={setBackgroundImage} initialUrl={backgroundImage} />
+              <BytescaleWidget onUpload={setBackgroundImage} initialUrl={backgroundImage} />
               {backgroundImage && (
-                <img src={backgroundImage} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
+                <div className="mt-3">
+                  <img src={backgroundImage} alt="Background" className="w-48 h-48 object-cover rounded-lg shadow-md" />
+                  <button type="button" onClick={() => setBackgroundImage('')} className="mt-2 text-sm text-red-600">Remove Image</button>
+                </div>
               )}
             </div>
 

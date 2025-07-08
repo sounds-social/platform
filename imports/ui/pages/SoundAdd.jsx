@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { HeadProvider, Title } from 'react-head';
 import { Meteor } from 'meteor/meteor';
-import UploadcareWidget from '../components/UploadcareWidget';
+import { FiLoader } from 'react-icons/fi';
+import BytescaleWidget from '../components/BytescaleWidget';
 
 const SoundAdd = () => {
   const history = useHistory();
@@ -15,11 +16,13 @@ const SoundAdd = () => {
   const [audioFile, setAudioFile] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setLoading(true);
     Meteor.callAsync('sounds.insert', title, description, tags.split(',').map(tag => tag.trim()), coverImage, isPrivate, backgroundImage, audioFile)
       .then(() => {
         setSuccess('Sound added successfully!');
@@ -30,9 +33,14 @@ const SoundAdd = () => {
         setIsPrivate(false);
         setBackgroundImage('');
         setAudioFile('');
+        setLoading(false);
         history.push('/'); // Redirect to home after successful addition
       })
-      .catch(err => setError(err.reason));
+      .catch(err => { 
+        setError(err.reason);
+        setLoading(false);
+        window.scrollTo(0, 0); // Scroll to top on error
+      });
   };
 
   return (
@@ -95,25 +103,34 @@ const SoundAdd = () => {
 
             <div>
               <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">Cover Image</label>
-              <UploadcareWidget onUpload={setCoverImage} />
+              <BytescaleWidget onUpload={setCoverImage} initialUrl={coverImage} />
               {coverImage && (
-                <img src={coverImage} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
+                <div className="mt-3">
+                  <img src={coverImage} alt="Cover" className="w-48 h-48 object-cover rounded-lg shadow-md" />
+                  <button type="button" onClick={() => setCoverImage('')} className="mt-2 text-sm text-red-600">Remove Image</button>
+                </div>
               )}
             </div>
 
             <div>
               <label htmlFor="backgroundImage" className="block text-sm font-medium text-gray-700">Background Image (Optional)</label>
-              <UploadcareWidget onUpload={setBackgroundImage} />
+              <BytescaleWidget onUpload={setBackgroundImage} initialUrl={backgroundImage} />
               {backgroundImage && (
-                <img src={backgroundImage} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
+                <div className="mt-3">
+                  <img src={backgroundImage} alt="Background" className="w-48 h-48 object-cover rounded-lg shadow-md" />
+                  <button type="button" onClick={() => setBackgroundImage('')} className="mt-2 text-sm text-red-600">Remove Image</button>
+                </div>
               )}
             </div>
 
             <div>
               <label htmlFor="audioFile" className="block text-sm font-medium text-gray-700">Audio File</label>
-              <UploadcareWidget onUpload={setAudioFile} accept="audio/*" />
+              <BytescaleWidget onUpload={setAudioFile} accept="audio/*" />
               {audioFile && (
-                <audio controls src={audioFile}></audio>
+                <div className="mt-3">
+                  <audio controls src={audioFile}></audio>
+                  <button type="button" onClick={() => setAudioFile('')} className="mt-2 text-sm text-red-600">Remove Audio</button>
+                </div>
               )}
             </div>
 
@@ -134,6 +151,12 @@ const SoundAdd = () => {
                 Add Sound
               </button>
             </div>
+
+            {loading && (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin"><FiLoader size={30} /></div>
+              </div>
+            )}
           </form>
         </div>
       </div>

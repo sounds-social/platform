@@ -31,7 +31,7 @@ export const Notifications = () => {
         )}
       </button>
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+        <div className="z-50 absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
           <div className="py-1">
             {notifications.length > 0 ? (
               notifications.map((notification) => (

@@ -18,6 +18,22 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
+    if (audioFile.trim() === '' || coverImage.trim() === '') {
+      throw new Meteor.Error('invalid-input', 'Audio file and cover image are required.');
+    }
+
+    // Get mp3 version of audio file
+    const convertToMp3Url = `${audioFile.trim()}?f=aac`.replace('/raw/', '/audio/')
+    const res = await fetch(convertToMp3Url);
+    let data = await res.json();
+
+    while (data.status !== 'Succeeded') {
+      await new Promise(r => setTimeout(r, 500));
+
+      const res = await fetch(convertToMp3Url);
+      data = await res.json();
+    }
+
     const soundId = await Sounds.insertAsync({
       title,
       description,
@@ -26,7 +42,7 @@ Meteor.methods({
       isPrivate,
       backgroundImage,
       userId: this.userId,
-      audioFile
+      audioFile: data.summary.result.artifactUrl
     });
 
     const uploader = await Meteor.users.findOneAsync(this.userId);
@@ -56,6 +72,10 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
+    if (coverImage.trim() === '') {
+      throw new Meteor.Error('invalid-input', 'Cover image is required.');
+    }
+
     const sound = await Sounds.findOneAsync({ _id: soundId, userId: this.userId });
     if (!sound) {
       throw new Meteor.Error('access-denied');
@@ -67,10 +87,9 @@ Meteor.methods({
       tags,
       isPrivate,
       lastUpdatedAt: new Date(),
+      backgroundImage,
+      coverImage
     };
-
-    if (coverImage) fieldsToUpdate.coverImage = coverImage;
-    if (backgroundImage) fieldsToUpdate.backgroundImage = backgroundImage;
 
     return await Sounds.updateAsync(soundId, {
       $set: fieldsToUpdate,
@@ -143,6 +162,39 @@ Meteor.methods({
     return await Sounds.updateAsync(soundId, {
       $inc: { battlesWonCount: 1 },
     });
+  },
+
+  async 'sounds.getAudioChunk'({ soundId, range }) {
+    check(soundId, String);
+    check(range, String);
+
+    const sound = await Sounds.findOneAsync(soundId);
+    if (!sound) {
+      throw new Meteor.Error('sound-not-found');
+    }
+
+    const response = await fetch(sound.audioFile, {
+      headers: { Range: range },
+    });
+
+    if (response.status !== 206 && response.status !== 200) {
+      throw new Meteor.Error('fetch-failed', `Failed to fetch audio chunk: ${response.statusText}`);
+    }
+
+    const buffer = await response.arrayBuffer();
+    const totalSizeHeader = response.headers.get('content-range');
+    const contentLengthHeader = response.headers.get('content-length');
+    const contentTypeHeader = response.headers.get('content-type');
+
+    let totalSize = null;
+    if (totalSizeHeader) {
+      totalSize = parseInt(totalSizeHeader.split('/')[1], 10);
+    } else if (response.status === 200 && contentLengthHeader) {
+      // If status is 200 and no Content-Range, assume the whole file is sent
+      totalSize = parseInt(contentLengthHeader, 10);
+    }
+
+    return { chunk: new Uint8Array(buffer), totalSize, contentType: contentTypeHeader };
   },
 });
 
