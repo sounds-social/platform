@@ -50,6 +50,7 @@ export const App = () => {
     setIsLoading(false);
   }, 500);
 
+
   if (isLoading) {
     return (
       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100">
