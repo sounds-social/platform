@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 import { FiThumbsUp, FiPlay } from "react-icons/fi";
+import { HeadProvider, Title } from 'react-head';
 import { Sounds } from '../../api/sounds';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 import { Link } from 'react-router-dom';
@@ -56,6 +57,9 @@ const Battle = () => {
   if (step === 'intro') {
     return (
       <div className="text-center my-20 p-8 rounded-lg">
+        <HeadProvider>
+          <Title>Sounds Battle - Sounds Social</Title>
+        </HeadProvider>
         <h1 className="text-6xl w-full text-transparent bg-clip-text font-extrabold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-2 mb-4 animate-pulse-slow">Sounds Battle</h1>
         <p className="mb-8 font-medium text-xl text-purple-950">Which sound slaps harder? You decide.<br/>Press the thumbs up button to choose the winner.</p>
         <button onClick={handleStart} className="cursor-pointer bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full text-lg font-bold uppercase tracking-wide shadow-lg hover:shadow-neon-pink transition-all duration-300 ease-in-out transform hover:scale-105">Enter the Battle</button>
@@ -69,6 +73,9 @@ const Battle = () => {
     }
     return (
       <div className="flex flex-col md:flex-row justify-center items-center min-h-[60vh]">
+        <HeadProvider>
+          <Title>Sounds Battle - Sounds Social</Title>
+        </HeadProvider>
         <div className="flex flex-col items-center mx-4 p-6 bg-gray-900 rounded-lg shadow-neon-blue transform hover:scale-105 transition-all duration-300">
           <img src={sounds[0].coverImage} alt={sounds[0].title} className="rounded-lg w-64 h-64 object-cover mb-4 shadow-lg shadow-purple-500/50" />
           <div className="flex space-x-2">
@@ -99,6 +106,9 @@ const Battle = () => {
   if (step === 'result') {
     return (
       <div className="text-center mb-14 rounded-lg shadow-neon-purple">
+        <HeadProvider>
+          <Title>Sounds Battle - Sounds Social</Title>
+        </HeadProvider>
         <h2 className="text-4xl font-bold mb-10 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Winner!</h2>
         {winner && (
           <div className="p-6 bg-gray-900 rounded-lg shadow-neon-blue inline-block transform hover:scale-105 transition-all duration-300">
