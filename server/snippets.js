@@ -87,8 +87,8 @@ Meteor.methods({
           .setDuration(endTime - startTime)
           .input(imagePath)
           .complexFilter([
-            '[1:v]scale=1000:1000[bg]',
-            '[0:a]showwaves=s=1280x100:mode=line:rate=25,colorkey=0x000000:0.01:0.1[waveform]',
+            '[1:v]scale=640:640[bg]',
+            '[0:a]showwaves=s=640x60:mode=line:rate=25,colorkey=0x000000:0.01:0.1[waveform]',
             '[bg][waveform]overlay=0:H-h-20[bg_waveform]',
             {
               filter: 'drawtext',
@@ -137,6 +137,10 @@ Meteor.methods({
               },
               inputs: 'bg_waveform_text_2',
             }
+          ])
+          .outputOptions([
+            '-preset fast',
+            '-r 25'
           ])
           .output(tempSnippetPath)
           .on('end', async () => {
