@@ -72,6 +72,10 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
+    if (coverImage.trim() === '') {
+      throw new Meteor.Error('invalid-input', 'Cover image is required.');
+    }
+
     const sound = await Sounds.findOneAsync({ _id: soundId, userId: this.userId });
     if (!sound) {
       throw new Meteor.Error('access-denied');
@@ -83,10 +87,9 @@ Meteor.methods({
       tags,
       isPrivate,
       lastUpdatedAt: new Date(),
+      backgroundImage,
+      coverImage
     };
-
-    if (coverImage) fieldsToUpdate.coverImage = coverImage;
-    if (backgroundImage) fieldsToUpdate.backgroundImage = backgroundImage;
 
     return await Sounds.updateAsync(soundId, {
       $set: fieldsToUpdate,

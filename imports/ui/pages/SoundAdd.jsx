@@ -39,6 +39,7 @@ const SoundAdd = () => {
       .catch(err => { 
         setError(err.reason);
         setLoading(false);
+        window.scrollTo(0, 0); // Scroll to top on error
       });
   };
 
@@ -104,7 +105,10 @@ const SoundAdd = () => {
               <label htmlFor="coverImage" className="block text-sm font-medium text-gray-700">Cover Image</label>
               <BytescaleWidget onUpload={setCoverImage} initialUrl={coverImage} />
               {coverImage && (
-                <img src={coverImage} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
+                <div className="mt-3">
+                  <img src={coverImage} alt="Cover" className="w-48 h-48 object-cover rounded-lg shadow-md" />
+                  <button type="button" onClick={() => setCoverImage('')} className="mt-2 text-sm text-red-600">Remove Image</button>
+                </div>
               )}
             </div>
 
@@ -112,7 +116,10 @@ const SoundAdd = () => {
               <label htmlFor="backgroundImage" className="block text-sm font-medium text-gray-700">Background Image (Optional)</label>
               <BytescaleWidget onUpload={setBackgroundImage} initialUrl={backgroundImage} />
               {backgroundImage && (
-                <img src={backgroundImage} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
+                <div className="mt-3">
+                  <img src={backgroundImage} alt="Background" className="w-48 h-48 object-cover rounded-lg shadow-md" />
+                  <button type="button" onClick={() => setBackgroundImage('')} className="mt-2 text-sm text-red-600">Remove Image</button>
+                </div>
               )}
             </div>
 
@@ -120,7 +127,10 @@ const SoundAdd = () => {
               <label htmlFor="audioFile" className="block text-sm font-medium text-gray-700">Audio File</label>
               <BytescaleWidget onUpload={setAudioFile} accept="audio/*" />
               {audioFile && (
-                <audio controls src={audioFile}></audio>
+                <div className="mt-3">
+                  <audio controls src={audioFile}></audio>
+                  <button type="button" onClick={() => setAudioFile('')} className="mt-2 text-sm text-red-600">Remove Audio</button>
+                </div>
               )}
             </div>
 
