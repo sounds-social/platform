@@ -59,7 +59,7 @@ const SoundCard = ({ sound, sounds, index }) => {
                   </span>
                 </p>
               </div>
-              <p className="text-xs text-gray-200">
+              <p className="text-xs text-gray-200 hidden md:block">
                 {formatDistanceToNow(new Date(sound.createdAt))} ago
               </p>
             </div>
@@ -104,7 +104,7 @@ const SoundCard = ({ sound, sounds, index }) => {
                     </span>
                   </p>
                 </div>
-                <p className="text-xs text-gray-500 ml-4">
+                <p className="text-xs text-gray-500 ml-4 hidden md:block">
                   {formatDistanceToNow(new Date(sound.createdAt))} ago
                 </p>
               </div>
