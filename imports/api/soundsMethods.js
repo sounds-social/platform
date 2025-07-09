@@ -163,39 +163,6 @@ Meteor.methods({
       $inc: { battlesWonCount: 1 },
     });
   },
-
-  async 'sounds.getAudioChunk'({ soundId, range }) {
-    check(soundId, String);
-    check(range, String);
-
-    const sound = await Sounds.findOneAsync(soundId);
-    if (!sound) {
-      throw new Meteor.Error('sound-not-found');
-    }
-
-    const response = await fetch(sound.audioFile, {
-      headers: { Range: range },
-    });
-
-    if (response.status !== 206 && response.status !== 200) {
-      throw new Meteor.Error('fetch-failed', `Failed to fetch audio chunk: ${response.statusText}`);
-    }
-
-    const buffer = await response.arrayBuffer();
-    const totalSizeHeader = response.headers.get('content-range');
-    const contentLengthHeader = response.headers.get('content-length');
-    const contentTypeHeader = response.headers.get('content-type');
-
-    let totalSize = null;
-    if (totalSizeHeader) {
-      totalSize = parseInt(totalSizeHeader.split('/')[1], 10);
-    } else if (response.status === 200 && contentLengthHeader) {
-      // If status is 200 and no Content-Range, assume the whole file is sent
-      totalSize = parseInt(contentLengthHeader, 10);
-    }
-
-    return { chunk: new Uint8Array(buffer), totalSize, contentType: contentTypeHeader };
-  },
 });
 
 if (Meteor.isServer) {
