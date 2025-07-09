@@ -9,6 +9,7 @@ import BytescaleWidget from '../components/BytescaleWidget';
 import { DndContext, closestCenter, useSensors, useSensor, PointerSensor } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { FiTrash } from 'react-icons/fi';
 
 
 const PlaylistFormPage = () => {
@@ -158,7 +159,12 @@ const PlaylistFormPage = () => {
           </label>
           <BytescaleWidget onUpload={setCoverImageUrl} initialUrl={coverImageUrl} />  
           {coverImageUrl && (
-            <img src={coverImageUrl} alt="Cover" className="mt-3 w-48 h-48 object-cover rounded-lg shadow-md" />
+            <div className="mt-3">
+              <img src={coverImageUrl} alt="Cover" className="w-48 h-48 object-cover rounded-lg shadow-md" />
+              <button type="button" onClick={() => setCoverImageUrl('')} className="mt-2 text-red-600 flex items-center cursor-pointer">
+                <FiTrash size={20} /> <span className="ml-2">Remove</span>
+              </button>
+            </div>
           )}
         </div>
 

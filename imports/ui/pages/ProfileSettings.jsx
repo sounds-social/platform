@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import { HeadProvider, Title } from 'react-head';
 import { Meteor } from 'meteor/meteor';
+import { FiTrash } from 'react-icons/fi';
 import BytescaleWidget from '../components/BytescaleWidget';
 
 const ProfileSettings = () => {
@@ -117,7 +118,9 @@ const ProfileSettings = () => {
               {avatar && (
                 <div className="mt-3">
                   <img src={avatar} alt="Avatar" className="w-48 h-48 object-cover rounded-lg shadow-md" />
-                  <button type="button" onClick={() => setAvatar('')} className="mt-2 text-sm text-red-600">Remove Image</button>
+                  <button type="button" onClick={() => setAvatar('')} className="mt-2 text-red-600 flex items-center cursor-pointer">
+                    <FiTrash size={20} /> <span className="ml-2">Remove</span>
+                  </button>
                 </div>
               )}
             </div>

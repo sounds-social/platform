@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { HeadProvider, Title } from 'react-head';
 import { Meteor } from 'meteor/meteor';
-import { FiLoader } from 'react-icons/fi';
+import { FiLoader, FiTrash } from 'react-icons/fi';
 import BytescaleWidget from '../components/BytescaleWidget';
 
 const SoundAdd = () => {
@@ -107,7 +107,9 @@ const SoundAdd = () => {
               {coverImage && (
                 <div className="mt-3">
                   <img src={coverImage} alt="Cover" className="w-48 h-48 object-cover rounded-lg shadow-md" />
-                  <button type="button" onClick={() => setCoverImage('')} className="mt-2 text-sm text-red-600">Remove Image</button>
+                  <button type="button" onClick={() => setCoverImage('')} className="mt-2 text-red-600 flex items-center cursor-pointer">
+                    <FiTrash size={20} /> <span className="ml-2">Remove</span>
+                  </button>
                 </div>
               )}
             </div>
@@ -118,7 +120,9 @@ const SoundAdd = () => {
               {backgroundImage && (
                 <div className="mt-3">
                   <img src={backgroundImage} alt="Background" className="w-48 h-48 object-cover rounded-lg shadow-md" />
-                  <button type="button" onClick={() => setBackgroundImage('')} className="mt-2 text-sm text-red-600">Remove Image</button>
+                  <button type="button" onClick={() => setBackgroundImage('')} className="mt-2 text-red-600 flex items-center cursor-pointer">
+                    <FiTrash size={20} /> <span className="ml-2">Remove</span>
+                  </button>
                 </div>
               )}
             </div>
@@ -129,7 +133,9 @@ const SoundAdd = () => {
               {audioFile && (
                 <div className="mt-3">
                   <audio controls src={audioFile}></audio>
-                  <button type="button" onClick={() => setAudioFile('')} className="mt-2 text-sm text-red-600">Remove Audio</button>
+                  <button type="button" onClick={() => setAudioFile('')} className="mt-2 text-red-600 flex items-center cursor-pointer">
+                    <FiTrash size={20} /> <span className="ml-2">Remove</span>
+                  </button>
                 </div>
               )}
             </div>
