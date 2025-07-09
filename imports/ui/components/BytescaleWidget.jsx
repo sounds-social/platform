@@ -5,6 +5,11 @@ const BytescaleWidget = ({ onUpload, accept, initialUrl }) => {
   const options = {
     apiKey: "public_223k2HsCqgSwzuimeQDZjvxhXFw2",
     maxFileCount: 1,
+    editor: {
+      images: {
+        crop: false,
+      }
+    },
     mimeTypes: accept ? [accept] : ["image/*"],
     onComplete: files => {
       if (files.length > 0) {
