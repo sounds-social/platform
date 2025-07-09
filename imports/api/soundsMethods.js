@@ -22,18 +22,6 @@ Meteor.methods({
       throw new Meteor.Error('invalid-input', 'Audio file and cover image are required.');
     }
 
-    // Get mp3 version of audio file
-    const convertToMp3Url = `${audioFile.trim()}?f=aac`.replace('/raw/', '/audio/')
-    const res = await fetch(convertToMp3Url);
-    let data = await res.json();
-
-    while (data.status !== 'Succeeded') {
-      await new Promise(r => setTimeout(r, 500));
-
-      const res = await fetch(convertToMp3Url);
-      data = await res.json();
-    }
-
     const soundId = await Sounds.insertAsync({
       title,
       description,
@@ -42,7 +30,7 @@ Meteor.methods({
       isPrivate,
       backgroundImage,
       userId: this.userId,
-      audioFile: data.summary.result.artifactUrl
+      audioFile,
     });
 
     const uploader = await Meteor.users.findOneAsync(this.userId);
