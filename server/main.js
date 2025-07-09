@@ -18,4 +18,3 @@ import '/imports/api/groupsPublications';
 import '/imports/api/notifications';
 import '/imports/api/notificationsMethods';
 import '/imports/api/notificationsPublications';
-// import '/server/snippets';
