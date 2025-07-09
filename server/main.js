@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import 'meteor/aldeed:collection2/static';
 
 import '/imports/api/sounds';
@@ -19,23 +18,5 @@ import '/imports/api/groupsPublications';
 import '/imports/api/notifications';
 import '/imports/api/notificationsMethods';
 import '/imports/api/notificationsPublications';
+import '/imports/api/emails';
 
-Meteor.startup(function () {
-  Accounts.emailTemplates.siteName = "Sounds Social";
-  Accounts.emailTemplates.from = "Sounds Social <contact@soundssocial.io>";
-  Accounts.emailTemplates.resetPassword.subject = function(user) {
-    return "Reset your password - Sounds Social";
-  };
-
-  Accounts.emailTemplates.resetPassword.html = function(user, url) {
-    console.log({ url: url.replace('/#/reset-password', '/reset-password') })
-
-    return `
-Hello,
-
-To reset your password, simply click the link below:
-
-<a href="${url.replace('#/', '')}">Reset Password</a>
-    `.trim();
-  };
-});

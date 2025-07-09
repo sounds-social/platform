@@ -6,5 +6,7 @@ Sounds Social is a platform to share your sound with others. This is a WIP but y
 
 ```sh
 meteor npm install
-meteor
+cp settings.json.example settings.json
+# Adjust settings.json with credentials
+meteor npm start
 ```

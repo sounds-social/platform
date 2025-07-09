@@ -1,0 +1,9 @@
+{
+  "packages": {
+    "email": {
+      "service": "SendGrid",
+      "user": "apikey",
+      "password": "PASSWORD"
+    }
+  }
+}

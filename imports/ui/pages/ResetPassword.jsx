@@ -21,15 +21,13 @@ const ResetPassword = () => {
 
     const correctToken = token.replace('=', '');
 
-    console.log({ correctToken, password})
-
     Accounts.resetPassword(correctToken, password, (err) => {
       if (err) {
         setError(err.reason || 'Failed to reset password.');
       } else {
-        setSuccess('Password reset successfully. You can now log in with your new password.');
+        setSuccess('Password reset successfully.');
         setTimeout(() => {
-          history.push('/sign-in');
+          history.push('/');
         }, 3000);
       }
     });
