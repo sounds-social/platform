@@ -29,6 +29,7 @@ import Explore from './pages/Explore';
 import Battle from './pages/Battle';
 import NotFound from './pages/NotFound';
 import SearchResults from './pages/SearchResults';
+import ResetPassword from './pages/ResetPassword';
 import { NotificationsPage } from './pages/NotificationsPage';
 
 // Import components
@@ -71,6 +72,7 @@ export const App = () => {
         <Route path="/sign-in" component={SignIn} />
         <Route path="/sign-up" component={SignUp} />
         <Route path="/forgot-password" component={ForgotPassword} />
+        <Route path="/reset-password/:token" component={ResetPassword} />
         <Route path="/profile/settings" component={ProfileSettings} />
         <Route path="/profile/:slug?/likes">
           <AllLikes />
