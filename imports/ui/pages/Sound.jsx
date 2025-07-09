@@ -159,20 +159,20 @@ const Sound = () => {
             </div>
           )}
 
-          <div className="flex items-center space-x-6 mt-6">
-            <div className="flex items-center text-gray-600">
+          <div className="flex flex-wrap items-center mt-6">
+            <div className="flex items-center text-gray-600 mb-4 mr-6">
               <FiPlay className="mr-2 text-xl" />
               <span>{sound.playCount || 0} {sound.playCount === 1 ? 'Play' : 'Plays'}</span>
             </div>
-            <div className="flex items-center text-gray-600">
+            <div className="flex items-center text-gray-600 mb-4 mr-6">
               <FiHeart className="mr-2 text-xl" />
               <span>{sound.likeCount || 0} {sound.likeCount === 1 ? 'Like' : 'Likes'}</span>
             </div>
-            <div className="flex items-center text-gray-600">
+            <div className="flex items-center text-gray-600 mb-4 mr-6">
               <FiMessageSquare className="mr-2 text-xl" />
               <span>{comments.length}  {comments.length === 1 ? 'Comment' : 'Comments'}</span>
             </div>
-            <div className="flex items-center text-gray-600">
+            <div className="flex items-center text-gray-600 mb-4 mr-6">
               <FiAward className="mr-2 text-xl" />
               <span>Battles Won: {sound.battlesWonCount || 0}</span>
             </div>
