@@ -197,14 +197,14 @@ const Sound = () => {
                 <FiHeart className={`mr-2 ${userHasLiked ? 'fill-current' : ''}`} /> {userHasLiked ? 'Unlike' : 'Like'}
               </button>
             )}
-            {Meteor.userId() && (
+            {/* Meteor.userId() && (
               <button
                 onClick={() => setIsCreateSnippetModalOpen(true)}
                 className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
               >
                 <FiShare2 className="mr-2" /> Share Snippet
               </button>
-            )}
+            ) */}
             {Meteor.userId() && (
               <button
                 onClick={() => setIsAddPlaylistModalOpen(true)}
