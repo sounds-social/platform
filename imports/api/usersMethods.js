@@ -93,27 +93,37 @@ Meteor.methods({
     });
   },
 
-  async 'users.support'(userIdToSupport) {
+  async 'users.addSupporter'(userIdToSupport) {
     check(userIdToSupport, String);
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
-    return await Meteor.users.updateAsync(this.userId, {
-      $addToSet: { 'profile.supports': userIdToSupport },
+    const result = await Meteor.users.updateAsync(userIdToSupport, {
+      $addToSet: { 'profile.supporters': this.userId },
     });
+
+    if (result) {
+      const currentUser = await Meteor.users.findOneAsync(this.userId);
+      await Notifications.insertAsync({
+        userId: userIdToSupport,
+        message: `${currentUser.profile.displayName} is now supporting you`,
+        link: `/profile/${currentUser.profile.slug}`,
+      });
+    }
+    return result;
   },
 
-  async 'users.unsupport'(userIdToUnsupport) {
+  async 'users.removeSupporter'(userIdToUnsupport) {
     check(userIdToUnsupport, String);
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
-    return await Meteor.users.updateAsync(this.userId, {
-      $pull: { 'profile.supports': userIdToUnsupport },
+    return await Meteor.users.updateAsync(userIdToUnsupport, {
+      $pull: { 'profile.supporters': this.userId },
     });
   },
 

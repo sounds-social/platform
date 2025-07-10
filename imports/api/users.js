@@ -22,11 +22,11 @@ const UserProfileSchema = new SimpleSchema({
   'follows.$': {
     type: String,
   },
-  supports: {
+  supporters: {
     type: Array,
     defaultValue: [],
   },
-  'supports.$': {
+  'supporters.$': {
     type: String,
   },
   followers: {

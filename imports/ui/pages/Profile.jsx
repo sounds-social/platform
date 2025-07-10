@@ -170,8 +170,19 @@ const Profile = () => {
   const isFollowing = Meteor.user()?.profile?.follows?.includes(user._id);
   const hasSocialLinks = user.profile.website || user.profile.youtube || user.profile.twitter || user.profile.instagram || user.profile.spotify;
 
-  const handleSupportClick = () => {
-    setShowSupportModal(true);
+  const isSupporting = user.profile?.supporters?.includes(Meteor.userId());
+
+  const handleSupportToggle = async () => {
+    try {
+      if (isSupporting) {
+        await Meteor.callAsync('users.removeSupporter', user._id);
+      } else {
+        await Meteor.callAsync('users.addSupporter', user._id);
+        setShowSupportModal(true);
+      }
+    } catch (error) {
+      console.error('Failed to toggle support status:', error);
+    }
   };
 
   const handleCloseSupportModal = () => {
@@ -225,10 +236,10 @@ const Profile = () => {
               <p className="text-gray-800 font-semibold">{user.profile.follows?.length || 0}</p>
               <p className="text-gray-500 text-sm">Following</p>
             </div>
-            {<div>
-              <p className="text-gray-800 font-semibold">{user.profile.supports?.length || 0}</p>
+            <div>
+              <p className="text-gray-800 font-semibold">{user.profile.supporters?.length || 0}</p>
               <p className="text-gray-500 text-sm">Supporters</p>
-            </div>}
+            </div>
           </div>
           {hasSocialLinks && (
             <div className="flex justify-center md:justify-start space-x-4 mt-4">
@@ -269,10 +280,10 @@ const Profile = () => {
               </button>
               {Meteor.user().plan === 'pro' && (
                 <button
-                  onClick={handleSupportClick}
+                  onClick={handleSupportToggle}
                   className="cursor-pointer bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
                 >
-                  Support
+                  {isSupporting ? 'Unsupport' : 'Support'}
                 </button>
               )}
               <button
