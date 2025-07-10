@@ -105,6 +105,9 @@ Meteor.methods({
     });
 
     if (result) {
+      await Meteor.users.updateAsync(this.userId, {
+        $addToSet: { 'profile.supports': userIdToSupport },
+      });
       const currentUser = await Meteor.users.findOneAsync(this.userId);
       await Notifications.insertAsync({
         userId: userIdToSupport,
@@ -121,6 +124,10 @@ Meteor.methods({
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
+
+    await Meteor.users.updateAsync(this.userId, {
+      $pull: { 'profile.supports': userIdToUnsupport },
+    });
 
     return await Meteor.users.updateAsync(userIdToUnsupport, {
       $pull: { 'profile.supporters': this.userId },

@@ -36,6 +36,13 @@ const UserProfileSchema = new SimpleSchema({
   'followers.$': {
     type: String,
   },
+  supports: {
+    type: Array,
+    defaultValue: [],
+  },
+  'supports.$': {
+    type: String,
+  },
   youtube: {
     type: String,
     optional: true,
