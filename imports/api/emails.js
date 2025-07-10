@@ -6,7 +6,7 @@ Meteor.startup(function () {
   process.env.MAIL_URL = `smtp://${user}:${password}@smtp.sendgrid.net:587`;
 
   Accounts.emailTemplates.siteName = "Sounds Social";
-  Accounts.emailTemplates.from = "Sounds Social <contact@soundssocial.io>";
+  Accounts.emailTemplates.from = "Sounds Social Contact <contact@soundssocial.io>";
   Accounts.emailTemplates.resetPassword.subject = function(user) {
     return "Reset your password - Sounds Social";
   };
