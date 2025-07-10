@@ -7,6 +7,7 @@ import { Sounds } from '../../api/sounds';
 import { PlaylistsCollection as Playlists } from '../../api/playlists';
 import SoundList from '../components/SoundList';
 import PlaylistList from '../components/PlaylistList';
+import UserList from '../components/UserList';
 import Fuse from 'fuse.js';
 
 const SearchResults = () => {
@@ -109,28 +110,7 @@ const SearchResults = () => {
       )}
 
       {searchType === 'users' && (
-        <div>
-          {users.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {users.map(user => (
-                <Link to={`/profile/${user.profile.slug}`} key={user._id} className="block bg-white rounded-lg shadow-md p-4 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-200">
-                  {user.profile.avatar ? (
-                    <img src={user.profile.avatar} alt="Avatar" className="w-16 h-16 rounded-full object-cover" />
-                  ) : (
-                    <div className="w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-600 text-white text-xl font-bold">
-                      {user.profile.displayName ? user.profile.displayName.charAt(0).toUpperCase() : ''}
-                    </div>
-                  )}
-                  <p className="text-lg font-semibold text-gray-800">{user.profile.displayName}</p>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
-              <span className="block sm:inline">No users found matching your search.</span>
-            </div>
-          )}
-        </div>
+        <UserList users={users} loading={loading} noUsersMessage="No users found matching your search." />
       )}
 
       {searchType === 'playlists' && (
