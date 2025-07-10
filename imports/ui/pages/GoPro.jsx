@@ -1,7 +1,22 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { useHistory } from 'react-router-dom';
 import { HeadProvider, Title } from 'react-head';
 
 const GoPro = () => {
+  const history = useHistory();
+
+  const handleGoProClick = () => {
+    Meteor.call('users.setPlan', 'pro', (error) => {
+      if (error) {
+        console.error('Error setting plan:', error);
+        // Optionally, display an error message to the user
+      } else {
+        history.push('/');
+      }
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <HeadProvider>
@@ -82,22 +97,14 @@ const GoPro = () => {
                   </div>
                   <p className="ml-3 text-base text-gray-700">Support your favorite musicians</p>
                 </li>
-                <li className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <svg className="h-6 w-6 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <p className="ml-3 text-base text-gray-700">Access to exclusive PRO features</p>
-                </li>
               </ul>
               <div className="mt-8">
-                <a
-                  href="#"
+                <button
+                  onClick={handleGoProClick}
                   className="block w-full bg-blue-600 border border-transparent rounded-md py-3 px-6 text-center text-base font-medium text-white hover:bg-blue-700"
                 >
                   Go PRO
-                </a>
+                </button>
               </div>
             </div>
           </div>

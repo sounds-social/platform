@@ -100,9 +100,10 @@ const UserSchema = new SimpleSchema({
   'roles.$': {
     type: String,
   },
-  heartbeat: {
-    type: Date,
+  plan: {
+    type: String,
     optional: true,
+    allowedValues: ['pro'],
   },
 });
 

@@ -44,7 +44,11 @@ import { AudioPlayerProvider, useAudioPlayer } from './contexts/AudioPlayerConte
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const user = useTracker(() => Meteor.user());
+  const user = useTracker(() => {
+    Meteor.subscribe('users.me');
+
+    return Meteor.user();
+  });
   const { currentSound } = useAudioPlayer();
 
   setTimeout(() => {

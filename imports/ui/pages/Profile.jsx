@@ -267,12 +267,14 @@ const Profile = () => {
               >
                 {isFollowing ? 'Unfollow' : 'Follow'}
               </button>
-              {/* <button
-                onClick={handleSupportClick}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
-              >
-                Support
-              </button> */}
+              {Meteor.user().plan === 'pro' && (
+                <button
+                  onClick={handleSupportClick}
+                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
+                >
+                  Support
+                </button>
+              )}
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(`${window.location.origin}/profile/${user.profile.slug}`);

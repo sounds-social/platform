@@ -116,4 +116,16 @@ Meteor.methods({
       $pull: { 'profile.supports': userIdToUnsupport },
     });
   },
+
+  async 'users.setPlan'(plan) {
+    check(plan, String);
+
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    return await Meteor.users.updateAsync(this.userId, {
+      $set: { plan },
+    });
+  },
 });

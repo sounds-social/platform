@@ -162,7 +162,7 @@ Pages for groups are:
   * Follow / Unfollow Button
   * Supporters count and list
 
-### Monetization / Support
+### Monetization
 
 The platform allows users to support their favorite musicians / audio content creators by paying a fee of 20 USD per month. The money is divided up into:
 
@@ -314,3 +314,15 @@ Users can participate in a "Sounds Battle" where two tracks are shown and the us
   * By default it's value is 0
   * Display the battles won count on the Sound detail page with label: "Battles Won: {x}" (x = battlesWonCount)
   * When pressing the thumbs up button it should increase the battlesWonCount by 1 for the sound that has been upvoted
+
+### Monetization v2
+
+To elaborate on the monetization feature following things are needed to make it work:
+
+* Add a "plan" field to users collection which is either empty = free plan or "pro" for pro plan
+  * Only display "Go PRO" in the navbar if the plan field is empty for the user
+  * Only display the Support button (Profile.jsx) and Support Overview in the navbar dropdown if the field is = "pro"
+* On the GoPro.jsx page if the user clicks on the "Go PRO" button it should set the plan field to "pro" (for now) and redirect to the homepage (path: /)
+* Add a "Manage plan" section to the ProfileSettings.jsx page which displays the current "plan" value with a label and a "Change plan" button that does nothing for now.
+
+
