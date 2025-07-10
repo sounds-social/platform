@@ -225,10 +225,10 @@ const Profile = () => {
               <p className="text-gray-800 font-semibold">{user.profile.follows?.length || 0}</p>
               <p className="text-gray-500 text-sm">Following</p>
             </div>
-            {/* <div>
+            {<div>
               <p className="text-gray-800 font-semibold">{user.profile.supports?.length || 0}</p>
               <p className="text-gray-500 text-sm">Supporters</p>
-            </div> */}
+            </div>}
           </div>
           {hasSocialLinks && (
             <div className="flex justify-center md:justify-start space-x-4 mt-4">
@@ -263,14 +263,14 @@ const Profile = () => {
             <div className="mt-6 flex justify-center md:justify-start space-x-4">
               <button
                 onClick={handleFollowToggle}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
+                className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
               >
                 {isFollowing ? 'Unfollow' : 'Follow'}
               </button>
               {Meteor.user().plan === 'pro' && (
                 <button
                   onClick={handleSupportClick}
-                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
+                  className="cursor-pointer bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
                 >
                   Support
                 </button>
@@ -281,7 +281,7 @@ const Profile = () => {
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 }}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md"
+                className="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md"
               >
                 {copied ? 'Copied!' : 'Share'}
               </button>
@@ -298,7 +298,7 @@ const Profile = () => {
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 }}
-                className="ml-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md"
+                className="cursor-pointer ml-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md"
               >
                 {copied ? 'Copied!' : 'Share'}
               </button>
