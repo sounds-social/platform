@@ -145,4 +145,14 @@ Meteor.methods({
       $set: { plan },
     });
   },
+
+  async 'users.resetPlanToFree'() {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    return await Meteor.users.updateAsync(this.userId, {
+      $set: { plan: '' },
+    });
+  },
 });

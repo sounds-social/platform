@@ -62,6 +62,12 @@ const ProfileSettings = () => {
     });
   };
 
+  const handleResetPlanToFree = () => {
+    Meteor.callAsync('users.resetPlanToFree')
+      .then(() => setSuccess('Plan reset to Free successfully.'))
+      .catch(err => setError(err.reason));
+  };
+
   if (!user) {
     return <div className="text-center py-8">Please log in to view your profile settings.</div>;
   }
@@ -263,6 +269,17 @@ const ProfileSettings = () => {
                 Change Plan
               </button>
             </div>
+            {user.plan === 'pro' && (
+              <div className="mt-4">
+                <button
+                  type="button"
+                  onClick={handleResetPlanToFree}
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-red-600 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  Reset Plan To Free
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
