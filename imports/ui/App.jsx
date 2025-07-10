@@ -31,6 +31,7 @@ import NotFound from './pages/NotFound';
 import SearchResults from './pages/SearchResults';
 import ResetPassword from './pages/ResetPassword';
 import { NotificationsPage } from './pages/NotificationsPage';
+import StripeSuccess from './pages/StripeSuccess';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -117,6 +118,7 @@ export const App = () => {
         <Route path="/notifications">
           <NotificationsPage />
         </Route>
+        <Route path="/stripe-success" component={StripeSuccess} />
         <Route path="/terms-of-service" component={TermsOfService} />
         <Route path="/privacy-policy" component={PrivacyPolicy} />
         <Route path="/logout" component={() => {

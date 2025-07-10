@@ -1,20 +1,16 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { useHistory } from 'react-router-dom';
 import { HeadProvider, Title } from 'react-head';
 
 const GoPro = () => {
-  const history = useHistory();
-
-  const handleGoProClick = () => {
-    Meteor.call('users.setPlan', 'pro', (error) => {
-      if (error) {
-        console.error('Error setting plan:', error);
-        // Optionally, display an error message to the user
-      } else {
-        history.push('/');
-      }
-    });
+  const handleGoProClick = async () => {
+    try {
+      const checkoutUrl = await Meteor.callAsync('stripe.createCheckoutSession');
+      window.location.href = checkoutUrl;
+    } catch (error) {
+      console.error('Error creating Stripe checkout session:', error);
+      // Optionally, display an error message to the user
+    }
   };
 
   return (

@@ -5,5 +5,16 @@
       "user": "apikey",
       "password": "PASSWORD"
     }
+  },
+  "private": {
+    "stripe": {
+      "secretKey": "sk_test_YOUR_SECRET_KEY",
+      "proPriceId": "price_YOUR_PRO_PRICE_ID"
+    }
+  },
+  "public": {
+    "stripe": {
+      "publishableKey": "pk_test_YOUR_PUBLISHABLE_KEY"
+    }
   }
 }

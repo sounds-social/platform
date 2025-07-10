@@ -155,4 +155,61 @@ Meteor.methods({
       $set: { plan: '' },
     });
   },
+
+  async 'stripe.createCheckoutSession'() {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    const stripe = require('stripe')(Meteor.settings.private.stripe.secretKey);
+    const user = await Meteor.users.findOneAsync(this.userId);
+
+    if (!user) {
+      throw new Meteor.Error('user-not-found', 'User not found.');
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price: Meteor.settings.private.stripe.proPriceId,
+          quantity: 1,
+        },
+      ],
+      mode: 'subscription',
+      success_url: Meteor.absoluteUrl('stripe-success?session_id={CHECKOUT_SESSION_ID}').replace('soundssocial.eu.meteorapp.com', 'soundssocial.io'),
+      cancel_url: Meteor.absoluteUrl('go-pro').replace('soundssocial.eu.meteorapp.com', 'soundssocial.io'),
+      client_reference_id: this.userId,
+      customer_email: user.emails[0].address,
+    });
+
+    return session.url;
+  },
+
+  async 'stripe.checkPaymentStatus'(sessionId) {
+    check(sessionId, String);
+
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    const stripe = require('stripe')(Meteor.settings.private.stripe.secretKey);
+
+    try {
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+      if (session.payment_status === 'paid') {
+        // Update user's plan to pro
+        await Meteor.users.updateAsync(this.userId, {
+          $set: { plan: 'pro' },
+        });
+        return { success: true };
+      } else {
+        return { success: false, message: 'Payment not successful.' };
+      }
+    } catch (error) {
+      console.error('Error checking Stripe payment status:', error);
+      throw new Meteor.Error('stripe-error', 'Failed to check payment status.');
+    }
+  },
 });
