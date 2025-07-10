@@ -1,4 +1,7 @@
 import React from 'react';
+import { useTracker } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import { Link } from 'react-router-dom';
 import { HeadProvider, Title } from 'react-head';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
@@ -9,6 +12,24 @@ const data = [
 ];
 
 const SupportOverview = () => {
+  const { supportedUsers, loading } = useTracker(() => {
+    const noData = { supportedUsers: [], loading: true };
+    const currentUser = Meteor.user();
+
+    if (!currentUser || !currentUser.profile || !currentUser.profile.supports || currentUser.profile.supports.length === 0) {
+      return { supportedUsers: [], loading: false };
+    }
+
+    const supportedUserIds = currentUser.profile.supports;
+    const handle = Meteor.subscribe('users.supportedUsers', supportedUserIds);
+
+    if (!handle.ready()) {
+      return noData;
+    }
+
+    const users = Meteor.users.find({ _id: { $in: supportedUserIds } }).fetch();
+    return { supportedUsers: users, loading: false };
+  }, []);
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <HeadProvider>
@@ -60,19 +81,30 @@ const SupportOverview = () => {
         </div>
 
         <div className="mt-12 text-center">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Musicians To Support</h3>
-          <p className="text-gray-600">List of supported musicians will appear here.</p>
-          {/* Placeholder for supported musicians list */}
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Example: */}
-            {/* <div className="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4">
-              <img src="https://via.placeholder.com/50" alt="Musician Avatar" className="w-12 h-12 rounded-full" />
-              <div>
-                <p className="font-semibold text-gray-800">Musician Name</p>
-                <p className="text-sm text-gray-500">@musicianslug</p>
-              </div>
-            </div> */}
-          </div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-4">Musicians You Support</h3>
+          {loading ? (
+            <p className="text-gray-600">Loading supported musicians...</p>
+          ) : supportedUsers.length > 0 ? (
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {supportedUsers.map(user => (
+                <Link to={`/profile/${user.profile.slug}`} key={user._id} className="block bg-white rounded-lg shadow-md p-4 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-200">
+                  {user.profile.avatar ? (
+                    <img src={user.profile.avatar} alt="Musician Avatar" className="w-12 h-12 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-600 text-white text-xl font-bold">
+                      {user.profile.displayName ? user.profile.displayName.charAt(0).toUpperCase() : ''}
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-semibold text-gray-800">{user.profile.displayName}</p>
+                    <p className="text-sm text-gray-500">@{user.profile.slug}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-600">You are not supporting any musicians yet.</p>
+          )}
         </div>
       </div>
     </div>

@@ -61,3 +61,19 @@ Meteor.publish('users.public', function () {
     }
   });
 });
+
+Meteor.publish('users.supportedUsers', function (userIds) {
+  if (!this.userId) {
+    return this.ready();
+  }
+
+  return Meteor.users.find({
+    _id: { $in: userIds }
+  }, {
+    fields: {
+      'profile.displayName': 1,
+      'profile.slug': 1,
+      'profile.avatar': 1,
+    }
+  });
+});
