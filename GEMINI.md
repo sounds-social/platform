@@ -166,13 +166,13 @@ Pages for groups are:
 
 The platform allows users to support their favorite musicians / audio content creators by paying a fee of 20 USD per month. The money is divided up into:
 
-* 10% for platform hosting costs
-* 10% for development of the platform
-* 80% to users supporting each other
+* 15% for platform hosting costs
+* 15% for development of the platform
+* 70% to users supporting each other
 
-Whenever the user clicks on a "Support" button on the (group) profile page, they go to a page that shows them how the money is divided so that a split of that 80% goes to the user that is being supported. That means that each month a user automatically "donates" the money to the list of musicians they support. The platform strives to make it as clear as possible what happens to the users money.
+Whenever the user clicks on a "Support" button on the (group) profile page, they go to a page that shows them how the money is divided so that a split of that 70% goes to the user that is being supported. That means that each month a user automatically "donates" the money to the list of musicians they support. The platform strives to make it as clear as possible what happens to the users money.
 
-In the future people can control how they want the split to happen (e.g. 10% to user1, 15% to user2). For now it's just an even split across the 80%.
+In the future people can control how they want the split to happen (e.g. 10% to user1, 15% to user2). For now it's just an even split across the 70%.
 
 Pages for the monetization are:
 

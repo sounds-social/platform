@@ -6,9 +6,9 @@ import { HeadProvider, Title } from 'react-head';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 const data = [
-  { name: 'Platform Hosting Costs', value: 10, color: '#8884d8' },
-  { name: 'Platform Development', value: 10, color: '#82ca9d' },
-  { name: 'Musicians To Support', value: 80, color: '#ffc658' },
+  { name: 'Platform Hosting Costs', value: 15, color: '#8884d8' },
+  { name: 'Platform Development', value: 15, color: '#82ca9d' },
+  { name: 'Musicians To Support', value: 70, color: '#ffc658' },
 ];
 
 const SupportOverview = () => {
@@ -75,13 +75,17 @@ const SupportOverview = () => {
               ))}
             </ul>
             <p className="mt-6 text-gray-600 text-sm">
-              80% is split evenly among the musicians you support. In the future, you'll be able to customize this split.
+              70% is split evenly among the musicians you support. In the future, you'll be able to customize this split.
             </p>
           </div>
         </div>
 
         <div className="mt-12 text-center">
           <h3 className="text-2xl font-bold text-gray-900 mb-4">Musicians You Support</h3>
+          {supportedUsers.length > 0 
+            && (<div className="text-gray-500">
+              Every user you support gets <span className="font-bold">{20 * 0.7 / supportedUsers.length}$</span>
+              </div>)}
           <UserList users={supportedUsers} loading={loading} noUsersMessage="You are not supporting any musicians yet." />
         </div>
       </div>
