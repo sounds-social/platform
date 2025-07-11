@@ -303,7 +303,7 @@ Meteor.methods({
     }
   },
 
-  async 'stripe.createPayout'() {
+  async 'stripe.transferToConnectedAccount'() {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
@@ -317,15 +317,15 @@ Meteor.methods({
     const stripe = require('stripe')(Meteor.settings.private.stripe.secretKey);
 
     try {
-      const payout = await stripe.payouts.create({
-        amount: 1000, // Example amount in cents, adjust as needed
-        currency: 'usd',
+      const transfer = await stripe.transfers.create({
+        amount: 100, // Amount in cents, adjust as needed
+        currency: 'chf',
         destination: user.profile.stripeAccountId,
       });
-      return { success: true, payoutId: payout.id };
+      return { success: true, transferId: transfer.id };
     } catch (error) {
-      console.error('Error creating Stripe payout:', error);
-      throw new Meteor.Error('stripe-error', 'Failed to create payout.');
+      console.error('Error creating Stripe transfer:', error);
+      throw new Meteor.Error('stripe-error', error.message || 'Failed to create transfer to connected account.');
     }
   },
 });

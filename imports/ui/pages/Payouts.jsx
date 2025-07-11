@@ -12,6 +12,8 @@ const Payouts = () => {
   const [accountStatus, setAccountStatus] = useState(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [payoutAmount, setPayoutAmount] = useState(0);
 
   useEffect(() => {
     const fetchAccountStatus = async () => {
@@ -55,7 +57,7 @@ const Payouts = () => {
   const handleCreatePayout = async () => {
     try {
       setError(null);
-      await Meteor.callAsync('stripe.createPayout');
+      await Meteor.callAsync('stripe.transferToConnectedAccount', payoutAmount * 100); // Convert to cents
       setSuccess('Payout initiated successfully!');
     } catch (err) {
       console.error('Error creating payout:', err);
@@ -81,6 +83,7 @@ const Payouts = () => {
         <div className="mt-10 bg-white rounded-lg shadow-lg p-6 md:p-10">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Stripe Connect Status</h3>
           {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">{error}</div>}
+          {success && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">{success}</div>}
           {loadingStatus ? (
             <p className="text-gray-600">Loading Stripe Connect status...</p>
           ) : user && user.profile?.stripeAccountId ? (
