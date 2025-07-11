@@ -32,6 +32,7 @@ import SearchResults from './pages/SearchResults';
 import ResetPassword from './pages/ResetPassword';
 import { NotificationsPage } from './pages/NotificationsPage';
 import StripeSuccess from './pages/StripeSuccess';
+import Payouts from './pages/Payouts';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -119,6 +120,7 @@ export const App = () => {
           <NotificationsPage />
         </Route>
         <Route path="/stripe-success" component={StripeSuccess} />
+        <Route path="/payouts" component={Payouts} />
         <Route path="/terms-of-service" component={TermsOfService} />
         <Route path="/privacy-policy" component={PrivacyPolicy} />
         <Route path="/logout" component={() => {

@@ -1,7 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
+import geoip from 'geoip-country';
 import { Notifications } from './notifications';
+import { HTTP } from 'meteor/http';
+
+const getCountryFromIp = (ip) => {
+  return geoip.lookup(ip)?.country;
+};
 
 Meteor.methods({
   async 'users.updateProfile'(displayName, slug, avatar, youtube, twitter, spotify, instagram, website) {
@@ -210,6 +216,116 @@ Meteor.methods({
     } catch (error) {
       console.error('Error checking Stripe payment status:', error);
       throw new Meteor.Error('stripe-error', 'Failed to check payment status.');
+    }
+  },
+
+  async 'stripe.createConnectAccount'() {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    const stripe = require('stripe')(Meteor.settings.private.stripe.secretKey);
+    const user = await Meteor.users.findOneAsync(this.userId);
+
+    if (!user) {
+      throw new Meteor.Error('user-not-found', 'User not found.');
+    }
+
+    const userIp = this.connection.clientAddress;
+    const countryCode = getCountryFromIp(userIp);
+
+    const account = await stripe.accounts.create({
+      type: 'express',
+      country: countryCode, // Dynamically set based on user's IP
+      email: user.emails[0].address,
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true },
+      },
+      business_type: 'individual',
+      individual: {
+        email: user.emails[0].address,
+      },
+      settings: {
+        payouts: {
+          schedule: {
+            interval: 'manual',
+          },
+        },
+      },
+    });
+
+    await Meteor.users.updateAsync(this.userId, {
+      $set: { 'profile.stripeAccountId': account.id },
+    });
+
+    return account.id;
+  },
+
+  async 'stripe.createAccountLink'(accountId) {
+    check(accountId, String);
+
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    const stripe = require('stripe')(Meteor.settings.private.stripe.secretKey);
+
+    const accountLink = await stripe.accountLinks.create({
+      account: accountId,
+      refresh_url: Meteor.absoluteUrl('payouts').replace('soundssocial.eu.meteorapp.com', 'soundssocial.io'),
+      return_url: Meteor.absoluteUrl('payouts').replace('soundssocial.eu.meteorapp.com', 'soundssocial.io'),
+      type: 'account_onboarding',
+    });
+
+    return accountLink.url;
+  },
+
+  async 'stripe.getAccountStatus'(accountId) {
+    check(accountId, String);
+
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    const stripe = require('stripe')(Meteor.settings.private.stripe.secretKey);
+
+    try {
+      const account = await stripe.accounts.retrieve(accountId);
+      return {
+        charges_enabled: account.charges_enabled,
+        payouts_enabled: account.payouts_enabled,
+        details_submitted: account.details_submitted,
+      };
+    } catch (error) {
+      console.error('Error retrieving Stripe account status:', error);
+      throw new Meteor.Error('stripe-error', 'Failed to retrieve account status.');
+    }
+  },
+
+  async 'stripe.createPayout'() {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    const user = await Meteor.users.findOneAsync(this.userId);
+
+    if (!user || !user.profile.stripeAccountId) {
+      throw new Meteor.Error('no-stripe-account', 'User does not have a connected Stripe account.');
+    }
+
+    const stripe = require('stripe')(Meteor.settings.private.stripe.secretKey);
+
+    try {
+      const payout = await stripe.payouts.create({
+        amount: 1000, // Example amount in cents, adjust as needed
+        currency: 'usd',
+        destination: user.profile.stripeAccountId,
+      });
+      return { success: true, payoutId: payout.id };
+    } catch (error) {
+      console.error('Error creating Stripe payout:', error);
+      throw new Meteor.Error('stripe-error', 'Failed to create payout.');
     }
   },
 });

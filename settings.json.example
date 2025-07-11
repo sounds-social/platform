@@ -14,7 +14,8 @@
   },
   "public": {
     "stripe": {
-      "publishableKey": "pk_test_YOUR_PUBLISHABLE_KEY"
+      "publishableKey": "pk_test_YOUR_PUBLISHABLE_KEY",
+      "stripeConnectClientId": "ca_YOUR_CONNECT_CLIENT_ID"
     }
   }
 }

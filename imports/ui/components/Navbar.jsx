@@ -46,6 +46,9 @@ const Navbar = ({ user }) => {
           {user && user.plan === 'pro' && (
             <Link onClick={handleDropdownClick} to="/support-overview" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support Overview</Link>
           )}
+          {user && user.plan === 'pro' && (
+            <Link onClick={handleDropdownClick} to="/payouts" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Payouts</Link>
+          )}
           <Link onClick={handleDropdownClick}  to="/explore" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Explore</Link>
           <Link onClick={handleDropdownClick}  to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</Link>
           <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Donate</a>
@@ -141,6 +144,7 @@ const Navbar = ({ user }) => {
             <div className="pt-4 pb-3 border-t border-gray-200">
               <div className="px-2 space-y-1">
                 <Link onClick={handleDropdownClick} to="/support-overview" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Support Overview</Link>
+                <Link onClick={handleDropdownClick} to="/payouts" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Payouts</Link>
                 <Link onClick={handleDropdownClick} to="/explore" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Explore</Link>
                 <Link onClick={handleDropdownClick} to="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Profile</Link>
                 <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Donate</a>

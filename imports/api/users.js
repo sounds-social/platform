@@ -63,6 +63,10 @@ const UserProfileSchema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  stripeAccountId: {
+    type: String,
+    optional: true,
+  },
 });
 
 const UserSchema = new SimpleSchema({
