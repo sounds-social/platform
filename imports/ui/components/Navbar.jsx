@@ -46,9 +46,7 @@ const Navbar = ({ user }) => {
           {user && user.plan === 'pro' && (
             <Link onClick={handleDropdownClick} to="/support-overview" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support Overview</Link>
           )}
-          {user && user.plan === 'pro' && (
-            <Link onClick={handleDropdownClick} to="/payouts" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Payouts</Link>
-          )}
+          <Link onClick={handleDropdownClick} to="/payouts" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Payouts</Link>
           <Link onClick={handleDropdownClick}  to="/explore" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Explore</Link>
           <Link onClick={handleDropdownClick}  to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</Link>
           <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Donate</a>

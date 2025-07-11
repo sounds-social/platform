@@ -19,4 +19,6 @@ import '/imports/api/notifications';
 import '/imports/api/notificationsMethods';
 import '/imports/api/notificationsPublications';
 import '/imports/api/emails';
+import '/imports/api/payouts';
+import '/imports/api/payoutsPublications';
 

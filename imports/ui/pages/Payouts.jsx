@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { HeadProvider, Title } from 'react-head';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
+import { Payouts as PayoutsCollection } from '../../api/payouts';
 
 const Payouts = () => {
   const { user, loading: userLoading } = useTracker(() => {
@@ -13,7 +14,16 @@ const Payouts = () => {
   const [loadingStatus, setLoadingStatus] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [payoutAmount, setPayoutAmount] = useState(0);
+
+  const { payouts, loading: payoutsLoading } = useTracker(() => {
+    const handle = Meteor.subscribe('payouts.myPayouts');
+    return { 
+      payouts: PayoutsCollection.find({ toUserId: Meteor.userId() }).fetch(), 
+      loading: !handle.ready(),
+    };
+  }, []);
+
+  console.log({ payouts, payoutsLoading })
 
   useEffect(() => {
     const fetchAccountStatus = async () => {
@@ -54,10 +64,10 @@ const Payouts = () => {
     }
   };
 
-  const handleCreatePayout = async () => {
+  const handleCreatePayout = async (payoutId, amount, destinationAccountId) => {
     try {
       setError(null);
-      await Meteor.callAsync('stripe.transferToConnectedAccount', payoutAmount * 100); // Convert to cents
+      await Meteor.callAsync('stripe.transferToConnectedAccount', payoutId, amount, destinationAccountId);
       setSuccess('Payout initiated successfully!');
     } catch (err) {
       console.error('Error creating payout:', err);
@@ -104,30 +114,73 @@ const Payouts = () => {
                   )}
                 </div>
               )}
-              {accountStatus?.payouts_enabled && (
-                <div className="mt-8">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Create Payout</h3>
-                  <button
-                    onClick={handleCreatePayout}
-                    className="cursor-pointer mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
-                  >
-                    Initiate Payout
-                  </button>
-                </div>
-              )}
             </div>
           ) : (
-            <button
-              onClick={handleOnboardStripe}
-              className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
-            >
-              Onboard with Stripe
-            </button>
+            <div>
+              <p className="text-gray-600 mb-4 italic">To start earning money click on the button below.</p>
+              <button
+                onClick={handleOnboardStripe}
+                className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
+              >
+                Onboard with Stripe
+              </button>
+            </div>
           )}
 
           <h3 className="text-xl font-bold text-gray-900 mt-8 mb-4">Payout History</h3>
-          <p className="text-gray-600">Payout history will appear here.</p>
-          {/* Placeholder for payout history list */}
+          {payoutsLoading ? (
+            <p className="text-gray-600">Loading payout history...</p>
+          ) : payouts.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Amount</th>
+                    <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Status</th>
+                    <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Date</th>
+                    <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {payouts.map((payout) => (
+                    <tr key={payout._id}>
+                      <td className="py-2 px-4 border-b text-gray-800">${(payout.amountInCents / 100).toFixed(2)}</td>
+                      <td className="py-2 px-4 border-b text-gray-800">{payout.status}</td>
+                      <td className="py-2 px-4 border-b text-gray-800">{new Date(payout.createdAt).toLocaleDateString()}</td>
+                      <td className="py-2 px-4 border-b">
+                        {payout.status === 'pending' && accountStatus?.payouts_enabled && (
+                          <button
+                            onClick={() => handleCreatePayout(payout._id, payout.amountInCents, user.profile.stripeAccountId)}
+                            className="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-1 px-2 rounded"
+                          >
+                            Transfer
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-gray-600">No payout history found.</p>
+          )}
+
+          <div className="mt-8">
+            <button
+              onClick={async () => {
+                try {
+                  await Meteor.callAsync('payouts.generateMonthlyPayouts');
+                  setSuccess('Monthly payouts generated successfully!');
+                } catch (err) {
+                  setError(err.reason || 'Failed to generate monthly payouts.');
+                }
+              }}
+              className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md"
+            >
+              Generate Monthly Payouts (Admin Only)
+            </button>
+          </div>
         </div>
       </div>
     </div>
