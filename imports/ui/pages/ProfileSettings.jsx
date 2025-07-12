@@ -75,6 +75,7 @@ const ProfileSettings = () => {
       const sessionUrl = await Meteor.callAsync('stripe.createCustomerPortalSession');
       window.location.href = sessionUrl;
     } catch (err) {
+      window.scrollTo(0,0)
       console.error('Error creating customer portal session:', err);
       setError(err.reason || 'Failed to open subscription management portal.');
     }
