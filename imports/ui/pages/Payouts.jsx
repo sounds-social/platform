@@ -165,22 +165,6 @@ const Payouts = () => {
           ) : (
             <p className="text-gray-600">No payout history found.</p>
           )}
-
-          <div className="mt-8">
-            <button
-              onClick={async () => {
-                try {
-                  await Meteor.callAsync('payouts.generateMonthlyPayouts');
-                  setSuccess('Monthly payouts generated successfully!');
-                } catch (err) {
-                  setError(err.reason || 'Failed to generate monthly payouts.');
-                }
-              }}
-              className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-md"
-            >
-              Generate Monthly Payouts (Admin Only)
-            </button>
-          </div>
         </div>
       </div>
     </div>

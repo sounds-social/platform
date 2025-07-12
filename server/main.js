@@ -21,4 +21,14 @@ import '/imports/api/notificationsPublications';
 import '/imports/api/emails';
 import '/imports/api/payouts';
 import '/imports/api/payoutsPublications';
+import { generateMonthlyPayouts } from '/imports/api/payoutsLogic';
+
+Meteor.startup(() => {
+  generateMonthlyPayouts();
+
+  // Run every 12 hours (12 * 60 * 60 * 1000 ms)
+  setInterval(() => {
+    generateMonthlyPayouts();
+  }, 12 * 60 * 60 * 1000);
+});
 

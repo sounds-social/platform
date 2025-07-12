@@ -318,7 +318,7 @@ Meteor.methods({
     try {
       const transfer = await stripe.transfers.create({
         amount: amount,
-        currency: 'chf',
+        currency: 'usd',
         destination: destinationAccountId,
       });
 
@@ -344,46 +344,4 @@ Meteor.methods({
     }
   },
 
-  async 'payouts.generateMonthlyPayouts'() {
-    // This method should ideally be called by a cron job or admin action, not directly by users.
-    if (!this.userId) {
-      throw new Meteor.Error('not-authorized');
-    }
-
-    const proUsers = await Meteor.users.find({ plan: 'pro' }).fetch();
-    const PRO_FEE_CENTS = 1593; // $20.00 in CHF (as of 11.7.2025)
-    const SHARE_PERCENTAGE = 0.70; // 70%
-    const SHARE_AMOUNT_CENTS = PRO_FEE_CENTS * SHARE_PERCENTAGE;
-
-    for (const proUser of proUsers) {
-      if (proUser.profile && proUser.profile.supports && proUser.profile.supports.length > 0) {
-        const supportedMusiciansCount = proUser.profile.supports.length;
-        const amountPerMusician = Math.floor(SHARE_AMOUNT_CENTS / supportedMusiciansCount);
-
-        for (const supportedUserId of proUser.profile.supports) {
-          // Check if a payout for this month already exists for this proUser to this supportedUser
-          const startOfMonth = new Date();
-          startOfMonth.setDate(1);
-          startOfMonth.setHours(0, 0, 0, 0);
-
-          const existingPayout = await Payouts.findOneAsync({
-            fromUserId: proUser._id,
-            toUserId: supportedUserId,
-            createdAt: { $gte: startOfMonth },
-          });
-
-          if (!existingPayout) {
-            await Payouts.insertAsync({
-              fromUserId: proUser._id,
-              toUserId: supportedUserId,
-              amountInCents: amountPerMusician,
-              isProcessed: false,
-              status: 'pending',
-            });
-          }
-        }
-      }
-    }
-    return { success: true, message: 'Monthly payouts generated.' };
-  },
-});
+  });
