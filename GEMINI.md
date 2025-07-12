@@ -162,17 +162,17 @@ Pages for groups are:
   * Follow / Unfollow Button
   * Supporters count and list
 
-### Monetization / Support
+### Monetization
 
 The platform allows users to support their favorite musicians / audio content creators by paying a fee of 20 USD per month. The money is divided up into:
 
-* 10% for platform hosting costs
-* 10% for development of the platform
-* 80% to users supporting each other
+* 15% for platform hosting costs
+* 15% for development of the platform
+* 70% to users supporting each other
 
-Whenever the user clicks on a "Support" button on the (group) profile page, they go to a page that shows them how the money is divided so that a split of that 80% goes to the user that is being supported. That means that each month a user automatically "donates" the money to the list of musicians they support. The platform strives to make it as clear as possible what happens to the users money.
+Whenever the user clicks on a "Support" button on the (group) profile page, they go to a page that shows them how the money is divided so that a split of that 70% goes to the user that is being supported. That means that each month a user automatically "donates" the money to the list of musicians they support. The platform strives to make it as clear as possible what happens to the users money.
 
-In the future people can control how they want the split to happen (e.g. 10% to user1, 15% to user2). For now it's just an even split across the 80%.
+In the future people can control how they want the split to happen (e.g. 10% to user1, 15% to user2). For now it's just an even split across the 70%.
 
 Pages for the monetization are:
 
@@ -314,3 +314,15 @@ Users can participate in a "Sounds Battle" where two tracks are shown and the us
   * By default it's value is 0
   * Display the battles won count on the Sound detail page with label: "Battles Won: {x}" (x = battlesWonCount)
   * When pressing the thumbs up button it should increase the battlesWonCount by 1 for the sound that has been upvoted
+
+### Monetization v2
+
+To elaborate on the monetization feature following things are needed to make it work:
+
+* Add a "plan" field to users collection which is either empty = free plan or "pro" for pro plan
+  * Only display "Go PRO" in the navbar if the plan field is empty for the user
+  * Only display the Support button (Profile.jsx) and Support Overview in the navbar dropdown if the field is = "pro"
+* On the GoPro.jsx page if the user clicks on the "Go PRO" button it should set the plan field to "pro" (for now) and redirect to the homepage (path: /)
+* Add a "Manage plan" section to the ProfileSettings.jsx page which displays the current "plan" value with a label and a "Change plan" button that does nothing for now.
+
+

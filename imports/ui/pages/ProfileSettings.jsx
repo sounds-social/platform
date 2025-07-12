@@ -62,6 +62,25 @@ const ProfileSettings = () => {
     });
   };
 
+  const handleResetPlanToFree = () => {
+    Meteor.callAsync('users.resetPlanToFree')
+      .then(() => setSuccess('Plan reset to Free successfully.'))
+      .catch(err => setError(err.reason));
+  };
+
+  const handleManageSubscription = async () => {
+    try {
+      setError('');
+      setSuccess('');
+      const sessionUrl = await Meteor.callAsync('stripe.createCustomerPortalSession');
+      window.location.href = sessionUrl;
+    } catch (err) {
+      window.scrollTo(0,0)
+      console.error('Error creating customer portal session:', err);
+      setError(err.reason || 'Failed to open subscription management portal.');
+    }
+  };
+
   if (!user) {
     return <div className="text-center py-8">Please log in to view your profile settings.</div>;
   }
@@ -213,6 +232,20 @@ const ProfileSettings = () => {
           </div>
 
           <div className="mt-10">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Manage Plan</h3>
+            <div className="bg-gray-50 p-4 rounded-md mb-6">
+              <p className="text-gray-700">Current Plan: {user.plan ? user.plan.toUpperCase() : 'FREE'}</p>
+            </div>
+            {user.plan === 'pro' && (
+              <div>
+                <button type="button" onClick={handleManageSubscription} className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                  Manage Subscription
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-10">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Change Password</h3>
             <form className="space-y-6" onSubmit={handlePasswordChange}>
               <div>
@@ -252,6 +285,8 @@ const ProfileSettings = () => {
               </div>
             </form>
           </div>
+
+          
         </div>
       </div>
     </div>

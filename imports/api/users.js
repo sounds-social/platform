@@ -22,11 +22,11 @@ const UserProfileSchema = new SimpleSchema({
   'follows.$': {
     type: String,
   },
-  supports: {
+  supporters: {
     type: Array,
     defaultValue: [],
   },
-  'supports.$': {
+  'supporters.$': {
     type: String,
   },
   followers: {
@@ -34,6 +34,13 @@ const UserProfileSchema = new SimpleSchema({
     defaultValue: [],
   },
   'followers.$': {
+    type: String,
+  },
+  supports: {
+    type: Array,
+    defaultValue: [],
+  },
+  'supports.$': {
     type: String,
   },
   youtube: {
@@ -53,6 +60,10 @@ const UserProfileSchema = new SimpleSchema({
     optional: true,
   },
   website: {
+    type: String,
+    optional: true,
+  },
+  stripeAccountId: {
     type: String,
     optional: true,
   },
@@ -100,9 +111,10 @@ const UserSchema = new SimpleSchema({
   'roles.$': {
     type: String,
   },
-  heartbeat: {
-    type: Date,
+  plan: {
+    type: String,
     optional: true,
+    allowedValues: ['pro'],
   },
 });
 

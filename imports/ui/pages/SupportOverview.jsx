@@ -1,14 +1,35 @@
 import React from 'react';
+import { useTracker } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import UserList from '../components/UserList';
 import { HeadProvider, Title } from 'react-head';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 const data = [
-  { name: 'Platform Hosting Costs', value: 10, color: '#8884d8' },
-  { name: 'Platform Development', value: 10, color: '#82ca9d' },
-  { name: 'Musicians To Support', value: 80, color: '#ffc658' },
+  { name: 'Platform Hosting Costs', value: 15, color: '#8884d8' },
+  { name: 'Platform Development', value: 15, color: '#82ca9d' },
+  { name: 'Musicians To Support', value: 70, color: '#ffc658' },
 ];
 
 const SupportOverview = () => {
+  const { supportedUsers, loading } = useTracker(() => {
+    const noData = { supportedUsers: [], loading: true };
+    const currentUser = Meteor.user();
+
+    if (!currentUser || !currentUser.profile || !currentUser.profile.supports || currentUser.profile.supports.length === 0) {
+      return { supportedUsers: [], loading: false };
+    }
+
+    const supportedUserIds = currentUser.profile.supports;
+    const handle = Meteor.subscribe('users.supportedUsers', supportedUserIds);
+
+    if (!handle.ready()) {
+      return noData;
+    }
+
+    const users = Meteor.users.find({ _id: { $in: supportedUserIds } }).fetch();
+    return { supportedUsers: users, loading: false };
+  }, []);
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <HeadProvider>
@@ -54,25 +75,18 @@ const SupportOverview = () => {
               ))}
             </ul>
             <p className="mt-6 text-gray-600 text-sm">
-              80% is split evenly among the musicians you support. In the future, you'll be able to customize this split.
+              70% is split evenly among the musicians you support. In the future, you'll be able to customize this split.
             </p>
           </div>
         </div>
 
         <div className="mt-12 text-center">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Musicians To Support</h3>
-          <p className="text-gray-600">List of supported musicians will appear here.</p>
-          {/* Placeholder for supported musicians list */}
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Example: */}
-            {/* <div className="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4">
-              <img src="https://via.placeholder.com/50" alt="Musician Avatar" className="w-12 h-12 rounded-full" />
-              <div>
-                <p className="font-semibold text-gray-800">Musician Name</p>
-                <p className="text-sm text-gray-500">@musicianslug</p>
-              </div>
-            </div> */}
-          </div>
+          <h3 className="text-2xl font-bold text-gray-900 mb-4">Musicians You Support</h3>
+          {supportedUsers.length > 0 
+            && (<div className="text-gray-500">
+              Every user you support gets <span className="font-bold">{20 * 0.7 / supportedUsers.length}$</span> each month.
+              </div>)}
+          <UserList users={supportedUsers} loading={loading} noUsersMessage="You are not supporting any musicians yet." />
         </div>
       </div>
     </div>

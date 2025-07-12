@@ -31,6 +31,8 @@ import NotFound from './pages/NotFound';
 import SearchResults from './pages/SearchResults';
 import ResetPassword from './pages/ResetPassword';
 import { NotificationsPage } from './pages/NotificationsPage';
+import StripeSuccess from './pages/StripeSuccess';
+import Payouts from './pages/Payouts';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -44,7 +46,11 @@ import { AudioPlayerProvider, useAudioPlayer } from './contexts/AudioPlayerConte
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const user = useTracker(() => Meteor.user());
+  const user = useTracker(() => {
+    Meteor.subscribe('users.me');
+
+    return Meteor.user();
+  });
   const { currentSound } = useAudioPlayer();
 
   setTimeout(() => {
@@ -113,6 +119,8 @@ export const App = () => {
         <Route path="/notifications">
           <NotificationsPage />
         </Route>
+        <Route path="/stripe-success" component={StripeSuccess} />
+        <Route path="/payouts" component={Payouts} />
         <Route path="/terms-of-service" component={TermsOfService} />
         <Route path="/privacy-policy" component={PrivacyPolicy} />
         <Route path="/logout" component={() => {

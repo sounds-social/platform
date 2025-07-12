@@ -61,10 +61,10 @@ const About = () => {
             <div className="pt-10 pb-12 px-6 sm:pt-16 sm:px-16 lg:py-16 lg:pr-0 xl:py-20 xl:px-20">
               <div className="lg:self-center">
                 <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
-                  <span className="block">Monetization<br/>(Coming Soon)</span>
+                  <span className="block">Monetization</span>
                 </h2>
                 <p className="mt-4 text-lg leading-6 text-blue-200">
-                  <span className="font-bold">Support the artists you love directly.</span> A significant portion of your PRO plan subscription will go directly to the musicians you choose to support. We believe in transparency, so you'll always know where your money is going. It's our commitment to building a fair and sustainable ecosystem for creators.
+                  <span className="font-bold">Support the artists you love directly.</span> 70% of your PRO plan subscription will go directly to the musicians you choose to support. We believe in transparency, so you'll always know where your money is going. It's our commitment to building a fair and sustainable ecosystem for creators.
                 </p>
               </div>
             </div>

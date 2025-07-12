@@ -170,8 +170,19 @@ const Profile = () => {
   const isFollowing = Meteor.user()?.profile?.follows?.includes(user._id);
   const hasSocialLinks = user.profile.website || user.profile.youtube || user.profile.twitter || user.profile.instagram || user.profile.spotify;
 
-  const handleSupportClick = () => {
-    setShowSupportModal(true);
+  const isSupporting = user.profile?.supporters?.includes(Meteor.userId());
+
+  const handleSupportToggle = async () => {
+    try {
+      if (isSupporting) {
+        await Meteor.callAsync('users.removeSupporter', user._id);
+      } else {
+        await Meteor.callAsync('users.addSupporter', user._id);
+        setShowSupportModal(true);
+      }
+    } catch (error) {
+      console.error('Failed to toggle support status:', error);
+    }
   };
 
   const handleCloseSupportModal = () => {
@@ -214,7 +225,14 @@ const Profile = () => {
           </div>
         )}
         <div className="text-center md:text-left flex-grow">
-          <h1 className="text-3xl font-bold text-gray-900">{user.profile.displayName}</h1>
+          <div className="flex items-center">
+            <h1 className="text-3xl font-bold text-gray-900">{user.profile.displayName}</h1>
+            {user.plan === 'pro' && (
+              <span className="ml-2 text-xs font-semibold text-white bg-blue-500 px-2 py-1 rounded-full">
+                PRO
+              </span>
+            )}
+          </div>
           <p className="text-gray-600 text-lg">@{user.profile.slug}</p>
           <div className="flex justify-center md:justify-start space-x-6 mt-4">
             <div>
@@ -225,10 +243,10 @@ const Profile = () => {
               <p className="text-gray-800 font-semibold">{user.profile.follows?.length || 0}</p>
               <p className="text-gray-500 text-sm">Following</p>
             </div>
-            {/* <div>
-              <p className="text-gray-800 font-semibold">{user.profile.supports?.length || 0}</p>
+            <div>
+              <p className="text-gray-800 font-semibold">{user.profile.supporters?.length || 0}</p>
               <p className="text-gray-500 text-sm">Supporters</p>
-            </div> */}
+            </div>
           </div>
           {hasSocialLinks && (
             <div className="flex justify-center md:justify-start space-x-4 mt-4">
@@ -263,23 +281,25 @@ const Profile = () => {
             <div className="mt-6 flex justify-center md:justify-start space-x-4">
               <button
                 onClick={handleFollowToggle}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
+                className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
               >
                 {isFollowing ? 'Unfollow' : 'Follow'}
               </button>
-              {/* <button
-                onClick={handleSupportClick}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
-              >
-                Support
-              </button> */}
+              {Meteor.user().plan === 'pro' && (
+                <button
+                  onClick={handleSupportToggle}
+                  className="cursor-pointer bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
+                >
+                  {isSupporting ? 'Unsupport' : 'Support'}
+                </button>
+              )}
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(`${window.location.origin}/profile/${user.profile.slug}`);
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 }}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md"
+                className="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md"
               >
                 {copied ? 'Copied!' : 'Share'}
               </button>
@@ -296,7 +316,7 @@ const Profile = () => {
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 }}
-                className="ml-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md"
+                className="cursor-pointer ml-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md"
               >
                 {copied ? 'Copied!' : 'Share'}
               </button>
