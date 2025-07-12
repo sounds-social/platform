@@ -175,7 +175,7 @@ const Payouts = () => {
           {payoutsLoading ? (
             <p className="text-gray-600">Loading payout history...</p>
           ) : payouts.length > 0 ? (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto max-h-[300px] overflow-y-auto">
               <table className="min-w-full bg-white">
                 <thead>
                   <tr>
