@@ -225,7 +225,14 @@ const Profile = () => {
           </div>
         )}
         <div className="text-center md:text-left flex-grow">
-          <h1 className="text-3xl font-bold text-gray-900">{user.profile.displayName}</h1>
+          <div className="flex items-center">
+            <h1 className="text-3xl font-bold text-gray-900">{user.profile.displayName}</h1>
+            {user.plan === 'pro' && (
+              <span className="ml-2 text-xs font-semibold text-white bg-blue-500 px-2 py-1 rounded-full">
+                PRO
+              </span>
+            )}
+          </div>
           <p className="text-gray-600 text-lg">@{user.profile.slug}</p>
           <div className="flex justify-center md:justify-start space-x-6 mt-4">
             <div>
