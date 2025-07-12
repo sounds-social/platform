@@ -14,7 +14,6 @@ export const checkProUsersSubscriptionStatus = async () => {
     }
 
     const customerId = user.services.stripe.customerId;
-
     console.log(`Checking subscription for PRO user ${user._id} (${customerId})...`);
 
     try {
@@ -23,6 +22,7 @@ export const checkProUsersSubscriptionStatus = async () => {
       });
 
       if (customer.subscriptions.data.length === 0) {
+        console.log(`No subscriptions found for user ${user._id}. Setting plan to '' (free).`);
         await Users.updateAsync(user._id, {
           $set: { plan: '' },
         });
