@@ -220,7 +220,10 @@ Meteor.methods({
       if (session.payment_status === 'paid') {
         // Update user's plan to pro
         await Meteor.users.updateAsync(this.userId, {
-          $set: { plan: 'pro' },
+          $set: {
+            plan: 'pro',
+            'services.stripe.customerId': session.customer,
+          },
         });
         return { success: true };
       } else {

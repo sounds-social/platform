@@ -9,12 +9,16 @@ export const checkProUsersSubscriptionStatus = async () => {
   const proUsers = await Meteor.users.find({ plan: 'pro' }).fetch();
 
   for (const user of proUsers) {
-    if (!user.profile?.stripeAccountId) {
+    if (!user.services?.stripe?.customerId) {
       continue;
     }
 
+    const customerId = user.services.stripe.customerId;
+
+    console.log(`Checking subscription for PRO user ${user._id} (${customerId})...`);
+
     try {
-      const customer = await stripe.customers.retrieve(user.profile?.stripeAccountId, {
+      const customer = await stripe.customers.retrieve(customerId, {
         expand: ['subscriptions'],
       });
 
