@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { HeadProvider, Title } from 'react-head';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
+import { Link } from 'react-router-dom';
 import { Payouts as PayoutsCollection } from '../../api/payouts';
 
 const Payouts = () => {
@@ -15,15 +16,41 @@ const Payouts = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  const { payouts, loading: payoutsLoading } = useTracker(() => {
+  const { payouts, loading: payoutsLoading, fromUsers, toUsers } = useTracker(() => {
     const handle = Meteor.subscribe('payouts.myPayouts');
+    const payouts = PayoutsCollection.find({ toUserId: Meteor.userId() }, { sort: { createdAt: -1 } }).fetch();
+
+    const fromUserIds = [...new Set(payouts.map(p => p.fromUserId))];
+    const toUserIds = [...new Set(payouts.map(p => p.toUserId))];
+
+    const allUserIds = [...new Set([...fromUserIds, ...toUserIds])];
+
+    const usersHandle = Meteor.subscribe('users.byIds', allUserIds);
+
+    const fromUsers = {};
+    const toUsers = {};
+
+    if (usersHandle.ready()) {
+      allUserIds.forEach(userId => {
+        const user = Meteor.users.findOne(userId);
+        if (user) {
+          if (fromUserIds.includes(userId)) {
+            fromUsers[userId] = user;
+          }
+          if (toUserIds.includes(userId)) {
+            toUsers[userId] = user;
+          }
+        }
+      });
+    }
+
     return { 
-      payouts: PayoutsCollection.find({ toUserId: Meteor.userId() }).fetch(), 
-      loading: !handle.ready(),
+      payouts,
+      loading: !handle.ready() || !usersHandle.ready(),
+      fromUsers,
+      toUsers,
     };
   }, []);
-
-  console.log({ payouts, payoutsLoading })
 
   useEffect(() => {
     const fetchAccountStatus = async () => {
@@ -152,6 +179,8 @@ const Payouts = () => {
               <table className="min-w-full bg-white">
                 <thead>
                   <tr>
+                    <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">From User</th>
+                    <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">To User</th>
                     <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Amount</th>
                     <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Status</th>
                     <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Date</th>
@@ -160,6 +189,20 @@ const Payouts = () => {
                 <tbody>
                   {payouts.map((payout) => (
                     <tr key={payout._id}>
+                      <td className="py-2 px-4 border-b text-gray-800">
+                        {fromUsers[payout.fromUserId] ? (
+                          <Link to={`/profile/${fromUsers[payout.fromUserId].profile.slug}`} className="text-blue-500 hover:underline">
+                            {fromUsers[payout.fromUserId].profile.displayName}
+                          </Link>
+                        ) : 'N/A'}
+                      </td>
+                      <td className="py-2 px-4 border-b text-gray-800">
+                        {toUsers[payout.toUserId] ? (
+                          <Link to={`/profile/${toUsers[payout.toUserId].profile.slug}`} className="text-blue-500 hover:underline">
+                            {toUsers[payout.toUserId].profile.displayName}
+                          </Link>
+                        ) : 'N/A'}
+                      </td>
                       <td className="py-2 px-4 border-b text-gray-800">${(payout.amountInCents / 100).toFixed(2)}</td>
                       <td className="py-2 px-4 border-b text-gray-800">{payout.status}</td>
                       <td className="py-2 px-4 border-b text-gray-800">{new Date(payout.createdAt).toLocaleDateString()}</td>

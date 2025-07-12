@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 
 Meteor.publish('users.view', function (slug) {
   if (!slug) {
@@ -74,6 +75,23 @@ Meteor.publish('users.supportedUsers', function (userIds) {
       'profile.displayName': 1,
       'profile.slug': 1,
       'profile.avatar': 1,
+    }
+  });
+});
+
+Meteor.publish('users.byIds', function (userIds) {
+  check(userIds, [String]);
+
+  if (!this.userId) {
+    return this.ready();
+  }
+
+  return Meteor.users.find({
+    _id: { $in: userIds }
+  }, {
+    fields: {
+      'profile.displayName': 1,
+      'profile.slug': 1,
     }
   });
 });

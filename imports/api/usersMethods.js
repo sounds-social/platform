@@ -10,6 +10,18 @@ const getCountryFromIp = (ip) => {
   return geoip.lookup(ip)?.country;
 };
 
+const getCurrencyRate = async () => {
+  const res = await fetch(
+    `https://api.currencyfreaks.com/v2.0/rates/latest?apikey=${
+      Meteor.settings.private.currencyFreaksApiKey
+    }`
+  )
+
+  const data = await res.json()
+
+  return parseFloat(data.rates?.CHF || 0)
+}
+
 Meteor.methods({
   async 'users.updateProfile'(displayName, slug, avatar, youtube, twitter, spotify, instagram, website) {
     check(displayName, String);
@@ -332,9 +344,16 @@ Meteor.methods({
     let failedCount = 0;
 
     try {
+      // console.log(await stripe.balance.retrieve());
+      const currencyRate = await getCurrencyRate();
+
+      if (!currencyRate) {
+        throw new Meteor.Error('currency-rate-error', 'Failed to retrieve currency rate.');
+      }
+
       const transfer = await stripe.transfers.create({
-        amount: totalAmountInCents,
-        currency: 'usd',
+        amount: Math.floor(totalAmountInCents * currencyRate), // from USD to CHF conversion
+        currency: 'chf',
         destination: user.profile.stripeAccountId,
       });
 

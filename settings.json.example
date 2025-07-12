@@ -10,7 +10,8 @@
     "stripe": {
       "secretKey": "sk_test_YOUR_SECRET_KEY",
       "proPriceId": "price_YOUR_PRO_PRICE_ID"
-    }
+    },
+    "currencyFreaksApiKey": "API_KEY"
   },
   "public": {
     "stripe": {
