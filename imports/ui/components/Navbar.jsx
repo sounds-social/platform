@@ -105,6 +105,9 @@ const Navbar = ({ user }) => {
             )}
           </div>
           <div className="-mr-2 flex md:hidden items-center">
+            {user && user.plan !== 'pro' && (
+              <Link onClick={handleDropdownClick} to="/go-pro" className="text-blue-500 font-bold px-3 py-2 rounded-md text-sm mr-4">Go PRO</Link>
+            )}
             {user && <Notifications />}
             <button onClick={() => setIsOpen(!isOpen)} className="ml-4 bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
               <span className="sr-only">Open main menu</span>
@@ -120,9 +123,6 @@ const Navbar = ({ user }) => {
             {user ? (
               <>
                 {loggedInLinks}
-                {user && user.plan !== 'pro' && (
-                  <Link onClick={handleDropdownClick} to="/go-pro" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Go PRO</Link>
-                )}
                 <form onSubmit={handleSearch} className="flex items-center mt-4">
                   <input
                     type="text"
