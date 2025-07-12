@@ -385,4 +385,24 @@ Meteor.methods({
       throw new Meteor.Error('stripe-error', error.message || 'Failed to process all pending payouts.');
     }
   },
+
+  async 'stripe.createCustomerPortalSession'() {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    const stripe = require('stripe')(Meteor.settings.private.stripe.secretKey);
+    const user = await Meteor.users.findOneAsync(this.userId);
+
+    if (!user || !user.services?.stripe?.customerId) {
+      throw new Meteor.Error('no-stripe-customer', 'User does not have a Stripe customer ID.');
+    }
+
+    const session = await stripe.billingPortal.sessions.create({
+      customer: user.services.stripe.customerId,
+      return_url: Meteor.absoluteUrl('profile/settings').replace('soundssocial.eu.meteorapp.com', 'soundssocial.io'),
+    });
+
+    return session.url;
+  },
 });
