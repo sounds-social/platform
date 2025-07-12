@@ -64,16 +64,19 @@ const Payouts = () => {
     }
   };
 
-  const handleCreatePayout = async (payoutId, amount, destinationAccountId) => {
+  const handleProcessAllPendingPayouts = async () => {
     try {
       setError(null);
-      await Meteor.callAsync('stripe.transferToConnectedAccount', payoutId, amount, destinationAccountId);
-      setSuccess('Payout initiated successfully!');
+      setSuccess(null);
+      const result = await Meteor.callAsync('stripe.processAllPendingPayouts');
+      setSuccess(`Processed ${result.successCount} payouts. ${result.failedCount} failed.`);
     } catch (err) {
-      console.error('Error creating payout:', err);
-      setError(err.reason || 'Failed to create payout.');
+      console.error('Error processing payouts:', err);
+      setError(err.reason || 'Failed to process payouts.');
     }
   };
+
+  const totalUnprocessedAmount = payouts.filter(p => p.status === 'pending').reduce((sum, p) => sum + p.amountInCents, 0);
 
   if (userLoading) {
     return <div className="text-center py-8">Loading user data...</div>;
@@ -114,6 +117,20 @@ const Payouts = () => {
                   )}
                 </div>
               )}
+              {accountStatus?.payouts_enabled && totalUnprocessedAmount > 0 && (
+                <div className="mt-8">
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">Available for Payout: ${(totalUnprocessedAmount / 100).toFixed(2)}</h3>
+                  <div className="text-gray-600">
+                    This amount is available for payout. Click the button below to process all pending payouts.
+                  </div>
+                  <button
+                    onClick={handleProcessAllPendingPayouts}
+                    className="cursor-pointer mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
+                  >
+                    Payout ${(totalUnprocessedAmount / 100).toFixed(2)}
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div>
@@ -138,7 +155,6 @@ const Payouts = () => {
                     <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Amount</th>
                     <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Status</th>
                     <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Date</th>
-                    <th className="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -147,16 +163,6 @@ const Payouts = () => {
                       <td className="py-2 px-4 border-b text-gray-800">${(payout.amountInCents / 100).toFixed(2)}</td>
                       <td className="py-2 px-4 border-b text-gray-800">{payout.status}</td>
                       <td className="py-2 px-4 border-b text-gray-800">{new Date(payout.createdAt).toLocaleDateString()}</td>
-                      <td className="py-2 px-4 border-b">
-                        {payout.status === 'pending' && accountStatus?.payouts_enabled && (
-                          <button
-                            onClick={() => handleCreatePayout(payout._id, payout.amountInCents, user.profile.stripeAccountId)}
-                            className="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-1 px-2 rounded"
-                          >
-                            Transfer
-                          </button>
-                        )}
-                      </td>
                     </tr>
                   ))}
                 </tbody>

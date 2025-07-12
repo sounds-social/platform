@@ -304,44 +304,66 @@ Meteor.methods({
     }
   },
 
-  async 'stripe.transferToConnectedAccount'(payoutId, amount, destinationAccountId) {
-    check(payoutId, String);
-    check(amount, Number);
-    check(destinationAccountId, String);
-
+  async 'stripe.processAllPendingPayouts'() {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
+    const user = await Meteor.users.findOneAsync(this.userId);
+
+    if (!user || !user.profile?.stripeAccountId) {
+      throw new Meteor.Error('no-stripe-account', 'User does not have a connected Stripe account.');
+    }
+
+    const pendingPayouts = await Payouts.find({
+      toUserId: this.userId,
+      status: 'pending',
+    }).fetch();
+
+    if (pendingPayouts.length === 0) {
+      return { successCount: 0, failedCount: 0, message: 'No pending payouts to process.' };
+    }
+
+    const totalAmountInCents = pendingPayouts.reduce((sum, payout) => sum + payout.amountInCents, 0);
+
     const stripe = require('stripe')(Meteor.settings.private.stripe.secretKey);
+
+    let successCount = 0;
+    let failedCount = 0;
 
     try {
       const transfer = await stripe.transfers.create({
-        amount: amount,
+        amount: totalAmountInCents,
         currency: 'usd',
-        destination: destinationAccountId,
+        destination: user.profile.stripeAccountId,
       });
 
-      await Payouts.updateAsync(payoutId, {
-        $set: {
-          isProcessed: true,
-          processedAt: new Date(),
-          stripeTransferId: transfer.id,
-          status: 'transferred',
-        },
-      });
-
-      return { success: true, transferId: transfer.id };
+      // Update all processed payouts
+      for (const payout of pendingPayouts) {
+        await Payouts.updateAsync(payout._id, {
+          $set: {
+            isProcessed: true,
+            processedAt: new Date(),
+            stripeTransferId: transfer.id,
+            status: 'transferred',
+          },
+        });
+        successCount++;
+      }
+      return { successCount, failedCount, message: 'All pending payouts processed successfully.' };
     } catch (error) {
-      console.error('Error creating Stripe transfer:', error);
-      await Payouts.updateAsync(payoutId, {
-        $set: {
-          status: 'failed',
-          failureReason: error.message,
-        },
-      });
-      throw new Meteor.Error('stripe-error', error.message || 'Failed to create transfer to connected account.');
+      console.error('Error creating Stripe transfer for all payouts:', error);
+      // Mark all pending payouts as failed if the main transfer fails
+      for (const payout of pendingPayouts) {
+        await Payouts.updateAsync(payout._id, {
+          $set: {
+            status: 'failed',
+            failureReason: error.message,
+          },
+        });
+        failedCount++;
+      }
+      throw new Meteor.Error('stripe-error', error.message || 'Failed to process all pending payouts.');
     }
   },
-
-  });
+});
