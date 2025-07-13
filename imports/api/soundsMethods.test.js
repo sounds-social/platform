@@ -1,3 +1,4 @@
+import 'meteor/aldeed:collection2/static';
 import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 import { mockMethodCall } from 'meteor/quave:testing';

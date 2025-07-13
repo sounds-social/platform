@@ -1,6 +1,4 @@
 import assert from "assert";
-import '/imports/ui/components/Navbar.test.jsx';
-import '/imports/ui/components/SoundList.test.jsx';
 import '/imports/api/soundsMethods.test.js';
 
 describe("sounds-social", function () {
@@ -10,6 +8,9 @@ describe("sounds-social", function () {
   });
 
   if (Meteor.isClient) {
+    require('/imports/ui/components/Navbar.test.jsx');
+    require('/imports/ui/components/SoundList.test.jsx');
+
     it("client is not server", function () {
       assert.strictEqual(Meteor.isServer, false);
     });
