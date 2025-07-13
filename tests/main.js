@@ -1,4 +1,7 @@
 import assert from "assert";
+import '/imports/ui/components/Navbar.test.jsx';
+import '/imports/ui/components/SoundList.test.jsx';
+import '/imports/api/soundsMethods.test.js';
 
 describe("sounds-social", function () {
   it("package.json has correct name", async function () {

@@ -3,10 +3,10 @@
   "private": true,
   "scripts": {
     "start": "meteor run --settings settings-local.json",
-    "test": "meteor test --once --driver-package meteortesting:mocha",
+    "test": "meteor test --once --settings settings-local.json --driver-package meteortesting:mocha",
     "deploy": "DEPLOY_HOSTNAME=eu-west-1.galaxy.meteor.com TOOL_NODE_FLAGS=--max-old-space-size=6144  meteor deploy soundssocial.eu.meteorapp.com --owner matteodem --mongo --container-size compact --plan essentials --no-wait --allow-superuser --settings settings.json",
-    "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
-    "visualize": "meteor --production --extra-packages bundle-visualizer"
+    "test-app": "TEST_WATCH=1 meteor test --full-app --settings settings-local.json --driver-package meteortesting:mocha",
+    "visualize": "meteor --production  --settings settings-local.json --extra-packages bundle-visualizer"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.7",
@@ -47,5 +47,11 @@
       "server": "server/main.js"
     },
     "testModule": "tests/main.js"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "chai-dom": "^1.12.1"
   }
 }
