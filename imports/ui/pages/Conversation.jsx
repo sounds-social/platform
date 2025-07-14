@@ -15,10 +15,6 @@ const ConversationPage = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    Meteor.call('messages.markConversationAsRead', userId);
-  }, [userId]);
-
   const { messages, otherUser } = useTracker(() => {
     const messagesHandle = Meteor.subscribe('messages');
     const usersHandle = Meteor.subscribe('users.byIds', [userId]);
@@ -35,6 +31,10 @@ const ConversationPage = () => {
 
     return { messages, otherUser, isLoading: !messagesHandle.ready() || !usersHandle.ready() };
   });
+
+  useEffect(() => {
+    Meteor.call('messages.markConversationAsRead', userId);
+  }, [userId, messages]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
