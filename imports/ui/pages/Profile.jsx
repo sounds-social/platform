@@ -10,7 +10,7 @@ import { PlaylistsCollection as Playlists } from '../../api/playlists';
 import { Comments } from '../../api/comments';
 import { Groups } from '../../api/groups';
 import { FaYoutube, FaSpotify, FaInstagram, FaGlobe } from 'react-icons/fa';
-import { FiTrash2 } from 'react-icons/fi';
+import { FiTrash2, FiMessageSquare } from 'react-icons/fi';
 import { BsTwitterX } from 'react-icons/bs';
 import SoundList from '../components/SoundList';
 import SupportModal from '../components/SupportModal';
@@ -303,6 +303,10 @@ const Profile = () => {
               >
                 {copied ? 'Copied!' : 'Share'}
               </button>
+              <Link to={`/messages/${user._id}`} className="cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md flex items-center">
+                <FiMessageSquare className="mr-2" />
+                Send message
+              </Link>
             </div>
           )}
           {isCurrentUser && (
