@@ -33,6 +33,8 @@ import ResetPassword from './pages/ResetPassword';
 import { NotificationsPage } from './pages/NotificationsPage';
 import StripeSuccess from './pages/StripeSuccess';
 import Payouts from './pages/Payouts';
+import MessagesPage from './pages/Messages';
+import ConversationPage from './pages/Conversation';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -121,6 +123,8 @@ export const App = () => {
         </Route>
         <Route path="/stripe-success" component={StripeSuccess} />
         <Route path="/payouts" component={Payouts} />
+        <Route exact path="/messages" component={MessagesPage} />
+        <Route path="/messages/:userId" component={ConversationPage} />
         <Route path="/terms-of-service" component={TermsOfService} />
         <Route path="/privacy-policy" component={PrivacyPolicy} />
         <Route path="/logout" component={() => {

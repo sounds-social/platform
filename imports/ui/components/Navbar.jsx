@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { FiMenu, FiX, FiSearch } from 'react-icons/fi';
+import { FiMenu, FiX, FiSearch, FiInbox } from 'react-icons/fi';
 import { Notifications } from './Notifications';
+import { useTracker } from 'meteor/react-meteor-data';
+import { Messages } from '../../api/messages';
 
 const Navbar = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const history = useHistory();
+
+  const unreadMessagesCount = useTracker(() => {
+    if (!user) return 0;
+    Meteor.subscribe('messages');
+    return Messages.find({ toUserId: user._id, isRead: false }).count();
+  }, [user]);
 
   const handleDropdownClick = () => setIsOpen(false);
 
@@ -99,6 +107,12 @@ const Navbar = ({ user }) => {
             )}
             {user && (
               <>
+                <Link to="/messages" className="relative text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">
+                  <FiInbox className="h-6 w-6" />
+                  {unreadMessagesCount > 0 && (
+                    <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-blue-500" />
+                  )}
+                </Link>
                 <Notifications />
                 {userMenu}
               </>
@@ -108,6 +122,12 @@ const Navbar = ({ user }) => {
             {user && user.plan !== 'pro' && (
               <Link onClick={handleDropdownClick} to="/go-pro" className="text-blue-500 font-bold px-3 py-2 rounded-md text-sm mr-4">Go PRO</Link>
             )}
+                                    {user && <Link to="/messages" className="relative text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">
+              <FiInbox className="h-6 w-6" />
+              {unreadMessagesCount > 0 && (
+                <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-blue-500" />
+              )}
+            </Link>}
             {user && <Notifications />}
             <button onClick={() => setIsOpen(!isOpen)} className="ml-4 bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
               <span className="sr-only">Open main menu</span>
