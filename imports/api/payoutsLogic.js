@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Payouts } from './payouts';
+import { subDays } from 'date-fns';
 
 export const generateMonthlyPayouts = async () => {
   console.log('Generating monthly payouts...');
@@ -15,14 +16,12 @@ export const generateMonthlyPayouts = async () => {
 
       for (const supportedUserId of proUser.profile.supports) {
         // Check if a payout for this month already exists for this proUser to this supportedUser
-        const startOfMonth = new Date();
-        startOfMonth.setDate(1);
-        startOfMonth.setHours(0, 0, 0, 0);
+        const thirtyDaysAgo = subDays(new Date(), 30);
 
         const existingPayout = await Payouts.findOneAsync({
           fromUserId: proUser._id,
           toUserId: supportedUserId,
-          createdAt: { $gte: startOfMonth },
+          createdAt: { $gte: thirtyDaysAgo },
         });
 
         if (!existingPayout) {
