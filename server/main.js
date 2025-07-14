@@ -25,13 +25,13 @@ import { generateMonthlyPayouts } from '/imports/api/payoutsLogic';
 import { checkProUsersSubscriptionStatus } from '/imports/api/stripeScheduler';
 
 Meteor.startup(() => {
-  generateMonthlyPayouts();
   checkProUsersSubscriptionStatus();
+  setTimeout(() => generateMonthlyPayouts(), 15 * 60 * 1000);
 
   // Run every 12 hours (12 * 60 * 60 * 1000 ms)
   setInterval(() => {
-    generateMonthlyPayouts();
     checkProUsersSubscriptionStatus();
+    setTimeout(() => generateMonthlyPayouts(), 15 * 60 * 1000);
   }, 12 * 60 * 60 * 1000);
 });
 
