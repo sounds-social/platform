@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "meteor run --settings settings-local.json",
-    "test": "meteor test --once --settings settings-test.json --driver-package meteortesting:mocha",
+    "test": "meteor test --once --settings settings-local.json --driver-package meteortesting:mocha",
     "deploy": "DEPLOY_HOSTNAME=eu-west-1.galaxy.meteor.com TOOL_NODE_FLAGS=--max-old-space-size=6144  meteor deploy soundssocial.eu.meteorapp.com --owner matteodem --container-size compact --plan essentials --no-wait --allow-superuser --settings settings.json",
     "test-app": "TEST_WATCH=1 meteor test --full-app --settings settings-local.json --driver-package meteortesting:mocha",
     "visualize": "meteor --production  --settings settings-local.json --extra-packages bundle-visualizer"
