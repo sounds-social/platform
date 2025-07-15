@@ -84,7 +84,7 @@ const SupportOverview = () => {
           <h3 className="text-2xl font-bold text-gray-900 mb-4">Musicians You Support</h3>
           {supportedUsers.length > 0 
             && (<div className="text-gray-500">
-              Every user you support gets <span className="font-bold">{20 * 0.7 / supportedUsers.length}$</span> each month.
+              Every user you support gets <span className="font-bold">{(20 * 0.7 / supportedUsers.length).toFixed(2)}$</span> each month.
               </div>)}
           <UserList users={supportedUsers} loading={loading} noUsersMessage="You are not supporting any musicians yet." />
         </div>
