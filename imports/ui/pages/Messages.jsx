@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
+import { HeadProvider, Title } from 'react-head';
 import { Messages } from '../../api/messages';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
@@ -32,6 +33,9 @@ const MessagesPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <HeadProvider>
+        <Title>Messages - Sounds Social</Title>
+      </HeadProvider>
       <h1 className="text-3xl font-bold text-gray-900">Messages</h1>
       <div className="mt-8">
         <ul className="">

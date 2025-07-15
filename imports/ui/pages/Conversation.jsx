@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
+import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Messages } from '../../api/messages';
 import { useParams } from 'react-router-dom';
@@ -50,6 +51,9 @@ const ConversationPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <HeadProvider>
+        <Title>Conversation{otherUser ? ` with ${otherUser.profile.displayName}` : ''} - Sounds Social</Title>
+      </HeadProvider>
       {otherUser && <h1 className="text-3xl font-bold text-gray-900">Conversation with {otherUser.profile.displayName}</h1>}
       <div className="mt-8">
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
