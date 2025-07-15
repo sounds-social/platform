@@ -17,5 +17,10 @@
     "stripe": {
       "publishableKey": "pk_test_YOUR_PUBLISHABLE_KEY"
     }
+  },
+  "galaxy.meteor.com": {
+    "env": {
+      "MONGO_URL": "YOUR_MONGO_URL"
+    }
   }
 }
