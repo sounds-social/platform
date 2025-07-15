@@ -76,6 +76,15 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
+    if (this.userId === userIdToFollow) {
+      throw new Meteor.Error('cannot-follow-self', 'You cannot follow yourself.');
+    }
+
+    const currentUser = await Meteor.users.findOneAsync(this.userId);
+    if (currentUser.profile.follows && currentUser.profile.follows.includes(userIdToFollow)) {
+      throw new Meteor.Error('already-following', 'You are already following this user.');
+    }
+
     const result = await Meteor.users.updateAsync(this.userId, {
       $addToSet: { 'profile.follows': userIdToFollow },
     });
@@ -85,7 +94,6 @@ Meteor.methods({
         $addToSet: { 'profile.followers': this.userId },
       });
 
-      const currentUser = await Meteor.users.findOneAsync(this.userId);
       await Notifications.insertAsync({
         userId: userIdToFollow,
         message: `${currentUser.profile.displayName} started following you`,
@@ -101,6 +109,11 @@ Meteor.methods({
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
+    }
+
+    const currentUser = await Meteor.users.findOneAsync(this.userId);
+    if (!currentUser.profile.follows || !currentUser.profile.follows.includes(userIdToUnfollow)) {
+      throw new Meteor.Error('not-following', 'You are not following this user.');
     }
 
     await Meteor.users.updateAsync(this.userId, {

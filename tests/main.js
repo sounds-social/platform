@@ -1,5 +1,4 @@
 import assert from "assert";
-import '/imports/api/soundsMethods.test.js';
 
 describe("sounds-social", function () {
   it("package.json has correct name", async function () {
@@ -17,6 +16,8 @@ describe("sounds-social", function () {
   }
 
   if (Meteor.isServer) {
+    require('/imports/api/soundsMethods.test.js');
+    require('/imports/api/usersMethods.test.js');
     it("server is not client", function () {
       assert.strictEqual(Meteor.isClient, false);
     });
