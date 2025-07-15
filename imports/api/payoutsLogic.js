@@ -14,25 +14,26 @@ export const generateMonthlyPayouts = async () => {
       const supportedMusiciansCount = proUser.profile.supports.length;
       const amountPerMusician = Math.floor(SHARE_AMOUNT_CENTS / supportedMusiciansCount);
 
-      for (const supportedUserId of proUser.profile.supports) {
-        // Check if a payout for this month already exists for this proUser to this supportedUser
-        const thirtyDaysAgo = subDays(new Date(), 30);
+      // Check if a payout for this month already exists for this proUser
+      const thirtyDaysAgo = subDays(new Date(), 30);
 
-        const existingPayout = await Payouts.findOneAsync({
+      const existingPayout = await Payouts.findOneAsync({
+        fromUserId: proUser._id,
+        createdAt: { $gte: thirtyDaysAgo },
+      });
+
+      if (existingPayout) {
+        continue;
+      }
+
+      for (const supportedUserId of proUser.profile.supports) {
+        await Payouts.insertAsync({
           fromUserId: proUser._id,
           toUserId: supportedUserId,
-          createdAt: { $gte: thirtyDaysAgo },
+          amountInCents: amountPerMusician,
+          isProcessed: false,
+          status: 'pending',
         });
-
-        if (!existingPayout) {
-          await Payouts.insertAsync({
-            fromUserId: proUser._id,
-            toUserId: supportedUserId,
-            amountInCents: amountPerMusician,
-            isProcessed: false,
-            status: 'pending',
-          });
-        }
       }
     }
   }
