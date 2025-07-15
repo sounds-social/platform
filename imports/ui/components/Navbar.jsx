@@ -107,7 +107,7 @@ const Navbar = ({ user }) => {
             )}
             {user && (
               <>
-                <Link to="/messages" className="relative text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">
+                <Link to="/messages" className="relative text-gray-600 hover:text-blue-500 px-4 py-2 rounded-md text-sm font-medium">
                   <FiInbox className="h-6 w-6" />
                   {unreadMessagesCount > 0 && (
                     <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-blue-500" />
@@ -122,7 +122,7 @@ const Navbar = ({ user }) => {
             {user && user.plan !== 'pro' && (
               <Link onClick={handleDropdownClick} to="/go-pro" className="text-blue-500 font-bold px-3 py-2 rounded-md text-sm mr-4">Go PRO</Link>
             )}
-                                    {user && <Link to="/messages" className="relative text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">
+                                    {user && <Link to="/messages" className="relative text-gray-600 hover:text-blue-500 px-4 py-2 rounded-md text-sm font-medium">
               <FiInbox className="h-6 w-6" />
               {unreadMessagesCount > 0 && (
                 <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-blue-500" />
