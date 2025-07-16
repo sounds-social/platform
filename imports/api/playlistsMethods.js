@@ -3,48 +3,48 @@ import { check } from 'meteor/check';
 import { PlaylistsCollection } from './playlists';
 
 Meteor.methods({
-  async 'playlists.insert'(name, isPublic, coverImageUrl) {
-    check(name, String);
-    check(isPublic, Boolean);
-    check(coverImageUrl, String);
+  async 'playlists.insert'(playlist) {
+    check(playlist, {
+      name: String,
+      description: String,
+      isPublic: Boolean,
+      coverImageUrl: String,
+    });
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
     return await PlaylistsCollection.insertAsync({
-      name,
-      isPublic,
-      coverImageUrl,
+      ...playlist,
       ownerId: this.userId,
       createdAt: new Date(),
     });
   },
 
-  async 'playlists.update'(playlistId, name, isPublic, coverImageUrl, soundIds) {
+  async 'playlists.update'(playlistId, playlist) {
     check(playlistId, String);
-    check(name, String);
-    check(isPublic, Boolean);
-    check(coverImageUrl, String);
-    check(soundIds, Array);
-    check(soundIds.every(id => typeof id === 'string'), true);
+    check(playlist, {
+      name: String,
+      description: String,
+      isPublic: Boolean,
+      coverImageUrl: String,
+      soundIds: [String],
+    });
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
-    const playlist = await PlaylistsCollection.findOneAsync(playlistId);
+    const existingPlaylist = await PlaylistsCollection.findOneAsync(playlistId);
 
-    if (playlist.ownerId !== this.userId) {
+    if (existingPlaylist.ownerId !== this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
     return await PlaylistsCollection.updateAsync(playlistId, {
       $set: {
-        name,
-        isPublic,
-        coverImageUrl,
-        soundIds,
+        ...playlist,
         updatedAt: new Date(),
       },
     });

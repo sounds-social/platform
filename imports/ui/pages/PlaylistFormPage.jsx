@@ -16,6 +16,7 @@ const PlaylistFormPage = () => {
   const { playlistId } = useParams();
   const history = useHistory();
   const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const [isPublic, setIsPublic] = useState(false);
   const [coverImageUrl, setCoverImageUrl] = useState('');
   const [soundIds, setSoundIds] = useState([]);
@@ -40,6 +41,7 @@ const PlaylistFormPage = () => {
   useEffect(() => {
     if (playlist) {
       setName(playlist.name);
+      setDescription(playlist.description || '');
       setIsPublic(playlist.isPublic);
       setCoverImageUrl(playlist.coverImageUrl || '');
       setSoundIds(playlist.soundIds || []);
@@ -82,7 +84,7 @@ const PlaylistFormPage = () => {
     e.preventDefault();
 
     if (playlistId) {
-      Meteor.call('playlists.update', playlistId, name, isPublic, coverImageUrl, soundIds, (err) => {
+      Meteor.call('playlists.update', playlistId, { name, description, isPublic, coverImageUrl, soundIds }, (err) => {
         if (err) {
           alert(err.reason);
         } else {
@@ -90,7 +92,7 @@ const PlaylistFormPage = () => {
         }
       });
     } else {
-      Meteor.call('playlists.insert', name, isPublic, coverImageUrl, (err, newPlaylistId) => {
+      Meteor.call('playlists.insert', { name, description, isPublic, coverImageUrl }, (err, newPlaylistId) => {
         if (err) {
           alert(err.reason);
         } else {
@@ -137,6 +139,19 @@ const PlaylistFormPage = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+          />
+        </div>
+
+        <div className="mb-5">
+          <label htmlFor="description" className="block text-gray-700 text-sm font-semibold mb-2">
+            Description:
+          </label>
+          <textarea
+            id="description"
+            className="shadow-sm appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows="4"
           />
         </div>
 

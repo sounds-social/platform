@@ -86,6 +86,9 @@ const PlaylistDetailPage = () => {
               by <Link to={`/profile/${playlistOwner.profile.slug}`} className="text-blue-500 hover:underline">{playlistOwner.profile.displayName}</Link>
             </p>
           )}
+          {playlist.description && (
+            <p className="text-gray-700 mt-4">{playlist.description}</p>
+          )}
           <div className="flex justify-center md:justify-start space-x-4 mt-4">
             <button
               onClick={handlePlayAll}

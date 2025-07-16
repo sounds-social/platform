@@ -34,7 +34,13 @@ const AddPlaylistModal = ({ isOpen, onRequestClose, soundId }) => {
         }
       });
     } else if (newPlaylistName.trim() !== '') {
-      Meteor.call('playlists.insert', newPlaylistName, false, '', (err, playlistId) => {
+      const newPlaylist = {
+        name: newPlaylistName,
+        description: '',
+        isPublic: false,
+        coverImageUrl: '',
+      };
+      Meteor.call('playlists.insert', newPlaylist, (err, playlistId) => {
         if (err) {
           alert(err.reason);
         } else if (soundId) {

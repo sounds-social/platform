@@ -15,6 +15,11 @@ const PlaylistsSchema = new SimpleSchema({
     min: 1,
     max: 100
   },
+  description: {
+    type: String,
+    optional: true,
+    max: 1000,
+  },
   isPublic: {
     type: Boolean,
     defaultValue: false
