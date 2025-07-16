@@ -102,16 +102,16 @@ const Sound = () => {
     }
   };
 
-  const handleCreateSnippet = async () => {
-    if (sound) {
-      setIsCreatingSnippet(true);
+  const handleShare = async () => {
+    if (navigator.share) {
       try {
-        const result = await Meteor.callAsync('snippets.create', sound._id, parseFloat(snippetStartTime), parseFloat(snippetEndTime));
-        setSnippetUrl(result);
+        await navigator.share({
+          title: sound.title,
+          text: `Check out ${sound.title} on Sounds Social!`,
+          url: window.location.href,
+        });
       } catch (error) {
-        console.error('Error creating snippet:', error);
-      } finally {
-        setIsCreatingSnippet(false);
+        console.error('Error sharing', error);
       }
     }
   };
@@ -208,6 +208,14 @@ const Sound = () => {
                 <FiHeart className={`mr-2 ${userHasLiked ? 'fill-current' : ''}`} /> {userHasLiked ? 'Unlike' : 'Like'}
               </button>
             )}
+            {navigator.canShare && (
+              <button
+                onClick={handleShare}
+                className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
+              >
+                <FiShare2 className="mr-2" /> Share
+              </button>
+            )}
             {/* Meteor.userId() && (
               <button
                 onClick={() => setIsCreateSnippetModalOpen(true)}
@@ -278,7 +286,7 @@ const Sound = () => {
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
-            <button
+            {/*<button
               onClick={handleCreateSnippet}
               className="self-end bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200 w-full md:w-auto flex items-center justify-center"
               disabled={isCreatingSnippet}
@@ -288,7 +296,7 @@ const Sound = () => {
               ) : (
                 'Create Snippet'
               )}
-            </button>
+            </button> */}
           </div>
           {snippetUrl && (
             <div className="mt-6">
