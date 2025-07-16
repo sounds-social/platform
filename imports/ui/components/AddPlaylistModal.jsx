@@ -72,7 +72,9 @@ const AddPlaylistModal = ({ isOpen, onRequestClose, soundId }) => {
       <div className="mb-4">
         <Select
           options={playlistOptions}
-          onChange={setSelectedPlaylist}
+          onChange={(val) => {
+            setSelectedPlaylist(val);
+          }}
           placeholder="Select an existing playlist"
           isClearable
           className="react-select-container"

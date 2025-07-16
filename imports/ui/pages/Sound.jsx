@@ -364,12 +364,6 @@ const Sound = () => {
           <p className="text-gray-600">No comments yet. Be the first to comment!</p>
         )}
       </div>
-
-      <AddPlaylistModal
-        isOpen={isAddPlaylistModalOpen}
-        onRequestClose={() => setIsAddPlaylistModalOpen(false)}
-        soundId={soundId}
-      />
     </div>
   );
 };
