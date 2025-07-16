@@ -107,7 +107,6 @@ export const AudioPlayerProvider = ({ children }) => {
 
       const handleLoadedMetadata = () => {
         if (currentSound.startTime) {
-          console.log(currentSound.startTime)
           audioRef.current.currentTime = currentSound.startTime;
         }
         audioRef.current.play();

@@ -64,6 +64,7 @@ const Sound = () => {
       const startTime = searchParams.get('t');
       if (startTime) {
         playSingleSound({ src: sound.audioFile, title: sound.title, id: soundId }, parseInt(startTime, 10));
+        history.replace(`/sound/${soundId}`); // Remove query param after playing
       }
     }
   }, [sound, location.search]);
