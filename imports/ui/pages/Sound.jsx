@@ -116,6 +116,44 @@ const Sound = () => {
     }
   };
 
+  const parseCommentContent = (content) => {
+    const parts = [];
+    let lastIndex = 0;
+    const timestampRegex = /(\d{1,2}:\d{2})/g;
+
+    content.replace(timestampRegex, (match, timestamp, offset) => {
+      // Add text before the timestamp
+      if (offset > lastIndex) {
+        parts.push(content.substring(lastIndex, offset));
+      }
+
+      // Convert timestamp to seconds
+      const [minutes, seconds] = timestamp.split(':').map(Number);
+      const totalSeconds = (minutes * 60) + seconds;
+
+      // Add clickable timestamp
+      parts.push(
+        <span
+          key={offset} // Use offset as a unique key
+          className="text-blue-500 hover:underline cursor-pointer"
+          onClick={() => {
+            playSingleSound({ src: sound.audioFile, title: sound.title, id: soundId }, totalSeconds);
+          }}
+        >
+          {timestamp}
+        </span>
+      );
+      lastIndex = offset + match.length;
+    });
+
+    // Add any remaining text after the last timestamp
+    if (lastIndex < content.length) {
+      parts.push(content.substring(lastIndex));
+    }
+
+    return parts;
+  };
+
   if (loading) {
     return <div className="text-center py-8">Loading...</div>;
   }
@@ -346,7 +384,7 @@ const Sound = () => {
                     </p>
                     <span className="ml-4 text-sm text-gray-500">{format(new Date(comment.createdAt), "dd.MM.yyyy - HH:mm")}</span>
                   </div>
-                  <p className="text-gray-700">{comment.content}</p>
+                  <p className="text-gray-700">{parseCommentContent(comment.content)}</p>
                 </div>
                 {comment.userId === Meteor.userId() && (
                   <button

@@ -13,12 +13,9 @@ export const AudioPlayerProvider = ({ children }) => {
   const audioRef = useRef(null);
 
   const playSingleSound = useCallback((sound, startTime = 0) => {
-    setCurrentSound(sound);
+    setCurrentSound({ ...sound, startTime });
     setPlaylist([]); // Clear the playlist
     setPlaylistIndex(-1); // Reset the playlist index
-    if (audioRef.current) {
-      audioRef.current.currentTime = startTime;
-    }
   }, []);
 
   const handleNext = useCallback(() => {
@@ -107,8 +104,19 @@ export const AudioPlayerProvider = ({ children }) => {
     if (currentSound && audioRef.current) {
       audioRef.current.src = currentSound.src;
       audioRef.current.load();
-      audioRef.current.play();
-      Meteor.call('sounds.incrementPlayCount', currentSound.id);
+
+      const handleLoadedMetadata = () => {
+        if (currentSound.startTime) {
+          console.log(currentSound.startTime)
+          audioRef.current.currentTime = currentSound.startTime;
+        }
+        audioRef.current.play();
+        Meteor.call('sounds.incrementPlayCount', currentSound.id);
+        audioRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      };
+
+      audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
+
     } else if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = '';
