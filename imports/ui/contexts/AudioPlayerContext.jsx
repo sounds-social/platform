@@ -12,10 +12,13 @@ export const AudioPlayerProvider = ({ children }) => {
   const [duration, setDuration] = useState(0); // New state for duration
   const audioRef = useRef(null);
 
-  const playSingleSound = useCallback((sound) => {
+  const playSingleSound = useCallback((sound, startTime = 0) => {
     setCurrentSound(sound);
     setPlaylist([]); // Clear the playlist
     setPlaylistIndex(-1); // Reset the playlist index
+    if (audioRef.current) {
+      audioRef.current.currentTime = startTime;
+    }
   }, []);
 
   const handleNext = useCallback(() => {

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useParams, Link, useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, Link, useHistory, useLocation } from 'react-router-dom';
 import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
@@ -16,6 +16,7 @@ Modal.setAppElement('#react-target');
 const Sound = () => {
   const { soundId } = useParams();
   const history = useHistory();
+  const location = useLocation();
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
@@ -57,15 +58,25 @@ const Sound = () => {
     return { sound: fetchedSound, comments: commentsWithUserData, loading: !ready, userHasLiked: liked };
   }, [soundId]);
 
+  useEffect(() => {
+    if (sound) {
+      const searchParams = new URLSearchParams(location.search);
+      const startTime = searchParams.get('t');
+      if (startTime) {
+        playSingleSound({ src: sound.audioFile, title: sound.title, id: soundId }, parseInt(startTime, 10));
+      }
+    }
+  }, [sound, location.search]);
+
   const handlePlay = () => {
     if (sound) {
       playSingleSound({ src: sound.audioFile, title: sound.title, id: soundId });
     }
   };
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (sound) {
-      Meteor.call('sounds.toggleLike', soundId);
+      await Meteor.callAsync('sounds.toggleLike', soundId);
     }
   };
 

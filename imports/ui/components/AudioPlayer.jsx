@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlay, FiPause, FiX, FiSkipForward, FiSkipBack, FiRepeat } from 'react-icons/fi';
+import { FiPlay, FiPause, FiX, FiSkipForward, FiSkipBack, FiRepeat, FiShare } from 'react-icons/fi';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 
 const AudioPlayer = () => {
   const { currentSound, isPlaying, audioRef, handleNext, handlePrevious, togglePlayPause, setCurrentSound, isLooping, toggleLoop, playlist, playlistIndex, duration } = useAudioPlayer();
   const [currentTime, setCurrentTime] = useState(0);
+  const [showCopiedMessage, setShowCopiedMessage] = useState(false);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -26,6 +27,14 @@ const AudioPlayer = () => {
       audioRef.current.currentTime = e.target.value;
       setCurrentTime(e.target.value);
     }
+  };
+
+  const handleShare = () => {
+    const shareableLink = `${window.location.origin}/sound/${currentSound.id}?t=${Math.floor(currentTime)}`;
+    navigator.clipboard.writeText(shareableLink).then(() => {
+      setShowCopiedMessage(true);
+      setTimeout(() => setShowCopiedMessage(false), 2000); // Hide message after 2 seconds
+    });
   };
 
   const formatTime = (time) => {
@@ -80,6 +89,19 @@ const AudioPlayer = () => {
           />
           <span className="text-xs sm:text-base">{formatTime(duration)}</span>
         </div>
+      </div>
+      <div className="relative">
+        <button
+          onClick={handleShare}
+          className="ml-2 sm:ml-4 p-1 sm:p-2 rounded-full bg-gray-500 hover:bg-blue-600 cursor-pointer"
+        >
+          <FiShare size={20} className="sm:w-6 sm:h-6" />
+        </button>
+        {showCopiedMessage && (
+          <div className="absolute bottom-full mb-2 right-0 bg-black text-white text-xs rounded py-1 px-2">
+            Link copied!
+          </div>
+        )}
       </div>
       <button
         onClick={toggleLoop}
