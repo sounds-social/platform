@@ -75,15 +75,17 @@ const PlaylistDetailPage = () => {
           </div>
         )}
         <div className="flex-grow text-center md:text-left">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-2">{playlist.name}</h1>
+          <div className="flex items-center mb-2">
+            <h1 className="text-4xl font-extrabold text-gray-900 mr-4">{playlist.name}</h1>
+            <span className={`text-white font-bold text-sm px-3 py-1 rounded-full ${playlist.isPublic ? 'bg-blue-500' : 'bg-red-500'}`}>
+              {playlist.isPublic ? 'Public' : 'Private'}
+            </span>
+          </div>
           {playlistOwner && (
             <p className="text-lg text-gray-600 mb-2">
               by <Link to={`/profile/${playlistOwner.profile.slug}`} className="text-blue-500 hover:underline">{playlistOwner.profile.displayName}</Link>
             </p>
           )}
-          <p className="text-lg text-gray-600 mb-4">
-            {playlist.isPublic ? 'Public Playlist' : 'Private Playlist'}
-          </p>
           <div className="flex justify-center md:justify-start space-x-4 mt-4">
             <button
               onClick={handlePlayAll}

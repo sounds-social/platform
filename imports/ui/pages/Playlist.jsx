@@ -63,14 +63,18 @@ const Playlist = () => {
   return (
     <div className="py-8">
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h1 className="text-3xl font-extrabold text-gray-900">{playlist.name}</h1>
+        <div className="flex items-center mb-4">
+          <h1 className="text-3xl font-extrabold text-gray-900 mr-4">{playlist.name}</h1>
+          {!isLikesPlaylist && (
+            <span className={`text-white text-sm px-3 py-1 rounded-full ${playlist.isPublic ? 'bg-blue-500' : 'bg-red-500'}`}>
+              {playlist.isPublic ? 'Public' : 'Private'}
+            </span>
+          )}
+        </div>
         {!isLikesPlaylist && playlistOwner && (
           <p className="text-lg text-gray-600 mt-2">
             by <Link to={`/profile/${playlistOwner.profile.slug}`} className="text-blue-500 hover:underline">{playlistOwner.profile.displayName}</Link>
           </p>
-        )}
-        {!isLikesPlaylist && (
-          <p className="text-gray-600 text-lg mt-2">{playlist.isPublic ? 'Public' : 'Private'} Playlist</p>
         )}
         <p className="text-gray-500 text-sm mt-2">{playlist.sounds?.length || 0} tracks</p>
       </div>
