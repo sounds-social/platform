@@ -26,6 +26,7 @@ import '/imports/api/payouts';
 import '/imports/api/payoutsPublications';
 import { generateMonthlyPayouts } from '/imports/api/payoutsLogic';
 import { checkProUsersSubscriptionStatus } from '/imports/api/stripeScheduler';
+import { setupOgPreview } from './ogPreview';
 
 Meteor.startup(() => {
   checkProUsersSubscriptionStatus();
@@ -36,5 +37,6 @@ Meteor.startup(() => {
     checkProUsersSubscriptionStatus();
     setTimeout(() => generateMonthlyPayouts(), 15 * 60 * 1000);
   }, 12 * 60 * 60 * 1000);
-});
 
+  setupOgPreview();
+});
