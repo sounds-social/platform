@@ -7,7 +7,9 @@ const UserList = ({ users, loading, noUsersMessage = "No users found." }) => {
   }
 
   if (!users || users.length === 0) {
-    return <p className="text-gray-600">{noUsersMessage}</p>;
+    return (<div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+      <span className="block sm:inline">{noUsersMessage}</span>
+    </div>);
   }
 
   return (
