@@ -178,16 +178,6 @@ Meteor.methods({
     });
   },
 
-  async 'users.resetPlanToFree'() {
-    if (!this.userId) {
-      throw new Meteor.Error('not-authorized');
-    }
-
-    return await Meteor.users.updateAsync(this.userId, {
-      $set: { plan: '' },
-    });
-  },
-
   async 'stripe.createCheckoutSession'() {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
@@ -333,6 +323,11 @@ Meteor.methods({
   },
 
   async 'stripe.processAllPendingPayouts'() {
+    throw new Meteor.Error(
+      'disabled', 
+      'This method is disabled until the end of the month.'
+    );
+
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }

@@ -62,12 +62,6 @@ const ProfileSettings = () => {
     });
   };
 
-  const handleResetPlanToFree = () => {
-    Meteor.callAsync('users.resetPlanToFree')
-      .then(() => setSuccess('Plan reset to Free successfully.'))
-      .catch(err => setError(err.reason));
-  };
-
   const handleManageSubscription = async () => {
     try {
       setError('');

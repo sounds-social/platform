@@ -120,6 +120,11 @@ const Payouts = () => {
           <p className="mt-4 text-lg text-gray-600">Manage your Stripe Connect account and view your payout history here.</p>
         </div>
 
+        <div className="mt-10 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
+          <p className="font-bold">Payouts Disabled</p>
+          <p>Currently payouts are disabled until end of the month (written on 17. July 2025)</p>
+        </div>
+
         <div className="mt-10 bg-white rounded-lg shadow-lg p-6 md:p-10">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Stripe Connect Status</h3>
           {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">{error}</div>}
@@ -152,7 +157,8 @@ const Payouts = () => {
                   </div>
                   <button
                     onClick={handleProcessAllPendingPayouts}
-                    className="cursor-pointer mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
+                    className="cursor-not-allowed mt-4 bg-gray-400 text-white font-bold py-2 px-4 rounded-md"
+                    disabled
                   >
                     Payout ${(totalUnprocessedAmount / 100).toFixed(2)}
                   </button>
