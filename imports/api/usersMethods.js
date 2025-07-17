@@ -178,6 +178,14 @@ Meteor.methods({
     });
   },
 
+  async 'users.sendVerificationEmail'() {
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    return Accounts.sendVerificationEmail(this.userId);
+  },
+
   async 'stripe.createCheckoutSession'() {
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');

@@ -35,6 +35,7 @@ import StripeSuccess from './pages/StripeSuccess';
 import Payouts from './pages/Payouts';
 import MessagesPage from './pages/Messages';
 import ConversationPage from './pages/Conversation';
+import VerifyEmail from './pages/VerifyEmail';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -48,6 +49,7 @@ import { AudioPlayerProvider, useAudioPlayer } from './contexts/AudioPlayerConte
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [emailSent, setEmailSent] = useState(false);
   const user = useTracker(() => {
     Meteor.subscribe('users.me');
 
@@ -72,6 +74,16 @@ export const App = () => {
     <Router>
       <div className="bg-gray-50 min-h-screen">
         <Navbar user={user} />
+        {user && !user.emails[0].verified && (
+          <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 text-center" role="alert">
+            <p className="font-bold">Verify Your Email</p>
+            <p>Please check your inbox to verify your email address. <button onClick={() => {
+              Meteor.call('users.sendVerificationEmail');
+              setEmailSent(true);
+            }} className="underline hover:text-yellow-800">Resend verification email</button></p>
+            {emailSent && <p className="text-sm mt-2">Verification email sent!</p>}
+          </div>
+        )}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Switch>
             <Route exact path="/">
@@ -80,6 +92,7 @@ export const App = () => {
         <Route path="/sign-in" component={SignIn} />
         <Route path="/sign-up" component={SignUp} />
         <Route path="/forgot-password" component={ForgotPassword} />
+        <Route path="/verify-email/:token" component={VerifyEmail} />
         <Route path="/reset-password/:token" component={ResetPassword} />
         <Route path="/profile/settings" component={ProfileSettings} />
         <Route path="/profile/:slug?/likes">

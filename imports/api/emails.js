@@ -23,4 +23,14 @@ To reset your password, simply click the link below:
 }">Reset Password</a>
     `.trim();
   };
+
+  Accounts.emailTemplates.verifyEmail = {
+    subject() {
+      return "Activate your account - Sounds Social";
+    },
+    html(user, url) {
+      return `Hey ${user.profile.displayName}! Verify your e-mail by following this link: <a href="${url.replace('#/', '')
+        .replace('soundssocial.eu.meteorapp.com', 'soundssocial.io')}">Verify Email</a>`;
+    },
+  };
 });
