@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { HeadProvider, Title } from 'react-head';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Messages } from '../../api/messages';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { useEffect, useRef } from 'react';
 
@@ -54,7 +54,7 @@ const ConversationPage = () => {
       <HeadProvider>
         <Title>Conversation{otherUser ? ` with ${otherUser.profile.displayName}` : ''} - Sounds Social</Title>
       </HeadProvider>
-      {otherUser && <h1 className="text-3xl font-bold text-gray-900">Conversation with {otherUser.profile.displayName}</h1>}
+      {otherUser && <h1 className="text-3xl font-bold text-gray-900">Conversation with <Link to={`/profile/${otherUser.profile.slug}`} className="text-blue-500 hover:underline">{otherUser.profile.displayName}</Link></h1>}
       <div className="mt-8">
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
           <div className="px-4 py-5 sm:p-6 h-96 overflow-y-auto">
