@@ -4,7 +4,7 @@ import { FiPlay, FiHeart } from 'react-icons/fi';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 import { formatDistanceToNow } from 'date-fns';
 
-const SoundCard = ({ sound, sounds, index }) => {
+const SoundCard = ({ sound, sounds, index, smallCover = false, hideStats = false }) => {
   const isPrivate = sound.isPrivate && sound.userId !== Meteor.userId();
   const history = useHistory();
   const { playPlaylist, playSingleSound } = useAudioPlayer();
@@ -33,18 +33,20 @@ const SoundCard = ({ sound, sounds, index }) => {
     <Link to={`/sound/${sound._id}`} className="group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200">
       {sound.backgroundImage ? (
         <div
-          className="relative h-48 bg-cover bg-center"
+          className={`relative ${smallCover ? 'h-24' : 'h-48'} bg-cover bg-center`}
           style={{ backgroundImage: `url(${sound.backgroundImage})` }}
         >
           <div className="absolute inset-0 group-hover:bg-opacity-50 transition-all duration-300 flex flex-col justify-between p-4">
-            <div className="flex justify-end space-x-4 text-white text-shadow-lg">
-              <div className="flex items-center text-sm">
-                <FiPlay className="mr-1" /> {sound.playCount || 0}
+            {!hideStats && (
+              <div className="flex justify-end space-x-4 text-white text-shadow-lg">
+                <div className="flex items-center text-sm">
+                  <FiPlay className="mr-1" /> {sound.playCount || 0}
+                </div>
+                <div className="flex items-center text-sm">
+                  <FiHeart className="mr-1" /> {sound.likes ? sound.likes.length : 0}
+                </div>
               </div>
-              <div className="flex items-center text-sm">
-                <FiHeart className="mr-1" /> {sound.likes ? sound.likes.length : 0}
-              </div>
-            </div>
+            )}
             <div className="flex justify-between items-end">
               <div className="text-white text-shadow-lg">
                 <h3 className="text-xl font-bold text-shadow-md">
@@ -59,9 +61,11 @@ const SoundCard = ({ sound, sounds, index }) => {
                   </span>
                 </p>
               </div>
-              <p className="text-xs text-gray-200 hidden md:block">
-                {formatDistanceToNow(new Date(sound.createdAt))} ago
-              </p>
+              {!hideStats && (
+                <p className="text-xs text-gray-200 hidden md:block">
+                  {formatDistanceToNow(new Date(sound.createdAt))} ago
+                </p>
+              )}
             </div>
           </div>
           <div className="absolute inset-0 flex items-center justify-center">
@@ -74,7 +78,7 @@ const SoundCard = ({ sound, sounds, index }) => {
           </div>
         </div>
       ) : (
-        <div className="flex h-48">
+        <div className={`flex ${smallCover ? 'h-24' : 'h-48'}`}>
           <div className="relative h-full aspect-square bg-gray-200 flex-shrink-0">
             {sound.coverImage && (
               <img src={sound.coverImage} alt={sound.title} className="w-full h-full object-cover" />
@@ -104,19 +108,23 @@ const SoundCard = ({ sound, sounds, index }) => {
                     </span>
                   </p>
                 </div>
-                <p className="text-xs text-gray-500 ml-4 hidden md:block">
-                  {formatDistanceToNow(new Date(sound.createdAt))} ago
-                </p>
+                {!hideStats && (
+                  <p className="text-xs text-gray-500 ml-4 hidden md:block">
+                    {formatDistanceToNow(new Date(sound.createdAt))} ago
+                  </p>
+                )}
               </div>
             </div>
-            <div className="flex items-center space-x-4 mt-2">
-              <div className="flex items-center text-gray-500 text-sm">
-                <FiPlay className="mr-1" /> {sound.playCount || 0}
+            {!hideStats && (
+              <div className="flex items-center space-x-4 mt-2">
+                <div className="flex items-center text-gray-500 text-sm">
+                  <FiPlay className="mr-1" /> {sound.playCount || 0}
+                </div>
+                <div className="flex items-center text-gray-500 text-sm">
+                  <FiHeart className="mr-1" /> {sound.likes ? sound.likes.length : 0}
+                </div>
               </div>
-              <div className="flex items-center text-gray-500 text-sm">
-                <FiHeart className="mr-1" /> {sound.likes ? sound.likes.length : 0}
-              </div>
-            </div>
+            )}
           </div>
         </div>
       )}

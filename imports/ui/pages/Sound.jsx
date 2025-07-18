@@ -10,6 +10,7 @@ import Modal from 'react-modal';
 import { format, formatDistanceToNow } from "date-fns";
 import AddPlaylistModal from '../components/AddPlaylistModal';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
+import SoundList from '../components/SoundList';
 
 Modal.setAppElement('#react-target');
 
@@ -25,7 +26,8 @@ const Sound = () => {
   const [snippetEndTime, setSnippetEndTime] = useState(30);
   const [snippetUrl, setSnippetUrl] = useState(null);
   const [isCreatingSnippet, setIsCreatingSnippet] = useState(false);
-  const { playSingleSound } = useAudioPlayer();
+  const [similarSounds, setSimilarSounds] = useState([]);
+  const { playSingleSound, playPlaylist } = useAudioPlayer();
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
     const noDataAvailable = { sound: null, comments: [], loading: true, userHasLiked: false };
@@ -66,12 +68,21 @@ const Sound = () => {
         playSingleSound({ src: sound.audioFile, title: sound.title, id: soundId }, parseInt(startTime, 10));
         history.replace(`/sound/${soundId}`); // Remove query param after playing
       }
+
+      Meteor.call('sounds.getSimilar', { soundId }, (error, result) => {
+        if (error) {
+          console.error(error);
+        } else {
+          setSimilarSounds(result);
+        }
+      });
     }
   }, [sound, location.search]);
 
   const handlePlay = () => {
     if (sound) {
-      playSingleSound({ src: sound.audioFile, title: sound.title, id: soundId });
+      const playlist = [sound, ...similarSounds].map(s => ({ src: s.audioFile, title: s.title, id: s._id }));
+      playPlaylist(playlist);
     }
   };
 
@@ -349,59 +360,85 @@ const Sound = () => {
       </Modal>
     </div>
 
-      {/* Comments Section */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Comments</h2>
+      <div className="flex flex-col md:flex-row gap-8 mt-8">
+        <div className="w-full md:w-2/3">
+          {/* Comments Section */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Comments</h2>
 
-        {Meteor.userId() && (
-          <form onSubmit={handleAddComment} className="mb-8">
-            <textarea
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              rows="3"
-              placeholder="Add a comment..."
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-            ></textarea>
-            <button
-              type="submit"
-              className="cursor-pointer mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
-            >
-              Post Comment
-            </button>
-          </form>
-        )}
+            {Meteor.userId() && (
+              <form onSubmit={handleAddComment} className="mb-8">
+                <textarea
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  rows="3"
+                  placeholder="Add a comment..."
+                  value={commentContent}
+                  onChange={(e) => setCommentContent(e.target.value)}
+                ></textarea>
+                <button
+                  type="submit"
+                  className="cursor-pointer mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200"
+                >
+                  Post Comment
+                </button>
+              </form>
+            )}
 
-        {/* Comment List */}
-        {comments.length > 0 ? (
-          <div className="space-y-6">
-            {comments.map(comment => (
-              <div key={comment._id} className="bg-gray-50 p-4 rounded-lg shadow-sm flex justify-between items-start">
-                <div>
-                  <div className="flex items-center mb-2">
-                    <p className="font-semibold text-gray-800">
-                      <Link to={`/profile/${comment.userSlug}`} className="text-blue-500 hover:underline">
-                        {comment.userName}
-                      </Link>
-                    </p>
-                    <span className="ml-4 text-sm text-gray-500">{format(new Date(comment.createdAt), "dd.MM.yyyy - HH:mm")}</span>
+            {/* Comment List */}
+            {comments.length > 0 ? (
+              <div className="space-y-6">
+                {comments.map(comment => (
+                  <div key={comment._id} className="bg-gray-50 p-4 rounded-lg shadow-sm flex justify-between items-start">
+                    <div>
+                      <div className="flex items-center mb-2">
+                        <p className="font-semibold text-gray-800">
+                          <Link to={`/profile/${comment.userSlug}`} className="text-blue-500 hover:underline">
+                            {comment.userName}
+                          </Link>
+                        </p>
+                        <span className="ml-4 text-sm text-gray-500">{format(new Date(comment.createdAt), "dd.MM.yyyy - HH:mm")}</span>
+                      </div>
+                      <p className="text-gray-700">{parseCommentContent(comment.content)}</p>
+                    </div>
+                    {comment.userId === Meteor.userId() && (
+                      <button
+                        onClick={() => handleRemoveComment(comment._id)}
+                        className="text-gray-500 hover:text-red-600 transition-colors duration-200"
+                        title="Remove comment"
+                      >
+                        <FiTrash2 />
+                      </button>
+                    )}
                   </div>
-                  <p className="text-gray-700">{parseCommentContent(comment.content)}</p>
-                </div>
-                {comment.userId === Meteor.userId() && (
-                  <button
-                    onClick={() => handleRemoveComment(comment._id)}
-                    className="text-gray-500 hover:text-red-600 transition-colors duration-200"
-                    title="Remove comment"
-                  >
-                    <FiTrash2 />
-                  </button>
-                )}
+                ))}
               </div>
-            ))}
+            ) : (
+              <p className="text-gray-600">No comments yet. Be the first to comment!</p>
+            )}
           </div>
-        ) : (
-          <p className="text-gray-600">No comments yet. Be the first to comment!</p>
-        )}
+        </div>
+        <div className="w-full md:w-1/3">
+          {/* Similar Sounds Section */}
+          {similarSounds.length > 0 && (
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Similar Sounds</h2>
+              <SoundList sounds={similarSounds.slice(0, 3)} smallCover={true} hideStats={true} />
+              {similarSounds.length > 3 && (
+                <div className="text-center mt-4">
+                  <Link
+                    to={{
+                      pathname: `/sound/${soundId}/similar`,
+                      state: { sounds: similarSounds, originalSoundId: soundId, originalSoundTitle: sound.title },
+                    }}
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
+                  >
+                    Load More
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

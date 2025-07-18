@@ -36,6 +36,7 @@ import Payouts from './pages/Payouts';
 import MessagesPage from './pages/Messages';
 import ConversationPage from './pages/Conversation';
 import VerifyEmail from './pages/VerifyEmail';
+import SimilarSounds from './pages/SimilarSounds';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -107,6 +108,7 @@ export const App = () => {
         <Route path="/support-overview" component={SupportOverview} />
         <Route path="/sound/add" component={SoundAdd} />
         <Route path="/sounds/:soundId/edit" component={SoundEdit} />
+        <Route path="/sound/:soundId/similar" component={SimilarSounds} />
         <Route path="/sound/:soundId">
           <Sound />
         </Route>
