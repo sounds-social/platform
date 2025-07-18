@@ -3,6 +3,7 @@ import { check } from 'meteor/check';
 import { Sounds } from './sounds';
 import { Notifications } from './notifications';
 import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
+import similarity from 'similarity';
 
 Meteor.methods({
   async 'sounds.insert'(title, description, tags, coverImage, isPrivate, backgroundImage, audioFile) {
@@ -150,6 +151,31 @@ Meteor.methods({
     return await Sounds.updateAsync(soundId, {
       $inc: { battlesWonCount: 1 },
     });
+  },
+
+  async 'sounds.getSimilar'({ soundId }) {
+    check(soundId, String);
+
+    const sound = await Sounds.findOneAsync(soundId);
+    if (!sound) {
+      throw new Meteor.Error('not-found', 'Sound not found');
+    }
+
+    const allSounds = await Sounds.find({ _id: { $ne: soundId }, isPrivate: { $ne: true } }).fetch();
+    const soundsWithSimilarity = allSounds.map(otherSound => {
+      const titleSimilarity = similarity(sound.title, otherSound.title);
+      const descriptionSimilarity = similarity(sound.description, otherSound.description);
+      const tagsSimilarity = similarity((sound.tags || []).join(' '), (otherSound.tags || []).join(' '));
+      
+      const totalSimilarity = (titleSimilarity * 0.5) + (descriptionSimilarity * 0.3) + (tagsSimilarity * 0.2);
+
+      return {
+        ...otherSound,
+        similarity: totalSimilarity,
+      };
+    });
+
+    return soundsWithSimilarity.sort((a, b) => b.similarity - a.similarity).slice(0, 3);
   },
 });
 
