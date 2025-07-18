@@ -245,7 +245,7 @@ const Profile = () => {
             </div>
             <div>
               <p className="text-gray-800 font-semibold">{user.profile.supporters?.length || 0}</p>
-              <p className="text-gray-500 text-sm">Supporters</p>
+              <p className="text-gray-500 text-sm">{user.profile.supporters?.length === 1 ? 'Supporter': 'Supporters'}</p>
             </div>
           </div>
           {hasSocialLinks && (
