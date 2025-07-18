@@ -175,7 +175,7 @@ Meteor.methods({
       };
     });
 
-    return soundsWithSimilarity.sort((a, b) => b.similarity - a.similarity).slice(0, 3);
+    return soundsWithSimilarity.sort((a, b) => b.similarity - a.similarity).slice(0, 20);
   },
 });
 
