@@ -4,7 +4,7 @@ import { FiPlay, FiHeart } from 'react-icons/fi';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 import { formatDistanceToNow } from 'date-fns';
 
-const SoundCard = ({ sound, sounds, index, smallCover = false, hideStats = false }) => {
+const SoundCard = ({ sound, sounds, index, smallCover = false, hideStats = false, hidePlayButton = false }) => {
   const isPrivate = sound.isPrivate && sound.userId !== Meteor.userId();
   const history = useHistory();
   const { playPlaylist, playSingleSound } = useAudioPlayer();
@@ -69,12 +69,12 @@ const SoundCard = ({ sound, sounds, index, smallCover = false, hideStats = false
             </div>
           </div>
           <div className="absolute inset-0 flex items-center justify-center">
-            <button
+            {!hidePlayButton && <button
               onClick={handlePlayClick}
               className="bg-blue-500 text-white rounded-full p-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110 cursor-pointer"
             >
               <FiPlay size={24} />
-            </button>
+            </button>}
           </div>
         </div>
       ) : (
@@ -84,12 +84,12 @@ const SoundCard = ({ sound, sounds, index, smallCover = false, hideStats = false
               <img src={sound.coverImage} alt={sound.title} className="w-full h-full object-cover" />
             )}
             <div className="absolute inset-0 flex items-center justify-center">
-              <button
+              {!hidePlayButton && <button
                 onClick={handlePlayClick}
                 className="bg-blue-500 text-white rounded-full p-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110 cursor-pointer"
               >
                 <FiPlay size={24} />
-              </button>
+              </button>}
             </div>
           </div>
           <div className="flex-grow p-4 flex flex-col justify-between">

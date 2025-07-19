@@ -435,7 +435,7 @@ const Sound = () => {
           {similarSounds.length > 0 && (
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Similar Sounds</h2>
-              <SoundList sounds={similarSounds.slice(0, 3)} smallCover={true} hideStats={true} />
+              <SoundList sounds={similarSounds.slice(0, 3)} smallCover={true} hideStats={true} hidePlayButton={true} />
               {similarSounds.length > 3 && (
                 <div className="text-center mt-4">
                   <Link
