@@ -164,10 +164,9 @@ Meteor.methods({
     const allSounds = await Sounds.find({ _id: { $ne: soundId }, isPrivate: { $ne: true } }).fetch();
     const soundsWithSimilarity = allSounds.map(otherSound => {
       const titleSimilarity = similarity(sound.title, otherSound.title);
-      const descriptionSimilarity = similarity(sound.description, otherSound.description);
       const tagsSimilarity = similarity((sound.tags || []).join(' '), (otherSound.tags || []).join(' '));
       
-      const totalSimilarity = (titleSimilarity * 0.5) + (descriptionSimilarity * 0.3) + (tagsSimilarity * 0.2);
+      const totalSimilarity = (titleSimilarity * 0.5) + (tagsSimilarity * 0.5);
 
       return {
         ...otherSound,

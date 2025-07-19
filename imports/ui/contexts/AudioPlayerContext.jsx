@@ -123,11 +123,11 @@ export const AudioPlayerProvider = ({ children }) => {
     }
   }, [currentSound]);
 
-  const playPlaylist = useCallback((newPlaylist, startIndex = 0) => {
+  const playPlaylist = useCallback((newPlaylist, startIndex = 0, startTime = 0) => {
     setPlaylist(newPlaylist);
     setPlaylistIndex(startIndex);
     if (newPlaylist.length > 0) {
-      setCurrentSound(newPlaylist[startIndex]);
+      setCurrentSound({ ...newPlaylist[startIndex], startTime });
     } else {
       setCurrentSound(null);
     }

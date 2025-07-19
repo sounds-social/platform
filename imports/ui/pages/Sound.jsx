@@ -27,7 +27,7 @@ const Sound = () => {
   const [snippetUrl, setSnippetUrl] = useState(null);
   const [isCreatingSnippet, setIsCreatingSnippet] = useState(false);
   const [similarSounds, setSimilarSounds] = useState([]);
-  const { playSingleSound, playPlaylist } = useAudioPlayer();
+  const { playPlaylist } = useAudioPlayer();
 
   const { sound, comments, loading, userHasLiked } = useTracker(() => {
     const noDataAvailable = { sound: null, comments: [], loading: true, userHasLiked: false };
@@ -60,15 +60,27 @@ const Sound = () => {
     return { sound: fetchedSound, comments: commentsWithUserData, loading: !ready, userHasLiked: liked };
   }, [soundId]);
 
+  const createPlaylist = () => {
+    return [sound, ...similarSounds]
+      .map(s => ({ src: s.audioFile, title: s.title, id: s._id }));
+  }
+
   useEffect(() => {
     if (sound) {
       const searchParams = new URLSearchParams(location.search);
       const startTime = searchParams.get('t');
-      if (startTime) {
-        playSingleSound({ src: sound.audioFile, title: sound.title, id: soundId }, parseInt(startTime, 10));
-        history.replace(`/sound/${soundId}`); // Remove query param after playing
-      }
+      if (startTime && similarSounds?.length > 0) {
+        const playlist = createPlaylist();
 
+        playPlaylist(playlist, 0, parseInt(startTime, 10));
+        history.replace(`/sound/${soundId}`);
+        console.log({ similarSounds });
+      }
+    }
+  }, [sound, location.search, similarSounds]);
+
+  useEffect(() => {
+    if (sound) {
       Meteor.call('sounds.getSimilar', { soundId }, (error, result) => {
         if (error) {
           console.error(error);
@@ -81,7 +93,7 @@ const Sound = () => {
 
   const handlePlay = () => {
     if (sound) {
-      const playlist = [sound, ...similarSounds].map(s => ({ src: s.audioFile, title: s.title, id: s._id }));
+      const playlist = createPlaylist();
       playPlaylist(playlist);
     }
   };
@@ -149,7 +161,8 @@ const Sound = () => {
           key={offset} // Use offset as a unique key
           className="text-blue-500 hover:underline cursor-pointer"
           onClick={() => {
-            playSingleSound({ src: sound.audioFile, title: sound.title, id: soundId }, totalSeconds);
+            const playlist = createPlaylist();
+            playPlaylist(playlist, 0, totalSeconds);
           }}
         >
           {timestamp}
