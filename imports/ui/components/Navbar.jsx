@@ -10,6 +10,8 @@ const Navbar = ({ user }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const history = useHistory();
 
+  const activeLinkStyle = { color: '#3B82F6' };
+
   const unreadMessagesCount = useTracker(() => {
     if (!user) return 0;
     Meteor.subscribe('messages');
@@ -28,16 +30,16 @@ const Navbar = ({ user }) => {
 
   const loggedInLinks = (
     <>
-      <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={{ color: '#3B82F6' }} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Latest</NavLink>
-      <NavLink onClick={handleDropdownClick} to="/hot" activeStyle={{ color: '#3B82F6' }} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</NavLink>
-      <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={{ color: '#3B82F6' }} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Battle</NavLink>
-      <NavLink onClick={handleDropdownClick} to="/sound/add" activeStyle={{ color: '#3B82F6' }} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Upload</NavLink>
+      <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Latest</NavLink>
+      <NavLink onClick={handleDropdownClick} to="/hot" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</NavLink>
+      <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Battle</NavLink>
+      <NavLink onClick={handleDropdownClick} to="/sound/add" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Upload</NavLink>
     </>
   );
 
   const loggedOutLinks = (
     <>
-      <NavLink onClick={handleDropdownClick} to="/sign-in" activeStyle={{ color: '#3B82F6' }} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</NavLink>
+      <NavLink onClick={handleDropdownClick} to="/sign-in" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</NavLink>
       <NavLink onClick={handleDropdownClick} to="/sign-up" activeStyle={{ backgroundColor: '#2563EB' }} className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</NavLink>
     </>
   );
@@ -52,15 +54,15 @@ const Navbar = ({ user }) => {
         <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50">
           
           {user && user.plan === 'pro' && (
-            <NavLink onClick={handleDropdownClick} to="/support-overview" activeStyle={{ color: '#3B82F6' }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support Overview</NavLink>
+            <NavLink onClick={handleDropdownClick} to="/support-overview" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support Overview</NavLink>
           )}
-          <NavLink onClick={handleDropdownClick} to="/payouts" activeStyle={{ color: '#3B82F6' }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Payouts</NavLink>
-          <NavLink onClick={handleDropdownClick}  to="/explore" activeStyle={{ color: '#3B82F6' }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Explore</NavLink>
-          <NavLink onClick={handleDropdownClick}  to="/profile" activeStyle={{ color: '#3B82F6' }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</NavLink>
+          <NavLink onClick={handleDropdownClick} to="/payouts" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Payouts</NavLink>
+          <NavLink onClick={handleDropdownClick}  to="/explore" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Explore</NavLink>
+          <NavLink onClick={handleDropdownClick}  to="/profile" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</NavLink>
           <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Donate</a>
           <a onClick={handleDropdownClick} href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Github</a>
-          <NavLink onClick={handleDropdownClick} to="/profile/settings" activeStyle={{ color: '#3B82F6' }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</NavLink>
-          <NavLink onClick={handleDropdownClick} to="/logout" activeStyle={{ color: '#3B82F6' }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</NavLink>
+          <NavLink onClick={handleDropdownClick} to="/profile/settings" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</NavLink>
+          <NavLink onClick={handleDropdownClick} to="/logout" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</NavLink>
         </div>
       )}
     </div>
@@ -162,15 +164,15 @@ const Navbar = ({ user }) => {
             <div className="pt-4 pb-3 border-t border-gray-200">
               <div className="px-2 space-y-1">
                 {user && user.plan === 'pro' && (
-                  <NavLink onClick={handleDropdownClick} to="/support-overview" activeStyle={{ color: '#3B82F6' }} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Support Overview</NavLink>
+                  <NavLink onClick={handleDropdownClick} to="/support-overview" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Support Overview</NavLink>
                 )}
-                <NavLink onClick={handleDropdownClick} to="/payouts" activeStyle={{ color: '#3B82F6' }} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Payouts</NavLink>
-                <NavLink onClick={handleDropdownClick} to="/explore" activeStyle={{ color: '#3B82F6' }} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Explore</NavLink>
-                <NavLink onClick={handleDropdownClick} to="/profile" activeStyle={{ color: '#3B82F6' }} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Profile</NavLink>
+                <NavLink onClick={handleDropdownClick} to="/payouts" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Payouts</NavLink>
+                <NavLink onClick={handleDropdownClick} to="/explore" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Explore</NavLink>
+                <NavLink onClick={handleDropdownClick} to="/profile" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Profile</NavLink>
                 <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Donate</a>
                 <a onClick={handleDropdownClick} href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Github</a>
-                <NavLink onClick={handleDropdownClick} to="/profile/settings" activeStyle={{ color: '#3B82F6' }} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Settings</NavLink>
-                <NavLink onClick={handleDropdownClick} to="/logout" activeStyle={{ color: '#3B82F6' }} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Logout</NavLink>
+                <NavLink onClick={handleDropdownClick} to="/profile/settings" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Settings</NavLink>
+                <NavLink onClick={handleDropdownClick} to="/logout" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Logout</NavLink>
               </div>
             </div>
           )}
