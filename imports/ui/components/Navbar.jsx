@@ -58,7 +58,7 @@ const Navbar = ({ user }) => {
           )}
           <NavLink onClick={handleDropdownClick} to="/payouts" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Payouts</NavLink>
           <NavLink onClick={handleDropdownClick}  to="/explore" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Explore</NavLink>
-          <NavLink onClick={handleDropdownClick}  to="/profile" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</NavLink>
+          <NavLink exact onClick={handleDropdownClick}  to="/profile" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</NavLink>
           <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Donate</a>
           <a onClick={handleDropdownClick} href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Github</a>
           <NavLink onClick={handleDropdownClick} to="/profile/settings" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</NavLink>
@@ -168,7 +168,7 @@ const Navbar = ({ user }) => {
                 )}
                 <NavLink onClick={handleDropdownClick} to="/payouts" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Payouts</NavLink>
                 <NavLink onClick={handleDropdownClick} to="/explore" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Explore</NavLink>
-                <NavLink onClick={handleDropdownClick} to="/profile" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Profile</NavLink>
+                <NavLink exact onClick={handleDropdownClick} to="/profile" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Profile</NavLink>
                 <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Donate</a>
                 <a onClick={handleDropdownClick} href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Github</a>
                 <NavLink onClick={handleDropdownClick} to="/profile/settings" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Settings</NavLink>
