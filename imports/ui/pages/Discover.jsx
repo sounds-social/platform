@@ -62,7 +62,7 @@ const Discover = () => {
       <div>
         <h3 className="text-2xl font-bold text-gray-800 mt-8">Hottest Sounds</h3>
         <p className="text-gray-500 mb-4">The most popular sounds right now.</p>
-        <SoundList sounds={hotSounds} loading={hotLoading} noSoundsMessage="No hot sounds found." defaultDisplayLimit={3} hidePlayButton={true} />
+        <SoundList sounds={hotSounds} loading={hotLoading} noSoundsMessage="No hot sounds found." defaultDisplayLimit={3} hidePlayButton={true} disableLoadMore={true} />
         <Link to="/hot" className="text-blue-500 mt-4 inline-block">View all hot sounds</Link>
       </div>
     </div>

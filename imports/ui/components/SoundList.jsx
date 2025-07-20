@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SoundCard from './SoundCard';
 
-const SoundList = ({ sounds, loading, noSoundsMessage, smallCover = false, hideStats = false, hidePlayButton = false, defaultDisplayLimit = 10, loadMoreAmount = 20 }) => {
+const SoundList = ({ sounds, loading, noSoundsMessage, smallCover = false, hideStats = false, hidePlayButton = false, defaultDisplayLimit = 10, loadMoreAmount = 20, disableLoadMore = false }) => {
   const [displayLimit, setDisplayLimit] = useState(defaultDisplayLimit);
 
   const handleLoadMore = () => {
@@ -27,7 +27,7 @@ const SoundList = ({ sounds, loading, noSoundsMessage, smallCover = false, hideS
       {soundsToDisplay.map((sound, index) => (
         <SoundCard key={sound._id} sound={sound} sounds={sounds} index={index} smallCover={smallCover} hideStats={hideStats} hidePlayButton={hidePlayButton} />
       ))}
-      {sounds.length > displayLimit && (
+      {sounds.length > displayLimit && !disableLoadMore && (
         <div className="text-center mt-4">
           <button
             onClick={handleLoadMore}
