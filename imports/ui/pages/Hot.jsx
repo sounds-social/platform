@@ -18,7 +18,7 @@ const Hot = () => {
 
     const soundsData = Sounds.find({
       createdAt: { $gte: thirtyDaysAgo },
-    }, { sort: { playCount: -1 }, limit: 20 }).fetch();
+    }, { sort: { playCount: -1 } }).fetch();
 
     const soundsWithUserData = soundsData.map(sound => {
       const soundUser = Meteor.users.findOne({ _id: sound.userId }, { fields: { 'profile.displayName': 1, 'profile.slug': 1 } });

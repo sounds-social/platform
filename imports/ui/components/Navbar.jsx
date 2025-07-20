@@ -30,7 +30,7 @@ const Navbar = ({ user }) => {
 
   const loggedInLinks = (
     <>
-      <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Latest</NavLink>
+      <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Home</NavLink>
       <NavLink onClick={handleDropdownClick} to="/hot" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</NavLink>
       <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Battle</NavLink>
       <NavLink onClick={handleDropdownClick} to="/sound/add" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Upload</NavLink>
