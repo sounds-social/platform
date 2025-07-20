@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import SoundCard from './SoundCard';
 
-const SoundList = ({ sounds, loading, noSoundsMessage, smallCover = false, hideStats = false, hidePlayButton = false }) => {
-  const [displayLimit, setDisplayLimit] = useState(10);
+const SoundList = ({ sounds, loading, noSoundsMessage, smallCover = false, hideStats = false, hidePlayButton = false, defaultDisplayLimit = 10, loadMoreAmount = 20 }) => {
+  const [displayLimit, setDisplayLimit] = useState(defaultDisplayLimit);
 
   const handleLoadMore = () => {
-    setDisplayLimit(prevLimit => prevLimit + 20);
+    setDisplayLimit(prevLimit => prevLimit + loadMoreAmount);
   };
 
   if (loading) {

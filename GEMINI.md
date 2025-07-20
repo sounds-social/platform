@@ -325,4 +325,17 @@ To elaborate on the monetization feature following things are needed to make it 
 * On the GoPro.jsx page if the user clicks on the "Go PRO" button it should set the plan field to "pro" (for now) and redirect to the homepage (path: /)
 * Add a "Manage plan" section to the ProfileSettings.jsx page which displays the current "plan" value with a label and a "Change plan" button that does nothing for now.
 
+### Discover Page
 
+Users can go to "/" to discover new sounds that they haven't heard before.
+
+* Rename "Latest" to "Home" and create two tabs which are "Discover" and "Following" (instead of "Latest")
+  * Following page is the same content as "Latest"
+  * The new title is "Following", description stays the same
+* The Discover page display following sounds in blocks:
+  * For tags: #trap beat, only show 3 and add a load more button
+  * Newest sounds from the platform: only show 3 again with load more button
+  * Hottest sounds, also only 3 and link to the "Hot" page instead of a load more button.
+  * The load more button loads 5 new sounds instead of what it is now
+  * For each block add a description + title
+  * Main title for page is "Discover"
