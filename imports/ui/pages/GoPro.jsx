@@ -1,8 +1,18 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { HeadProvider, Title } from 'react-head';
+import { useTracker } from 'meteor/react-meteor-data';
+import Unauthorized from '../components/Unauthorized';
 
 const GoPro = () => {
+  const { user, loggingIn } = useTracker(() => {
+    const subscription = Meteor.subscribe('users.me');
+    return {
+      user: Meteor.user(),
+      loggingIn: !subscription.ready(),
+    };
+  });
+
   const handleGoProClick = async () => {
     try {
       const checkoutUrl = await Meteor.callAsync('stripe.createCheckoutSession');
@@ -12,6 +22,14 @@ const GoPro = () => {
       // Optionally, display an error message to the user
     }
   };
+
+  if (loggingIn) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <Unauthorized />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">

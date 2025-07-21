@@ -4,6 +4,8 @@ import { HeadProvider, Title } from 'react-head';
 import { Meteor } from 'meteor/meteor';
 import { FiLoader, FiTrash } from 'react-icons/fi';
 import BytescaleWidget from '../components/BytescaleWidget';
+import { useTracker } from 'meteor/react-meteor-data';
+import Unauthorized from '../components/Unauthorized';
 
 const SoundAdd = () => {
   const history = useHistory();
@@ -17,6 +19,12 @@ const SoundAdd = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const user = useTracker(() => Meteor.user());
+
+  if (!user) {
+    return <Unauthorized />;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();

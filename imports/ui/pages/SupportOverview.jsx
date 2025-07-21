@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import UserList from '../components/UserList';
 import { HeadProvider, Title } from 'react-head';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import Unauthorized from '../components/Unauthorized';
 
 const data = [
   { name: 'Platform Hosting Costs', value: 15, color: '#8884d8' },
@@ -12,6 +13,12 @@ const data = [
 ];
 
 const SupportOverview = () => {
+  const user = useTracker(() => Meteor.user());
+
+  if (!user) {
+    return <Unauthorized />;
+  }
+
   const { supportedUsers, loading } = useTracker(() => {
     const noData = { supportedUsers: [], loading: true };
     const currentUser = Meteor.user();

@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
 import { Payouts as PayoutsCollection } from '../../api/payouts';
+import Unauthorized from '../components/Unauthorized';
 
 const Payouts = () => {
   const { user, loading: userLoading } = useTracker(() => {
@@ -107,6 +108,10 @@ const Payouts = () => {
 
   if (userLoading) {
     return <div className="text-center py-8">Loading user data...</div>;
+  }
+
+  if (!user) {
+    return <Unauthorized />;
   }
 
   return (
