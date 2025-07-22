@@ -30,6 +30,7 @@ const Navbar = ({ user }) => {
 
   const loggedOutLinks = (
     <>
+      <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Home</NavLink>
       <NavLink onClick={handleDropdownClick} to="/hot" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</NavLink>
       <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Battle</NavLink>
       <NavLink onClick={handleDropdownClick} to="/sign-in" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</NavLink>
@@ -78,6 +79,7 @@ const Navbar = ({ user }) => {
                   </>
                 ) : (
                   <div className="flex items-baseline space-x-4">
+                    <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Home</NavLink>
                     <NavLink onClick={handleDropdownClick} to="/hot" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</NavLink>
                     <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Battle</NavLink>
                     <NavLink onClick={handleDropdownClick} to="/sign-in" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</NavLink>

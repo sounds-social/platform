@@ -7,13 +7,13 @@ import SoundList from '../components/SoundList';
 
 const Following = () => {
   const { sounds, loading } = useTracker(() => {
-    const noDataAvailable = { sounds: [], loading: true };
+    const noDataAvailable = { sounds: [], loading: false };
     const privateHandle = Meteor.subscribe('sounds.private');
     const publicHandle = Meteor.subscribe('sounds.public');
     const usersHandle = Meteor.subscribe('users.me');
     const publicUsersHandle = Meteor.subscribe('users.public');
 
-    if (!privateHandle.ready() || !publicHandle.ready() || !usersHandle.ready() || !publicUsersHandle.ready()) return noDataAvailable;
+    if (!privateHandle.ready() || !publicHandle.ready() || !usersHandle.ready() || !publicUsersHandle.ready()) return { sounds: [], loading: true };
 
     const user = Meteor.user();
     if (!user) return noDataAvailable;

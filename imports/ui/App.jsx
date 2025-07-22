@@ -87,9 +87,8 @@ export const App = () => {
         )}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Switch>
-            <Route exact path="/">
-              {user ? <Home /> : <About />}
-            </Route>
+            <Route exact path="/" component={Home} />
+            <Route path="/about" component={About} />
         <Route path="/sign-in" component={SignIn} />
         <Route path="/sign-up" component={SignUp} />
         <Route path="/forgot-password" component={ForgotPassword} />
