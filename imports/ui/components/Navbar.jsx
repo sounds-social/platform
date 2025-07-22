@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { NavLink, Link, useHistory } from 'react-router-dom';
-import { FiMenu, FiX, FiSearch, FiInbox } from 'react-icons/fi';
+import { FiMenu, FiX, FiInbox } from 'react-icons/fi';
 import { Notifications } from './Notifications';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Messages } from '../../api/messages';
+import SearchBar from './SearchBar';
 
 const Navbar = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const history = useHistory();
 
   const activeLinkStyle = { color: '#3B82F6' };
 
@@ -19,14 +18,6 @@ const Navbar = ({ user }) => {
   }, [user]);
 
   const handleDropdownClick = () => setIsOpen(false);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      history.push(`/search?q=${searchTerm}`);
-      setIsOpen(false);
-    }
-  };
 
   const loggedInLinks = (
     <>
@@ -83,22 +74,15 @@ const Navbar = ({ user }) => {
                     <div className="flex items-baseline space-x-4">
                       {loggedInLinks}
                     </div>
-                    <form onSubmit={handleSearch} className="flex items-center ml-4">
-                      <input
-                        type="text"
-                        placeholder="Search"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="px-3 py-2 rounded-l-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
-                      />
-                      <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-r-md text-sm font-medium h-[38px] cursor-pointer">
-                        <FiSearch />
-                      </button>
-                    </form>
+                    <SearchBar />
                   </>
                 ) : (
                   <div className="flex items-baseline space-x-4">
-                    {loggedOutLinks}
+                    <NavLink onClick={handleDropdownClick} to="/hot" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</NavLink>
+                    <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Battle</NavLink>
+                    <NavLink onClick={handleDropdownClick} to="/sign-in" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</NavLink>
+                    <NavLink onClick={handleDropdownClick} to="/sign-up" activeStyle={{ backgroundColor: '#2563EB' }} className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</NavLink>
+                    <SearchBar />
                   </div>
                 )}
               </div>
@@ -147,22 +131,16 @@ const Navbar = ({ user }) => {
             {user ? (
               <>
                 {loggedInLinks}
-                <form onSubmit={handleSearch} className="flex items-center mt-4">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="px-3 py-2 rounded-l-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm w-full"
-                  />
-                  <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-r-md text-sm font-medium h-[38px] cursor-pointer">
-                    <FiSearch />
-                  </button>
-                </form>
+                <div className="mt-4">
+                  <SearchBar />
+                </div>
               </>
             ) : (
               <>
                 {loggedOutLinks}
+                <div className="mt-4">
+                  <SearchBar />
+                </div>
               </>
             )}
           </div>
