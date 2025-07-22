@@ -24,7 +24,7 @@ describe('<Navbar />', () => {
 
     it('shows the main navigation links when logged in', () => {
       render(<Navbar user={{}} />, { wrapper: MemoryRouter });
-      expect(screen.getByText('Latest')).to.exist;
+      expect(screen.getByText('Home')).to.exist;
       expect(screen.getByText('Hot')).to.exist;
       expect(screen.getByText('Battle')).to.exist;
       expect(screen.getByText('Upload')).to.exist;
