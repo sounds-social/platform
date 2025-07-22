@@ -39,6 +39,8 @@ const Navbar = ({ user }) => {
 
   const loggedOutLinks = (
     <>
+      <NavLink onClick={handleDropdownClick} to="/hot" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</NavLink>
+      <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Battle</NavLink>
       <NavLink onClick={handleDropdownClick} to="/sign-in" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</NavLink>
       <NavLink onClick={handleDropdownClick} to="/sign-up" activeStyle={{ backgroundColor: '#2563EB' }} className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</NavLink>
     </>
@@ -158,7 +160,11 @@ const Navbar = ({ user }) => {
                   </button>
                 </form>
               </>
-            ) : loggedOutLinks}
+            ) : (
+              <>
+                {loggedOutLinks}
+              </>
+            )}
           </div>
           {user && (
             <div className="pt-4 pb-3 border-t border-gray-200">
