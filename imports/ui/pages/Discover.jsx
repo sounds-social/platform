@@ -28,7 +28,6 @@ const Discover = () => {
     const trapSoundsData = soundsWithUserData.filter(sound => sound.tags && sound.tags.includes('trap beat'));
     const hotSoundsData = [...soundsWithUserData].sort((a, b) => (b.playCount || 0) - (a.playCount || 0));
 
-
     return {
       newestSounds: soundsWithUserData,
       newestLoading: loading,

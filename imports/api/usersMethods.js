@@ -25,6 +25,12 @@ const getCurrencyRate = async () => {
 Meteor.methods({
   async 'users.updateProfile'(displayName, slug, avatar, youtube, twitter, spotify, instagram, website) {
     check(displayName, String);
+
+    const userWithSameDisplayName = await Meteor.users.findOneAsync({ 'profile.displayName': displayName });
+    if (userWithSameDisplayName && userWithSameDisplayName._id !== this.userId) {
+      throw new Meteor.Error('display-name-already-exists', 'This display name is already in use.');
+    }
+
     if (slug !== undefined) {
       check(slug, String);
       const user = await Meteor.users.findOneAsync({ 'profile.slug': slug });
@@ -423,5 +429,11 @@ Meteor.methods({
     });
 
     return session.url;
+  },
+
+  async 'users.checkDisplayName'(displayName) {
+    check(displayName, String);
+    const user = await Meteor.users.findOneAsync({ 'profile.displayName': displayName });
+    return !!user;
   },
 });

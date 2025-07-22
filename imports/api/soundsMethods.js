@@ -144,10 +144,6 @@ Meteor.methods({
   async 'sounds.winBattle'(soundId) {
     check(soundId, String);
 
-    if (!this.userId) {
-      throw new Meteor.Error('not-authorized');
-    }
-
     return await Sounds.updateAsync(soundId, {
       $inc: { battlesWonCount: 1 },
     });

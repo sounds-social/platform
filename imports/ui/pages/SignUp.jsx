@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { HeadProvider, Title } from 'react-head';
 import { Accounts } from 'meteor/accounts-base';
+import { Meteor } from 'meteor/meteor';
 import uniqid from 'uniqid';
 
 const SignUp = () => {
@@ -11,18 +12,28 @@ const SignUp = () => {
   const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const slug = uniqid();
-
-    Accounts.createUser({ email, password, profile: { displayName, slug } }, (err) => {
-      if (err) {
-        setError(err.reason);
-      } else {
-        history.push('/');
+    try {
+      const displayNameExists = await Meteor.callAsync('users.checkDisplayName', displayName);
+      if (displayNameExists) {
+        setError('Display name already exists.');
+        return;
       }
-    });
+
+      const slug = uniqid();
+
+      Accounts.createUser({ email, password, profile: { displayName, slug } }, (err) => {
+        if (err) {
+          setError(err.reason);
+        } else {
+          history.push('/');
+        }
+      });
+    } catch (err) {
+      setError(err.reason);
+    }
   };
 
   return (
