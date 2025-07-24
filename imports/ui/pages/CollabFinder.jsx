@@ -58,7 +58,13 @@ const CollabFinder = () => {
             className="absolute"
           >
             <div className="relative w-full h-full rounded-lg shadow-neon-purple bg-gray-800 p-6 flex flex-col items-center justify-center text-center text-white">
-              <img src={user.profile.avatar || '/default-avatar.png'} alt={user.profile.displayName} className="w-32 h-32 rounded-full mb-4 shadow-lg shadow-purple-500/50" />
+              {user.profile.avatar ? (
+                <img src={user.profile.avatar} alt={user.profile.displayName} className="w-32 h-32 rounded-full mb-4 shadow-lg shadow-purple-500/50" />
+              ) : (
+                <div className="w-32 h-32 rounded-full mb-4 flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-600 text-white text-5xl font-bold">
+                  {user.profile.displayName ? user.profile.displayName.charAt(0).toUpperCase() : ''}
+                </div>
+              )}
               <h2 className="text-2xl font-bold text-pink-400 text-shadow-neon">{user.profile.displayName}</h2>
               <p className="text-lg text-purple-300">{user.profile.mood}</p>
               <p className="mt-4">{user.profile.matchDescription}</p>
