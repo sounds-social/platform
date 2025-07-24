@@ -67,6 +67,27 @@ const UserProfileSchema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  firstName: {
+    type: String,
+    optional: true,
+  },
+  mood: {
+    type: String,
+    optional: true,
+    allowedValues: ['happy', 'sad', 'dreamy', 'epic', 'relaxing', 'scary'],
+  },
+  matchDescription: {
+    type: String,
+    optional: true,
+    max: 500,
+  },
+  tags: {
+    type: Array,
+    optional: true,
+  },
+  'tags.$': {
+    type: String,
+  },
 });
 
 const UserSchema = new SimpleSchema({

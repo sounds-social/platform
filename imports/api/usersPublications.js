@@ -95,3 +95,15 @@ Meteor.publish('users.byIds', function (userIds) {
     }
   });
 });
+
+Meteor.publish('users.all', function () {
+  if (!this.userId) {
+    return this.ready();
+  }
+
+  return Meteor.users.find({}, {
+    fields: {
+      profile: 1,
+    }
+  });
+});

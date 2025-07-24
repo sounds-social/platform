@@ -339,3 +339,23 @@ Users can go to "/" to discover new sounds that they haven't heard before.
   * The load more button loads 5 new sounds instead of what it is now
   * For each block add a description + title
   * Main title for page is "Discover"
+
+# Collab Finder
+
+The user can use a collab finder to find their next collaboration (producer, musicians, vocalists) etc. It's like a tinder for musicians.
+
+* Use "react-tinder-card" for the frontend
+* On the swipe card display the avatar image of the user and following new user profile fields:
+  * firstName: required, The first name of the user
+  * mood: required, The mood the user is in (e.g. happy, sad, dreamy, epic, relaxing, and scary)
+  * matchDescription: not required, description of what the musician is looking for
+  * tags: not required, Genres or other tags (e.g. vocalist, trap producer, etc.)
+* On first visit display a page with description similar to the "Battle Pit"
+  * Title is "Collab Finder", description is: "Swipe left or right on potential music collaborators", Button is "Setup Profile"
+  * The introduction page is only displayed when the profile is incomplete
+  * Create a modal form that displays the fields mentioned above in a form after clicking on "Setup Profile"
+  * After saving display the musicians on the platform in random order
+  * On the main page, show a settings icon that allows the user to change their info
+* Create a new collection "Matches" that is updated everytime someone swipes left or right (remember the decision (like or dislike) in the collection so that it remembers where you left off)
+* Add a new NavLink called "Match" to the right of "Hot" and the left of Search which displays the collab finder
+* Style it similarly to the "Battle Pit"
