@@ -1,6 +1,6 @@
 # Sounds Social
 
-Sounds Social is a platform to share your sound with others. You can check out the app already on [here](https://soundssocial.io/). One of the key features is the monetization, where you can support your favorite audio creators and it automatically divides up 70% of your monthly PRO subscription and pays it out to them. 
+Sounds Social is a platform to share your sound with others. You can check out the app already on [here](https://soundssocial.io/).
 
 ### How to setup and run
 
