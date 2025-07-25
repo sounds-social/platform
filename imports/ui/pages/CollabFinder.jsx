@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import TinderCard from 'react-tinder-card';
-import { FiSettings } from 'react-icons/fi';
+import { FiSettings, FiX, FiHeart } from 'react-icons/fi';
 import { Matches } from '../../api/matches';
 import { Link } from 'react-router-dom';
 
@@ -91,7 +91,7 @@ const CollabFinder = () => {
               key={user._id}
               onSwipe={(dir) => onSwipe(dir, user._id)}
               preventSwipe={['up', 'down']}
-              swipeThreshold={0.5}
+              swipeThreshold={0.8}
               className="absolute"
             >
               <div className="relative w-[300px] h-[400px] overflow-y-auto rounded-lg border border-gray-300 bg-white p-6 flex flex-col items-center justify-center text-center">
@@ -111,6 +111,14 @@ const CollabFinder = () => {
                     <span key={tag} className="bg-purple-500 text-white px-2 py-1 rounded-full text-sm m-1">{tag}</span>
                   ))}
                 </div>
+              </div>
+              <div className="absolute bottom-[-60px] left-0 right-0 flex justify-center space-x-10">
+                <button onClick={() => onSwipe('left', user._id)} className="bg-red-500 text-white p-3 rounded-full shadow-lg hover:bg-red-600 transition-colors duration-200">
+                  <FiX size={24} />
+                </button>
+                <button onClick={() => onSwipe('right', user._id)} className="bg-green-500 text-white p-3 rounded-full shadow-lg hover:bg-green-600 transition-colors duration-200">
+                  <FiHeart size={24} />
+                </button>
               </div>
             </TinderCard>
           ))
