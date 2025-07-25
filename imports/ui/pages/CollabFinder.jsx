@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import TinderCard from 'react-tinder-card';
 import { FiSettings } from 'react-icons/fi';
 import { Matches } from '../../api/matches';
+import { Link } from 'react-router-dom';
 
 const CollabFinder = () => {
   const [showIntro, setShowIntro] = useState(true);
@@ -12,6 +13,8 @@ const CollabFinder = () => {
   const [mood, setMood] = useState('');
   const [matchDescription, setMatchDescription] = useState('');
   const [tags, setTags] = useState([]);
+  const [showMatchModal, setShowMatchModal] = useState(false);
+  const [matchedUser, setMatchedUser] = useState(null);
 
   const { users, currentUser } = useTracker(() => {
     Meteor.subscribe('users.all');
@@ -40,7 +43,14 @@ const CollabFinder = () => {
   };
 
   const onSwipe = (direction, swipedUserId) => {
-    Meteor.callAsync('matches.swipe', { swipedUserId, direction });
+    Meteor.callAsync('matches.swipe', { swipedUserId, direction })
+      .then(res => {
+        if (res?.matched) {
+          const user = Meteor.users.findOne(swipedUserId);
+          setMatchedUser(user);
+          setShowMatchModal(true);
+        }
+      });
   };
 
   const setupProfile = () => {
@@ -81,6 +91,7 @@ const CollabFinder = () => {
               key={user._id}
               onSwipe={(dir) => onSwipe(dir, user._id)}
               preventSwipe={['up', 'down']}
+              swipeThreshold={0.5}
               className="absolute"
             >
               <div className="relative w-[300px] h-[400px] overflow-y-auto rounded-lg border border-gray-300 bg-white p-6 flex flex-col items-center justify-center text-center">
@@ -143,6 +154,18 @@ const CollabFinder = () => {
                 <button type="submit" className="cursor-pointer bg-blue-500 text-white px-6 py-3 rounded-lg font-bold mt-4">Save</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {showMatchModal && matchedUser && (
+        <div className="absolute top-0 left-0 w-full h-full bg-gray-900/75 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-[400px] text-center">
+            <h2 className="text-2xl font-bold mb-4 text-gray-800">Congrats!</h2>
+            <p className="text-lg text-gray-800 mb-6">You've matched with {matchedUser.profile.firstName}!</p>
+            <div className="flex justify-center space-x-4">
+              <Link to={`/messages/${matchedUser._id}`} target="_blank" rel="noopener noreferrer" className="cursor-pointer bg-blue-500 text-white px-6 py-3 rounded-lg font-bold">Send a DM</Link>
+              <button onClick={() => setShowMatchModal(false)} className="cursor-pointer bg-gray-500 text-white px-6 py-3 rounded-lg font-bold">Continue</button>
+            </div>
           </div>
         </div>
       )}
