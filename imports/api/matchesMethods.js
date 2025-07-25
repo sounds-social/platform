@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Matches } from './matches';
+import { Sounds } from './sounds';
 
 Meteor.methods({
   async 'matches.swipe'({ swipedUserId, direction }) {
@@ -43,6 +44,7 @@ Meteor.methods({
           {
             $set: {
               matched: true,
+              matchedAt: new Date(),
             },
           },
           { multi: true }

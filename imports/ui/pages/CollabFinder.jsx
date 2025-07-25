@@ -84,7 +84,10 @@ const CollabFinder = () => {
 
   return (
     <div className="relative h-screen flex flex-col items-center justify-center bg-slate-300 rounded-2xl overflow-x-hidden">
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 flex space-x-4">
+        <Link to="/match-history" className="px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100">
+          Match History
+        </Link>
         <button onClick={openSettings} className="text-gray-600 hover:text-pink-500">
           <FiSettings size={24} />
         </button>

@@ -19,10 +19,12 @@ const MatchSchema = new SimpleSchema({
     autoValue () {
       if (this.isInsert) {
         return new Date()
-      } else if (this.isUpsert) {
-        return { $setOnInsert: new Date() };
       }
     },
+  },
+  matchedAt: {
+    type: Date,
+    optional: true,
   },
   matched: {
     type: Boolean,
