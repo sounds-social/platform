@@ -436,4 +436,24 @@ Meteor.methods({
     const user = await Meteor.users.findOneAsync({ 'profile.displayName': displayName });
     return !!user;
   },
+
+  async 'users.updateCollabProfile'(firstName, mood, matchDescription, tags) {
+    check(firstName, String);
+    check(mood, String);
+    check(matchDescription, String);
+    check(tags, Array);
+
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    return await Meteor.users.updateAsync(this.userId, {
+      $set: {
+        'profile.firstName': firstName,
+        'profile.mood': mood,
+        'profile.matchDescription': matchDescription,
+        'profile.tags': tags,
+      },
+    });
+  },
 });

@@ -79,7 +79,7 @@ const UserProfileSchema = new SimpleSchema({
   matchDescription: {
     type: String,
     optional: true,
-    max: 500,
+    max: 100,
   },
   tags: {
     type: Array,

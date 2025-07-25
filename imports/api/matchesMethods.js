@@ -3,15 +3,17 @@ import { check } from 'meteor/check';
 import { Matches } from './matches';
 
 Meteor.methods({
-  'matches.swipe'({ swipedUserId, action }) {
+  async 'matches.swipe'({ swipedUserId, direction }) {
     check(swipedUserId, String);
-    check(action, String);
+    check(direction, String);
 
     if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
-    Matches.upsert(
+    const action = direction === 'left' ? 'dislike' : 'like';
+
+    await Matches.upsertAsync(
       {
         userId: this.userId,
         swipedUserId,
@@ -22,5 +24,32 @@ Meteor.methods({
         },
       }
     );
+
+    if (action === 'like') {
+      const reciprocalMatch = await Matches.findOneAsync({
+        userId: swipedUserId,
+        swipedUserId: this.userId,
+        action: 'like',
+      });
+
+      if (reciprocalMatch) {
+        await Matches.updateAsync(
+          {
+            $or: [
+              { userId: this.userId, swipedUserId: swipedUserId },
+              { userId: swipedUserId, swipedUserId: this.userId },
+            ],
+          },
+          {
+            $set: {
+              matched: true,
+            },
+          },
+          { multi: true }
+        );
+
+        return { matched: true, swipedUserId };
+      }
+    }
   },
 });
