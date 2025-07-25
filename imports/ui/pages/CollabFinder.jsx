@@ -66,13 +66,18 @@ const CollabFinder = () => {
   };
 
   const isProfileComplete = currentUser?.profile.firstName && currentUser?.profile.mood;
+  const isLoggedIn = !!Meteor.userId();
 
   if (showIntro && !isProfileComplete) {
     return (
       <div className="text-center my-20 p-8 rounded-lg">
         <h1 className="text-6xl w-full text-transparent bg-clip-text font-extrabold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-2 mb-4 animate-pulse-slow">Collab Finder</h1>
         <p className="mb-8 font-medium text-xl text-purple-950">Swipe left or right on potential music collaborators</p>
-        <button onClick={setupProfile} className="cursor-pointer bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full text-lg font-bold uppercase tracking-wide shadow-lg hover:shadow-neon-pink transition-all duration-300 ease-in-out transform hover:scale-105">Setup Profile</button>
+        {isLoggedIn ? (
+          <button onClick={setupProfile} className="cursor-pointer bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full text-lg font-bold uppercase tracking-wide shadow-lg hover:shadow-neon-pink transition-all duration-300 ease-in-out transform hover:scale-105">Setup Profile</button>
+        ) : (
+          <Link to="/sign-up" className="cursor-pointer bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full text-lg font-bold uppercase tracking-wide shadow-lg hover:shadow-neon-pink transition-all duration-300 ease-in-out transform hover:scale-105">Sign Up</Link>
+        )}
       </div>
     );
   }

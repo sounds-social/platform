@@ -82,6 +82,7 @@ const Navbar = ({ user }) => {
                   <div className="flex items-baseline space-x-4">
                     <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Home</NavLink>
                     <NavLink onClick={handleDropdownClick} to="/hot" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</NavLink>
+                    <NavLink onClick={handleDropdownClick} to="/match" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Match</NavLink>
                     <NavLink onClick={handleDropdownClick} to="/sign-in" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</NavLink>
                     <NavLink onClick={handleDropdownClick} to="/sign-up" activeStyle={{ backgroundColor: '#2563EB' }} className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</NavLink>
                     <SearchBar />
