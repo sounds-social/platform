@@ -68,6 +68,10 @@ const SoundsSchema = new SimpleSchema({
     type: SimpleSchema.Integer,
     defaultValue: 0,
   },
+  matchedAt: {
+    type: Date,
+    optional: true,
+  },
   battlesWonCount: {
     type: SimpleSchema.Integer,
     defaultValue: 0,

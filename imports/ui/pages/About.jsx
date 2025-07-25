@@ -1,6 +1,6 @@
 import React from 'react';
 import { HeadProvider, Title } from 'react-head';
-import { FiShare2, FiDollarSign, FiCode, FiUploadCloud, FiZap, FiMusic } from 'react-icons/fi';
+import { FiUsers, FiCode, FiZap, FiMusic } from 'react-icons/fi';
 
 const About = () => {
   return (
@@ -18,7 +18,7 @@ const About = () => {
                   <span className="block xl:inline">Sounds Social</span>
                 </h1>
                 <p className="mt-3 text-base text-gray-200 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                  Share your sound with the world.<br/>Connect with other musicians and get discovered.
+                  Find Your Next Collab. Share Your Beats. Grow Together.
                 </p>
               </div>
             </main>
@@ -37,9 +37,9 @@ const About = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
-            <FiUploadCloud className="text-5xl text-blue-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Unlimited Uploads</h2>
-            <p className="text-gray-600">Upload as many sounds as you want, for free. No limits on your creativity.</p>
+            <FiUsers className="text-5xl text-blue-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Swipe to find your next collab</h2>
+            <p className="text-gray-600">Connect with other musicians and find your next collaboration with our intuitive matching system.</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
             <FiZap className="text-5xl text-blue-500 mx-auto mb-4" />

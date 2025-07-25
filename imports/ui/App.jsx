@@ -27,6 +27,8 @@ import Home from './pages/Home';
 import Hot from './pages/Hot';
 import Explore from './pages/Explore';
 import Battle from './pages/Battle';
+import CollabFinder from './pages/CollabFinder';
+import MatchHistory from './pages/MatchHistory';
 import NotFound from './pages/NotFound';
 import SearchResults from './pages/SearchResults';
 import ResetPassword from './pages/ResetPassword';
@@ -128,6 +130,12 @@ export const App = () => {
         </Route>
         <Route path="/battle">
           <Battle />
+        </Route>
+        <Route path="/match">
+          <CollabFinder />
+        </Route>
+        <Route path="/match-history">
+          <MatchHistory />
         </Route>
         <Route path="/search">
           <SearchResults />

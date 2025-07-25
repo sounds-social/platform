@@ -23,7 +23,7 @@ const Navbar = ({ user }) => {
     <>
       <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Home</NavLink>
       <NavLink onClick={handleDropdownClick} to="/hot" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</NavLink>
-      <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Battle</NavLink>
+      <NavLink onClick={handleDropdownClick} to="/match" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Match</NavLink>
       <NavLink onClick={handleDropdownClick} to="/sound/add" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Upload</NavLink>
     </>
   );
@@ -32,7 +32,7 @@ const Navbar = ({ user }) => {
     <>
       <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Home</NavLink>
       <NavLink onClick={handleDropdownClick} to="/hot" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</NavLink>
-      <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Battle</NavLink>
+      <NavLink onClick={handleDropdownClick} to="/match" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Match</NavLink>
       <NavLink onClick={handleDropdownClick} to="/sign-in" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</NavLink>
       <NavLink onClick={handleDropdownClick} to="/sign-up" activeStyle={{ backgroundColor: '#2563EB' }} className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</NavLink>
     </>
@@ -52,6 +52,7 @@ const Navbar = ({ user }) => {
           )}
           <NavLink onClick={handleDropdownClick} to="/payouts" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Payouts</NavLink>
           <NavLink onClick={handleDropdownClick}  to="/explore" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Explore</NavLink>
+          <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Battle Pit</NavLink>
           <NavLink exact onClick={handleDropdownClick}  to="/profile" activeStyle={activeLinkStyle} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</NavLink>
           <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Donate</a>
           <a onClick={handleDropdownClick} href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Github</a>
@@ -81,7 +82,7 @@ const Navbar = ({ user }) => {
                   <div className="flex items-baseline space-x-4">
                     <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Home</NavLink>
                     <NavLink onClick={handleDropdownClick} to="/hot" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Hot</NavLink>
-                    <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Battle</NavLink>
+                    <NavLink onClick={handleDropdownClick} to="/match" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Match</NavLink>
                     <NavLink onClick={handleDropdownClick} to="/sign-in" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Sign In</NavLink>
                     <NavLink onClick={handleDropdownClick} to="/sign-up" activeStyle={{ backgroundColor: '#2563EB' }} className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</NavLink>
                     <SearchBar />
@@ -154,6 +155,7 @@ const Navbar = ({ user }) => {
                 )}
                 <NavLink onClick={handleDropdownClick} to="/payouts" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Payouts</NavLink>
                 <NavLink onClick={handleDropdownClick} to="/explore" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Explore</NavLink>
+                <NavLink onClick={handleDropdownClick} to="/battle" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Battle Pit</NavLink>
                 <NavLink exact onClick={handleDropdownClick} to="/profile" activeStyle={activeLinkStyle} className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Profile</NavLink>
                 <a onClick={handleDropdownClick} href="https://ko-fi.com/itsmatteodemicheli" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Donate</a>
                 <a onClick={handleDropdownClick} href="https://github.com/sounds-social/platform" target="_blank" rel="noopener noreferrer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-white hover:bg-gray-700">Github</a>
