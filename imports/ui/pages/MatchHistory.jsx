@@ -23,13 +23,21 @@ const MatchHistory = () => {
       ],
     }).fetch();
 
-    const matchedUsersWithDate = matchedDocs.map(doc => {
+    const matchedUsersWithDate = [];
+    const addedUserIds = new Set();
+
+    matchedDocs.forEach(doc => {
       const otherUserId = doc.userId === currentUserId ? doc.swipedUserId : doc.userId;
-      const user = Meteor.users.findOne(otherUserId);
-      return {
-        ...user,
-        matchedAt: doc.updatedAt // Use updatedAt from the match document
-      };
+      if (!addedUserIds.has(otherUserId)) {
+        const user = Meteor.users.findOne(otherUserId);
+        if (user) {
+          matchedUsersWithDate.push({
+            ...user,
+            matchedAt: doc.matchedAt
+          });
+          addedUserIds.add(otherUserId);
+        }
+      }
     });
 
     return {
@@ -63,7 +71,6 @@ const MatchHistory = () => {
               <div>
                 <h2 className="text-xl font-semibold text-gray-800">{user.profile.displayName}</h2>
                 {user.profile.firstName && <p className="text-gray-600">{user.profile.firstName}</p>}
-                {user.profile.mood && <p className="text-gray-600 font-semibold">{user.profile.mood}</p>}
                 {user.matchedAt && <p className="text-sm text-gray-500">Matched {formatDistanceToNow(user.matchedAt, { addSuffix: true })}</p>}
               </div>
             </div>
