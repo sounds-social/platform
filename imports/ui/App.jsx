@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 import { FiLoader } from 'react-icons/fi';
+import '@smastrom/react-rating/dist/style.css';
 
 import AllComments from './pages/AllComments';
 import AllLikes from './pages/AllLikes';
@@ -39,6 +40,7 @@ import MessagesPage from './pages/Messages';
 import ConversationPage from './pages/Conversation';
 import VerifyEmail from './pages/VerifyEmail';
 import SimilarSounds from './pages/SimilarSounds';
+import FeedbackPage from './pages/FeedbackPage';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -142,6 +144,9 @@ export const App = () => {
         </Route>
         <Route path="/notifications">
           <NotificationsPage />
+        </Route>
+        <Route path="/feedback">
+          <FeedbackPage />
         </Route>
         <Route path="/stripe-success" component={StripeSuccess} />
         <Route path="/payouts" component={Payouts} />

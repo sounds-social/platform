@@ -83,6 +83,10 @@ const SoundsSchema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  feedbackRequests: {
+    type: SimpleSchema.Integer,
+    defaultValue: 0,
+  },
 });
 
 Sounds.attachSchema(SoundsSchema);

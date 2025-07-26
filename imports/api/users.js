@@ -88,6 +88,10 @@ const UserProfileSchema = new SimpleSchema({
   'tags.$': {
     type: String,
   },
+  feedbackCoins: {
+    type: Number,
+    defaultValue: 0,
+  },
 });
 
 const UserSchema = new SimpleSchema({
