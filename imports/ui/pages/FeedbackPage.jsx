@@ -10,7 +10,14 @@ const FeedbackPage = () => {
     const userHandle = Meteor.subscribe('users.public');
     const soundsHandle = Meteor.subscribe('sounds.feedbackRequested');
     const user = Meteor.user();
-    const requestedSounds = Sounds.find({}, { sort: { feedbackRequests: -1 } }).fetch();
+    const requestedSounds = Sounds.find({}, { sort: { feedbackRequests: -1 } }).fetch().map(sound => {
+      const soundUser = Meteor.users.findOne(sound.userId);
+      return {
+        ...sound,
+        userName: soundUser ? soundUser.profile.displayName : 'Unknown',
+        userSlug: soundUser ? soundUser.profile.slug : 'unknown',
+      };
+    });
     return { user, requestedSounds, loading: !userHandle.ready() || !soundsHandle.ready() };
   });
 

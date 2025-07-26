@@ -66,5 +66,17 @@ Meteor.publish('sounds.random', async function (battleCounter) {
 });
 
 Meteor.publish('sounds.feedbackRequested', function () {
-  return Sounds.find({ feedbackRequests: { $gte: 1 } }, { sort: { feedbackRequests: -1 } });
+  const self = this;
+  const soundsCursor = Sounds.find({ feedbackRequests: { $gte: 1 } }, { sort: { feedbackRequests: -1 } });
+
+  soundsCursor.forEach(async (sound) => {
+    self.added('sounds', sound._id, sound);
+    // Publish the user associated with each sound
+    const user = Meteor.users.findOneAsync(sound.userId);
+    if (user) {
+      self.added('users', user._id, { profile: user.profile });
+    }
+  });
+
+  self.ready();
 });
