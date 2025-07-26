@@ -27,6 +27,7 @@ import '/imports/api/payoutsPublications';
 import '/imports/api/matches';
 import '/imports/api/matchesMethods';
 import '/imports/api/matchesPublications';
+import '/imports/api/feedback';
 import { generateMonthlyPayouts } from '/imports/api/payoutsLogic';
 import { checkProUsersSubscriptionStatus } from '/imports/api/stripeScheduler';
 import { setupOgPreview } from './ogPreview';
