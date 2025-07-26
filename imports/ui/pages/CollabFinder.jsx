@@ -141,7 +141,7 @@ const CollabFinder = () => {
             <form onSubmit={handleProfileUpdate}>
               <div className="mb-4">
                 <label htmlFor="firstName" className="block text-gray-800 mb-2">First Name</label>
-                <input type="text" id="firstName" value={firstName} onChange={e => setFirstName(e.target.value)} className="w-full p-2 rounded bg-gray-200 text-gray-800" required />
+                <input type="text" id="firstName" value={firstName} maxLength={35} onChange={e => setFirstName(e.target.value)} className="w-full p-2 rounded bg-gray-200 text-gray-800" required />
               </div>
               <div className="mb-4">
                 <label htmlFor="mood" className="block text-gray-800 mb-2">Mood</label>
@@ -157,11 +157,11 @@ const CollabFinder = () => {
               </div>
               <div className="mb-4">
                 <label htmlFor="matchDescription" className="block text-gray-800 mb-2">What are you looking for?</label>
-                <textarea id="matchDescription" value={matchDescription} onChange={e => setMatchDescription(e.target.value)} className="w-full p-2 rounded bg-gray-200 text-gray-800"></textarea>
+                <textarea id="matchDescription" value={matchDescription} onChange={e => setMatchDescription(e.target.value)} maxLength={100} className="w-full p-2 rounded bg-gray-200 text-gray-800"></textarea>
               </div>
               <div className="mb-4">
                 <label htmlFor="tags" className="block text-gray-800 mb-2">Genres / Tags (comma separated)</label>
-                <input type="text" id="tags" value={tags.join(', ')} onChange={e => setTags(e.target.value.split(', ').map(t => t.trim()))} className="w-full p-2 rounded bg-gray-200 text-gray-800" />
+                <input type="text" id="tags" value={tags.join(', ')} onChange={e => setTags(e.target.value.split(', ').map(t => t.trim()))} maxLength={42} className="w-full p-2 rounded bg-gray-200 text-gray-800" />
               </div>
               <div className="flex justify-end">
                 {isProfileComplete && (
