@@ -172,6 +172,40 @@ Meteor.methods({
 
     return soundsWithSimilarity.sort((a, b) => b.similarity - a.similarity).slice(0, 20);
   },
+
+  async 'sounds.requestFeedback'(soundId, requests) {
+    check(soundId, String);
+    check(requests, Number);
+
+    if (!this.userId) {
+      throw new Meteor.Error('not-authorized', 'You must be logged in to request feedback.');
+    }
+
+    const user = await Meteor.users.findOneAsync(this.userId);
+    if (!user) {
+      throw new Meteor.Error('user-not-found', 'User not found.');
+    }
+
+    const sound = await Sounds.findOneAsync(soundId);
+    if (!sound) {
+      throw new Meteor.Error('sound-not-found', 'Sound not found.');
+    }
+
+    if (sound.userId !== this.userId) {
+      throw new Meteor.Error('not-owner', 'You can only request feedback for your own sounds.');
+    }
+
+    const currentFeedbackCoins = user.profile?.feedbackCoins || 0;
+    if (currentFeedbackCoins < requests) {
+      throw new Meteor.Error('not-enough-coins', 'You do not have enough feedback coins.');
+    }
+
+    // Decrement user's feedbackCoins
+    await Meteor.users.updateAsync(this.userId, { $inc: { 'profile.feedbackCoins': -requests } });
+
+    // Increment sound's feedbackRequests
+    await Sounds.updateAsync(soundId, { $inc: { feedbackRequests: requests } });
+  },
 });
 
 if (Meteor.isServer) {
