@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data';
 import { FiLoader } from 'react-icons/fi';
+import '@smastrom/react-rating/dist/style.css';
 
 import AllComments from './pages/AllComments';
 import AllLikes from './pages/AllLikes';

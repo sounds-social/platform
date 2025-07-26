@@ -10,6 +10,7 @@ import Modal from 'react-modal';
 import { format, formatDistanceToNow } from "date-fns";
 import AddPlaylistModal from '../components/AddPlaylistModal';
 import RequestFeedbackModal from '../components/RequestFeedbackModal';
+import GiveFeedbackModal from '../components/GiveFeedbackModal';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 import SoundList from '../components/SoundList';
 
@@ -23,6 +24,7 @@ const Sound = () => {
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
   const [isRequestFeedbackModalOpen, setIsRequestFeedbackModalOpen] = useState(false);
+  const [isGiveFeedbackModalOpen, setIsGiveFeedbackModalOpen] = useState(false);
   const [isCreateSnippetModalOpen, setIsCreateSnippetModalOpen] = useState(false);
   const [snippetStartTime, setSnippetStartTime] = useState(0);
   const [snippetEndTime, setSnippetEndTime] = useState(30);
@@ -298,6 +300,14 @@ const Sound = () => {
                 <FiPlus className="mr-2" /> Add to Playlist
               </button>
             )}
+            {Meteor.userId() && Meteor.userId() !== sound.userId && (
+              <button
+                onClick={() => setIsGiveFeedbackModalOpen(true)}
+                className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
+              >
+                <FiMessageSquare className="mr-2" /> Give Feedback
+              </button>
+            )}
             {Meteor.userId() === sound.userId && (
               <div className="flex space-x-4 mb-4">
                 <Link
@@ -334,6 +344,11 @@ const Sound = () => {
       <RequestFeedbackModal
         isOpen={isRequestFeedbackModalOpen}
         onRequestClose={() => setIsRequestFeedbackModalOpen(false)}
+        soundId={soundId}
+      />
+      <GiveFeedbackModal
+        isOpen={isGiveFeedbackModalOpen}
+        onRequestClose={() => setIsGiveFeedbackModalOpen(false)}
         soundId={soundId}
       />
 
