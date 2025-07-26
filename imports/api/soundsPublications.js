@@ -72,7 +72,7 @@ Meteor.publish('sounds.feedbackRequested', function () {
   soundsCursor.forEach(async (sound) => {
     self.added('sounds', sound._id, sound);
     // Publish the user associated with each sound
-    const user = Meteor.users.findOneAsync(sound.userId);
+    const user = await Meteor.users.findOneAsync(sound.userId);
     if (user) {
       self.added('users', user._id, { profile: user.profile });
     }

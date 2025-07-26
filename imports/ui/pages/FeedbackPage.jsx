@@ -14,7 +14,7 @@ const FeedbackPage = () => {
     const feedbackHandle = Meteor.subscribe('feedback.forUser');
 
     const user = Meteor.user();
-    const requestedSounds = Sounds.find({}, { sort: { feedbackRequests: -1 } }).fetch().map(sound => {
+    const requestedSounds = Sounds.find({ feedbackRequests: { $gte: 1 } }, { sort: { feedbackRequests: -1 } }).fetch().map(sound => {
       const soundUser = Meteor.users.findOne(sound.userId);
       return {
         ...sound,
