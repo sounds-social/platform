@@ -64,3 +64,7 @@ Meteor.publish('sounds.random', async function (battleCounter) {
 
   this.ready();
 });
+
+Meteor.publish('sounds.feedbackRequested', function () {
+  return Sounds.find({ feedbackRequests: { $gte: 1 } }, { sort: { feedbackRequests: -1 } });
+});
