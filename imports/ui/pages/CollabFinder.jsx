@@ -3,8 +3,15 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import TinderCard from 'react-tinder-card';
 import { FiSettings, FiX, FiHeart } from 'react-icons/fi';
-import { Matches } from '../../api/matches';
+import { HeadProvider, Title } from 'react-head';
 import { Link } from 'react-router-dom';
+import { Matches } from '../../api/matches';
+
+const CollabFinderTitle = () => (
+  <HeadProvider>
+    <Title>Collab Finder - Sounds Social</Title>
+  </HeadProvider>
+);
 
 const CollabFinder = () => {
   const [showIntro, setShowIntro] = useState(true);
@@ -71,6 +78,7 @@ const CollabFinder = () => {
   if (showIntro && !isProfileComplete) {
     return (
       <div className="text-center my-20 p-8 rounded-lg">
+        <CollabFinderTitle />
         <h1 className="text-6xl w-full text-transparent bg-clip-text font-extrabold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-2 mb-4 animate-pulse-slow">Collab Finder</h1>
         <p className="mb-8 font-medium text-xl text-purple-950">Swipe left or right on potential music collaborators</p>
         {isLoggedIn ? (
@@ -84,6 +92,7 @@ const CollabFinder = () => {
 
   return (
     <div className="relative h-screen flex flex-col items-center justify-center bg-slate-300 rounded-2xl overflow-x-hidden">
+      <CollabFinderTitle />
       <div className="absolute top-4 right-4 flex space-x-4">
         <Link to="/match-history" className="px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100">
           Match History
