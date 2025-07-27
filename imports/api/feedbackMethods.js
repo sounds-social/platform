@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Feedback } from './feedback';
+import { Sounds } from './sounds';
 
 Meteor.methods({
   'feedback.insert': async function (soundId, content, rating) {
@@ -27,6 +28,9 @@ Meteor.methods({
       rating,
       createdAt: new Date(),
     });
+
+    // Set feedbackRequests for the sound to 0
+    await Sounds.updateAsync(soundId, { $set: { feedbackRequests: 0 } });
 
     // Update feedbackCoins for the giver
     const user = await Meteor.users.findOneAsync(this.userId);

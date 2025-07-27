@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { Meteor } from 'meteor/meteor';
 import { Rating } from '@smastrom/react-rating';
+import { useHistory } from 'react-router-dom';
 
 const GiveFeedbackModal = ({ isOpen, onRequestClose, soundId }) => {
+  const history = useHistory();
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(0);
   const [error, setError] = useState(null);
@@ -15,6 +17,7 @@ const GiveFeedbackModal = ({ isOpen, onRequestClose, soundId }) => {
       setContent('');
       setRating(0);
       onRequestClose();
+      history.push('/feedback');
     } catch (err) {
       setError(err.reason || 'An unknown error occurred.');
     }

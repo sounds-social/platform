@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { Meteor } from 'meteor/meteor';
+import { useHistory } from 'react-router-dom';
 
 const RequestFeedbackModal = ({ isOpen, onRequestClose, soundId }) => {
+  const history = useHistory();
   const [requests, setRequests] = useState(1);
   const [error, setError] = useState(null);
 
@@ -10,7 +12,9 @@ const RequestFeedbackModal = ({ isOpen, onRequestClose, soundId }) => {
     setError(null); // Clear previous errors
     try {
       await Meteor.callAsync('sounds.requestFeedback', soundId, requests);
+      setRequests(1);
       onRequestClose();
+      history.push('/feedback');
     } catch (err) {
       setError(err.reason || 'An unknown error occurred.');
     }
