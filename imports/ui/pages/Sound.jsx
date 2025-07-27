@@ -5,7 +5,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { Sounds } from '../../api/sounds';
 import { Comments } from '../../api/comments';
-import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2, FiAward, FiShare2, FiLoader } from 'react-icons/fi';
+import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2, FiAward, FiShare2, FiLoader, FiDownload } from 'react-icons/fi';
 import Modal from 'react-modal';
 import { format, formatDistanceToNow } from "date-fns";
 import AddPlaylistModal from '../components/AddPlaylistModal';
@@ -299,6 +299,15 @@ const Sound = () => {
               >
                 <FiPlus className="mr-2" /> Add to Playlist
               </button>
+            )}
+            {sound.isDownloadable && (
+              <a
+                href={sound.audioFile}
+                download
+                className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
+              >
+                <FiDownload className="mr-2" /> Download
+              </a>
             )}
             {Meteor.userId() && Meteor.userId() !== sound.userId && (
               <button

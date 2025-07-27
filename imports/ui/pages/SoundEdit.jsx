@@ -22,6 +22,7 @@ const SoundEdit = () => {
   const [tags, setTags] = useState('');
   const [coverImage, setCoverImage] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
+  const [isDownloadable, setIsDownloadable] = useState(false);
   const [backgroundImage, setBackgroundImage] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -34,6 +35,7 @@ const SoundEdit = () => {
       setCoverImage(sound.coverImage || '');
       setIsPrivate(sound.isPrivate || false);
       setBackgroundImage(sound.backgroundImage || '');
+      setIsDownloadable(sound.isDownloadable || false);
     }
   }, [sound]);
 
@@ -41,7 +43,7 @@ const SoundEdit = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    Meteor.callAsync('sounds.update', soundId, title, description, tags.split(',').map(tag => tag.trim()), coverImage, isPrivate, backgroundImage)
+    Meteor.callAsync('sounds.update', soundId, title, description, tags.split(',').map(tag => tag.trim()), coverImage, isPrivate, backgroundImage, isDownloadable)
       .then(() => {
         setSuccess('Sound updated successfully!');
         history.push(`/sound/${soundId}`);
@@ -154,6 +156,18 @@ const SoundEdit = () => {
                 onChange={(e) => setIsPrivate(e.target.checked)}
               />
               <label htmlFor="isPrivate" className="ml-2 block text-sm text-gray-900">Make this sound private</label>
+            </div>
+
+            <div className="flex items-center">
+              <input
+                id="isDownloadable"
+                name="isDownloadable"
+                type="checkbox"
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                checked={isDownloadable}
+                onChange={(e) => setIsDownloadable(e.target.checked)}
+              />
+              <label htmlFor="isDownloadable" className="ml-2 block text-sm text-gray-900">Make this sound downloadable</label>
             </div>
 
             <div>

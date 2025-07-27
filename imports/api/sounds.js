@@ -87,6 +87,10 @@ const SoundsSchema = new SimpleSchema({
     type: SimpleSchema.Integer,
     defaultValue: 0,
   },
+  isDownloadable: {
+    type: Boolean,
+    defaultValue: false,
+  },
 });
 
 Sounds.attachSchema(SoundsSchema);

@@ -6,7 +6,7 @@ import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
 import similarity from 'similarity';
 
 Meteor.methods({
-  async 'sounds.insert'(title, description, tags, coverImage, isPrivate, backgroundImage, audioFile) {
+  async 'sounds.insert'(title, description, tags, coverImage, isPrivate, backgroundImage, audioFile, isDownloadable) {
     check(title, String);
     check(description, String);
     check(tags, Array);
@@ -32,6 +32,7 @@ Meteor.methods({
       backgroundImage,
       userId: this.userId,
       audioFile,
+      isDownloadable: !!isDownloadable,
     });
 
     const uploader = await Meteor.users.findOneAsync(this.userId);
@@ -48,7 +49,7 @@ Meteor.methods({
     return soundId;
   },
 
-  async 'sounds.update'(soundId, title, description, tags, coverImage, isPrivate, backgroundImage) {
+  async 'sounds.update'(soundId, title, description, tags, coverImage, isPrivate, backgroundImage, isDownloadable) {
     check(soundId, String);
     check(title, String);
     check(description, String);
@@ -77,7 +78,8 @@ Meteor.methods({
       isPrivate,
       lastUpdatedAt: new Date(),
       backgroundImage,
-      coverImage
+      coverImage,
+      isDownloadable: !!isDownloadable
     };
 
     return await Sounds.updateAsync(soundId, {
