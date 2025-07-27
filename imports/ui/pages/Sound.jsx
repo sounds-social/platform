@@ -325,10 +325,10 @@ const Sound = () => {
                 <button
                   onClick={() => setIsRequestFeedbackModalOpen(true)}
                   className={` flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 flex-shrink-0 ${
-                    !currentUser?.profile?.feedbackCoins ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                    currentUser?.profile?.feedbackCoins < 1 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                   }`}
-                  disabled={!currentUser?.profile?.feedbackCoins}
-                  title={!currentUser?.profile?.feedbackCoins ? 'You have no feedback coins to request feedback.' : ''}
+                  disabled={currentUser?.profile?.feedbackCoins < 1 }
+                  title={currentUser?.profile?.feedbackCoins < 1  ? 'You have no feedback coins to request feedback.' : ''}
                 >
                   <FiMessageSquare className="mr-2" /> Request Feedback
                 </button>

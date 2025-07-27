@@ -12,6 +12,8 @@ const GiveFeedbackModal = ({ isOpen, onRequestClose, soundId }) => {
     setError(null); // Clear previous errors
     try {
       await Meteor.callAsync('feedback.insert', soundId, content, rating);
+      setContent('');
+      setRating(0);
       onRequestClose();
     } catch (err) {
       setError(err.reason || 'An unknown error occurred.');

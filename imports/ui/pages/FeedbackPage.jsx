@@ -2,6 +2,7 @@ import React from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { HeadProvider, Title } from 'react-head';
+import { Link } from 'react-router-dom';
 import { Sounds } from '../../api/sounds';
 import { Feedback } from '../../api/feedback';
 import SoundList from '../components/SoundList';
@@ -56,6 +57,7 @@ const FeedbackPage = () => {
       <h1 className="text-4xl font-extrabold text-gray-900 mb-6">Feedback</h1>
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Available Coins: {feedbackCoins}</h2>
+        <p className="text-gray-700 mb-4">You can have 10 coins max.</p>
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -72,9 +74,19 @@ const FeedbackPage = () => {
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Feedbacks Received</h2>
         <p className="text-gray-700 mb-4">Feedbacks given for your sounds.</p>
         {receivedFeedbacks.length > 0 ? (
-          <FeedbackList feedbacks={receivedFeedbacks.slice(0, 5)} />
+          <FeedbackList feedbacks={receivedFeedbacks.slice(0, 3)} />
         ) : (
           <p className="text-gray-600 italic">No feedbacks received yet.</p>
+        )}
+        {receivedFeedbacks.length > 3 && (
+          <div className="text-center mt-4">
+            <Link
+              to="/feedback/received"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
+            >
+              Show All
+            </Link>
+          </div>
         )}
       </div>
     </div>

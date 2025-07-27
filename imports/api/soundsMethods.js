@@ -191,13 +191,22 @@ Meteor.methods({
       throw new Meteor.Error('sound-not-found', 'Sound not found.');
     }
 
+    if (requests < 1 || requests > 10) {
+      throw new Meteor.Error('invalid-requests', 'You can request between 1 and 10 feedbacks at a time.');
+    }
+
     if (sound.userId !== this.userId) {
       throw new Meteor.Error('not-owner', 'You can only request feedback for your own sounds.');
     }
 
     const currentFeedbackCoins = user.profile?.feedbackCoins || 0;
     if (currentFeedbackCoins < requests) {
-      throw new Meteor.Error('not-enough-coins', 'You do not have enough feedback coins.');
+      throw new Meteor.Error(
+        'not-enough-coins', 
+        `You do not have enough feedback coins. You have ${currentFeedbackCoins} coin${
+          currentFeedbackCoins === 1 ? '' : 's'
+        } to spend.`
+      );
     }
 
     // Decrement user's feedbackCoins

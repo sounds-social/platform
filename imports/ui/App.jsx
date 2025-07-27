@@ -41,6 +41,7 @@ import ConversationPage from './pages/Conversation';
 import VerifyEmail from './pages/VerifyEmail';
 import SimilarSounds from './pages/SimilarSounds';
 import FeedbackPage from './pages/FeedbackPage';
+import ReceivedFeedbackPage from './pages/ReceivedFeedbackPage';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -144,6 +145,9 @@ export const App = () => {
         </Route>
         <Route path="/notifications">
           <NotificationsPage />
+        </Route>
+        <Route path="/feedback/received">
+          <ReceivedFeedbackPage />
         </Route>
         <Route path="/feedback">
           <FeedbackPage />
