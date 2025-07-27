@@ -9,6 +9,8 @@ import { FiPlay, FiHeart, FiPlus, FiMessageSquare, FiEdit, FiTrash2, FiAward, Fi
 import Modal from 'react-modal';
 import { format, formatDistanceToNow } from "date-fns";
 import AddPlaylistModal from '../components/AddPlaylistModal';
+import RequestFeedbackModal from '../components/RequestFeedbackModal';
+import GiveFeedbackModal from '../components/GiveFeedbackModal';
 import { useAudioPlayer } from '../contexts/AudioPlayerContext';
 import SoundList from '../components/SoundList';
 
@@ -21,6 +23,8 @@ const Sound = () => {
   const [commentContent, setCommentContent] = useState('');
   const [commentTimestamp, setCommentTimestamp] = useState('');
   const [isAddPlaylistModalOpen, setIsAddPlaylistModalOpen] = useState(false);
+  const [isRequestFeedbackModalOpen, setIsRequestFeedbackModalOpen] = useState(false);
+  const [isGiveFeedbackModalOpen, setIsGiveFeedbackModalOpen] = useState(false);
   const [isCreateSnippetModalOpen, setIsCreateSnippetModalOpen] = useState(false);
   const [snippetStartTime, setSnippetStartTime] = useState(0);
   const [snippetEndTime, setSnippetEndTime] = useState(30);
@@ -29,12 +33,13 @@ const Sound = () => {
   const [similarSounds, setSimilarSounds] = useState([]);
   const { playPlaylist } = useAudioPlayer();
 
-  const { sound, comments, loading, userHasLiked } = useTracker(() => {
+  const { sound, comments, loading, userHasLiked, currentUser } = useTracker(() => {
     const noDataAvailable = { sound: null, comments: [], loading: true, userHasLiked: false };
     const soundHandle = Meteor.subscribe('sounds.singleSound', soundId);
     const commentsHandle = Meteor.subscribe('comments.forSound', soundId);
     const usersHandle = Meteor.subscribe('users.public');
     const userId = Meteor.userId();
+    const currentUser = Meteor.user();
 
     const ready = soundHandle.ready() && commentsHandle.ready() && usersHandle.ready();
     const fetchedSound = Sounds.findOne(soundId);
@@ -57,7 +62,7 @@ const Sound = () => {
 
     const liked = fetchedSound && fetchedSound.likes && fetchedSound.likes.some(like => like.userId === userId);
 
-    return { sound: fetchedSound, comments: commentsWithUserData, loading: !ready, userHasLiked: liked };
+    return { sound: fetchedSound, comments: commentsWithUserData, loading: !ready, userHasLiked: liked, currentUser };
   }, [soundId]);
 
   const createPlaylist = () => {
@@ -295,6 +300,14 @@ const Sound = () => {
                 <FiPlus className="mr-2" /> Add to Playlist
               </button>
             )}
+            {Meteor.userId() && Meteor.userId() !== sound.userId && (
+              <button
+                onClick={() => setIsGiveFeedbackModalOpen(true)}
+                className="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 mr-4 mb-4 flex-shrink-0"
+              >
+                <FiMessageSquare className="mr-2" /> Give Feedback
+              </button>
+            )}
             {Meteor.userId() === sound.userId && (
               <div className="flex space-x-4 mb-4">
                 <Link
@@ -309,6 +322,16 @@ const Sound = () => {
                 >
                   <FiTrash2 className="mr-2" /> Remove
                 </button>
+                <button
+                  onClick={() => setIsRequestFeedbackModalOpen(true)}
+                  className={` flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-md transition duration-200 flex-shrink-0 ${
+                    currentUser?.profile?.feedbackCoins < 1 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                  }`}
+                  disabled={currentUser?.profile?.feedbackCoins < 1 }
+                  title={currentUser?.profile?.feedbackCoins < 1  ? 'You have no feedback coins to request feedback.' : ''}
+                >
+                  <FiMessageSquare className="mr-2" /> Request Feedback
+                </button>
               </div>
             )}
           </div>
@@ -316,6 +339,16 @@ const Sound = () => {
       <AddPlaylistModal
         isOpen={isAddPlaylistModalOpen}
         onRequestClose={() => setIsAddPlaylistModalOpen(false)}
+        soundId={soundId}
+      />
+      <RequestFeedbackModal
+        isOpen={isRequestFeedbackModalOpen}
+        onRequestClose={() => setIsRequestFeedbackModalOpen(false)}
+        soundId={soundId}
+      />
+      <GiveFeedbackModal
+        isOpen={isGiveFeedbackModalOpen}
+        onRequestClose={() => setIsGiveFeedbackModalOpen(false)}
         soundId={soundId}
       />
 

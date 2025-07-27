@@ -64,3 +64,19 @@ Meteor.publish('sounds.random', async function (battleCounter) {
 
   this.ready();
 });
+
+Meteor.publish('sounds.feedbackRequested', function () {
+  const self = this;
+  const soundsCursor = Sounds.find({ feedbackRequests: { $gte: 1 } }, { sort: { feedbackRequests: -1 } });
+
+  soundsCursor.forEach(async (sound) => {
+    self.added('sounds', sound._id, sound);
+    // Publish the user associated with each sound
+    const user = await Meteor.users.findOneAsync(sound.userId);
+    if (user) {
+      self.added('users', user._id, { profile: user.profile });
+    }
+  });
+
+  self.ready();
+});
