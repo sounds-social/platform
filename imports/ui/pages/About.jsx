@@ -38,7 +38,7 @@ const About = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
             <FiUsers className="text-5xl text-blue-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Swipe to find your next collab</h2>
+            <h2 className="text-2xl font-bold mb-2">Swipe to find<br/>your next collab</h2>
             <p className="text-gray-600">Connect with other musicians and find your next collaboration with our intuitive matching system.</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
@@ -48,8 +48,8 @@ const About = () => {
           </div>
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
             <FiMusic className="text-5xl text-blue-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">For Musicians, By a Musician</h2>
-            <p className="text-gray-600">Built by a musician who understands your needs and wants to help you succeed.</p>
+            <h2 className="text-2xl font-bold mb-2">Give Feedback.<br/>Get Feedback</h2>
+            <p className="text-gray-600">Improve your music by getting valuable feedback from other musicians, and help others by sharing your insights.</p>
           </div>
         </div>
       </div>
