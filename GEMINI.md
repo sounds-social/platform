@@ -359,3 +359,38 @@ The user can use a collab finder to find their next collaboration (producer, mus
 * Create a new collection "Matches" that is updated everytime someone swipes left or right (remember the decision (like or dislike) in the collection so that it remembers where you left off)
 * Add a new NavLink called "Match" to the right of "Hot" and the left of Search which displays the collab finder
 * Style it similarly to the "Battle Pit"
+
+# Feedback for Feedback
+
+Give 2 pieces of feedback for tracks, get "one feedback coin" to request feedbacks from others.
+
+* Adjust data structure:
+  * Add "feedbackCoins" (number) to user. By default it's 0 (imports/api/users.js)
+  * Add "feedbackRequests" (number) to sound. By default it's 0 (imports/api/sounds.js)
+  * Create new "feedback" collection with following fields:
+    * soundId: Sound that feedback is given for
+    * giverId: User that gives the feedback
+    * content: The content of the feedback (minimum 50 characters, max 1000) 
+    * rating: 1 to 5 (number, optional) the rating 
+    * createdAt: Created at timestamp
+* Add buttons to sound detail page (imports/ui/pages/Sound.jsx):
+  * If the user is viewing a sound that is their own show a "Request Feedback" button
+    * When clicked, open a modal with a whole number input that is min. 1 and max 10
+    * Display a button "Request" that calls a Meteor.method that updates the feedbackCoins and feedbackRequests fields 
+    * Display a button "Close" that closes the modal and does nothing
+  * If the user is viewing someone elses sound display a "Give Feedback" button
+    * When clicked it opens a modal with a textarea ("content", minimum 50 characters, max 1000) and a star rating (1 to 5) 
+      * Use the "@smastrom/react-rating" package
+    * Display a button called "Submit" which creates a new "feedback" document and opens up a detail page (more info below). Also it adds 0.5 feedbackCoins to the current user. 
+      * The user can have a maximum of 10 feedbackCoins, check for that in the Meteor.method
+    * Display a button "Close" that closes the modal and does nothing
+* Create a new page ("/feedback") which display following:
+  * On top it shows the amount of "feedbackCoins" for the current user
+  * First a list of "Feedbacks requested" title and a description. The list displays sounds that have sounds with "feedbackRequests" >= 1 and is sorted by most requests to lowest.
+    * hidePlayButton = true for the sound list
+  * Second a list of feedbacks for the current user. Title is "Feedbacks Received" and a description.
+    * Only show 5 by default and if there's more feedbacks display a "Show All" button that links to a page ("/feedback/received") where all the feedbacks for the current user are displayed (sorted )
+  * Create a FeedbackList.jsx component to display all the feedbacks
+    * Sort the feedbacks by createdAt
+    * Display the createdAt timestamp with date-fns: formatDistanceToNow
+    * Each feedback is linked to the detail feedback page (more info below)
