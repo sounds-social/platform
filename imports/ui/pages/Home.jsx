@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { HeadProvider, Title } from 'react-head';
 import Discover from './Discover';
 import Following from './Following';
 
 const Home = () => {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState('discover');
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tab = params.get('tab');
+    if (tab === 'following' || tab === 'discover') {
+      setActiveTab(tab);
+    }
+  }, [location.search]);
 
   return (
     <div>

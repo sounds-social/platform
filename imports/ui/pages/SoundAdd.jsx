@@ -42,9 +42,9 @@ const SoundAdd = () => {
         setIsPrivate(false);
         setBackgroundImage('');
         setAudioFile('');
-    setIsDownloadable(false);
-    setLoading(false);
-        history.push('/'); // Redirect to home after successful addition
+        setIsDownloadable(false);
+        setLoading(false);
+        history.push('/?tab=following'); // Redirect to home after successful addition
       })
       .catch(err => { 
         setError(err.reason);
