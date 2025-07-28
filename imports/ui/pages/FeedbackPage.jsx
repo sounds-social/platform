@@ -57,7 +57,7 @@ const FeedbackPage = () => {
       <h1 className="text-4xl font-extrabold text-gray-900 mb-6">Feedback</h1>
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Available Coins: {feedbackCoins}</h2>
-        <p className="text-gray-700 mb-4">You can have 10 coins max.</p>
+        <p className="text-gray-700 mb-4">Start earning coins by giving feedback (0.5 coins per feedback. You can have 10 coins max.)</p>
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
