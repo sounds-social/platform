@@ -1,8 +1,13 @@
 import React from 'react';
 import { HeadProvider, Title } from 'react-head';
 import { FiUsers, FiCode, FiZap, FiMusic } from 'react-icons/fi';
+import { Meteor } from 'meteor/meteor';
+import { useTracker } from 'meteor/react-meteor-data';
+import { Link } from 'react-router-dom';
 
 const About = () => {
+  const userId = useTracker(() => Meteor.userId());
+
   return (
     <div className="bg-gray-50">
       <HeadProvider>
@@ -20,6 +25,18 @@ const About = () => {
                 <p className="mt-3 text-base text-gray-200 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                   Find Your Next Collab. Share Your Beats. Grow Together.
                 </p>
+                {!userId && (
+                  <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                    <div className="rounded-md shadow">
+                      <Link
+                        to="/sign-up"
+                        className="w-full flex items-center justify-center px-8 py-3 border-2 border-violet-500 text-base font-medium rounded-md text-violet-500 bg-white hover:bg-gray-100 md:py-4 md:text-lg md:px-10"
+                      >
+                        Join Beta
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </div>
             </main>
           </div>

@@ -111,7 +111,7 @@ const CollabFinder = () => {
               swipeThreshold={0.8}
               className="absolute"
             >
-              <div className="relative w-[300px] h-[400px] overflow-y-auto rounded-lg border border-gray-300 bg-white p-6 flex flex-col items-center justify-center text-center">
+              <div className="relative w-[300px] h-[430px] overflow-y-auto rounded-lg border border-gray-300 bg-white p-6 flex flex-col items-center justify-center text-center">
                 {user.profile.avatar ? (
                   <img src={user.profile.avatar} alt={user.profile.displayName} className="w-32 h-32 rounded-full mb-4 border border-gray-300" />
                 ) : (
