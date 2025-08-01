@@ -127,7 +127,7 @@ const Payouts = () => {
 
         <div className="mt-10 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
           <p className="font-bold">Payouts Disabled</p>
-          <p>Currently payouts are disabled until end of the month (written on 17. July 2025)</p>
+          <p>Currently payouts are disabled until end of the month</p>
         </div>
 
         <div className="mt-10 bg-white rounded-lg shadow-lg p-6 md:p-10">
