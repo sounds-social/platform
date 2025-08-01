@@ -9,6 +9,9 @@ const Footer = () => {
           {new Date().getFullYear()} Sounds Social
         </div>
         <div>
+          <a href="https://sounds-social.ghost.io/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-sm mr-4">
+            Blog
+          </a>
           <a href="https://discord.gg/Je3P3gQ9u5" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-sm mr-4">
             Discord
           </a>
