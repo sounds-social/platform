@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check';
 import { Feedback } from './feedback';
 import { Sounds } from './sounds';
 
@@ -23,3 +22,11 @@ Meteor.publish('feedback.forUser', async function () {
 
   return feedbacks;
 });
+
+Meteor.publish('feedback.givenByUser', function () {
+  if (!this.userId) {
+    return this.ready();
+  }
+  return Feedback.find({ giverId: this.userId }, { sort: { createdAt: -1 } });
+});
+""

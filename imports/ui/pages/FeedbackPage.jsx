@@ -9,10 +9,11 @@ import SoundList from '../components/SoundList';
 import FeedbackList from '../components/FeedbackList';
 
 const FeedbackPage = () => {
-  const { user, requestedSounds, receivedFeedbacks, loading } = useTracker(() => {
+  const { user, requestedSounds, receivedFeedbacks, givenFeedbacks, loading } = useTracker(() => {
     const userHandle = Meteor.subscribe('users.public');
     const soundsHandle = Meteor.subscribe('sounds.feedbackRequested');
-    const feedbackHandle = Meteor.subscribe('feedback.forUser');
+    const feedbackReceivedHandle = Meteor.subscribe('feedback.forUser');
+    const feedbackGivenHandle = Meteor.subscribe('feedback.givenByUser');
 
     const user = Meteor.user();
     const requestedSounds = Sounds.find({ feedbackRequests: { $gte: 1 } }, { sort: { feedbackRequests: -1 } }).fetch().map(sound => {
@@ -24,7 +25,7 @@ const FeedbackPage = () => {
       };
     });
 
-    const receivedFeedbacks = Feedback.find({}, { sort: { createdAt: -1 } }).fetch().map(feedback => {
+        const receivedFeedbacks = Feedback.find({ }, { sort: { createdAt: -1 } }).fetch().map(feedback => {
       const giver = Meteor.users.findOne(feedback.giverId);
       const sound = Sounds.findOne(feedback.soundId);
       return {
@@ -36,7 +37,19 @@ const FeedbackPage = () => {
       };
     });
 
-    return { user, requestedSounds, receivedFeedbacks, loading: !userHandle.ready() || !soundsHandle.ready() || !feedbackHandle.ready() };
+    const givenFeedbacks = Feedback.find({ giverId: Meteor.userId() }, { sort: { createdAt: -1 } }).fetch().map(feedback => {
+      const giver = Meteor.users.findOne(feedback.giverId);
+      const sound = Sounds.findOne(feedback.soundId);
+      return {
+        ...feedback,
+        giverName: giver ? giver.profile.displayName : 'Anonymous',
+        giverSlug: giver ? giver.profile.slug : 'unknown',
+        soundTitle: sound ? sound.title : 'Unknown Sound',
+        soundSlug: sound ? sound.slug : 'unknown',
+      };
+    });
+
+    return { user, requestedSounds, receivedFeedbacks, givenFeedbacks, loading: !userHandle.ready() || !soundsHandle.ready() || !feedbackReceivedHandle.ready() || !feedbackGivenHandle.ready() };
   });
 
   if (loading) {
@@ -87,6 +100,26 @@ const FeedbackPage = () => {
           <div className="text-center mt-4">
             <Link
               to="/feedback/received"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
+            >
+              Show All
+            </Link>
+          </div>
+        )}
+      </div>
+
+      <div className="bg-white rounded-lg shadow-md p-6 mt-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Feedbacks Given</h2>
+        <p className="text-gray-700 mb-4">Feedbacks you have given to other sounds.</p>
+        {givenFeedbacks.length > 0 ? (
+          <FeedbackList feedbacks={givenFeedbacks.slice(0, 3)} />
+        ) : (
+          <p className="text-gray-600 italic">You have not given any feedback yet.</p>
+        )}
+        {givenFeedbacks.length > 3 && (
+          <div className="text-center mt-4">
+            <Link
+              to="/feedback/given"
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
             >
               Show All
