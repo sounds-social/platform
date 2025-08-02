@@ -25,7 +25,7 @@ const FeedbackPage = () => {
       };
     });
 
-        const receivedFeedbacks = Feedback.find({ }, { sort: { createdAt: -1 } }).fetch().map(feedback => {
+        const receivedFeedbacks = Feedback.find({ giverId: { $ne: Meteor.userId() } }, { sort: { createdAt: -1 } }).fetch().map(feedback => {
       const giver = Meteor.users.findOne(feedback.giverId);
       const sound = Sounds.findOne(feedback.soundId);
       return {

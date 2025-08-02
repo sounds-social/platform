@@ -10,7 +10,6 @@ const GivenFeedbackPage = () => {
   const { user, givenFeedbacks, loading } = useTracker(() => {
     const userHandle = Meteor.subscribe('users.public');
     const feedbackHandle = Meteor.subscribe('feedback.givenByUser');
-    const soundsHandle = Meteor.subscribe('sounds.public'); // To get sound titles
 
     const user = Meteor.user();
     const givenFeedbacks = Feedback.find({ giverId: Meteor.userId() }, { sort: { createdAt: -1 } }).fetch().map(feedback => {
@@ -25,7 +24,7 @@ const GivenFeedbackPage = () => {
       };
     });
 
-    return { user, givenFeedbacks, loading: !userHandle.ready() || !feedbackHandle.ready() || !soundsHandle.ready() };
+    return { user, givenFeedbacks, loading: !userHandle.ready() || !feedbackHandle.ready() };
   });
 
   if (loading) {
