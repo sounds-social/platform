@@ -19,6 +19,15 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
+    const user = await Meteor.users.findOneAsync(this.userId);
+
+    if (user.plan !== 'pro') {
+      const soundCount = await Sounds.find({ userId: this.userId }).countAsync();
+      if (soundCount >= 5) {
+        throw new Meteor.Error('upload-limit-reached', 'You have reached the upload limit of 5 sounds. Please upgrade to a pro plan to upload more.');
+      }
+    }
+
     if (audioFile.trim() === '' || coverImage.trim() === '') {
       throw new Meteor.Error('invalid-input', 'Audio file and cover image are required.');
     }

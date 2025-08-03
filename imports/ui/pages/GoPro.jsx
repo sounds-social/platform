@@ -61,7 +61,7 @@ const GoPro = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <p className="ml-3 text-base text-gray-700">Upload as many sounds as you want</p>
+                  <p className="ml-3 text-base text-gray-700">Upload up to 5 sounds</p>
                 </li>
                 <li className="flex items-start">
                   <div className="flex-shrink-0">
@@ -101,7 +101,7 @@ const GoPro = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <p className="ml-3 text-base text-gray-700">All Free features</p>
+                  <p className="ml-3 text-base text-gray-700">Upload unlimited sounds</p>
                 </li>
                 <li className="flex items-start">
                   <div className="flex-shrink-0">
