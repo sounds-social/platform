@@ -11,6 +11,7 @@ Meteor.publish('users.view', function (slug) {
   }, {
     fields: {
       plan: 1,
+      createdAt: 1,
       'profile.displayName': 1,
       'profile.slug': 1,
       'profile.avatar': 1,
@@ -39,6 +40,7 @@ Meteor.publish('users.me', function () {
       plan: 1,
       emails: 1,
       profile: 1,
+      createdAt: 1,
     }
   });
 });
@@ -47,6 +49,7 @@ Meteor.publish('users.public', function () {
   return Meteor.users.find({}, {
     fields: {
       plan: 1,
+      createdAt: 1,
       'profile.displayName': 1,
       'profile.slug': 1,
       'profile.avatar': 1,
@@ -104,6 +107,7 @@ Meteor.publish('users.all', function () {
   return Meteor.users.find({}, {
     fields: {
       profile: 1,
+      createdAt: 1,
     }
   });
 });

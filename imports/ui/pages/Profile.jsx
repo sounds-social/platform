@@ -228,8 +228,13 @@ const Profile = () => {
           <div className="flex items-center">
             <h1 className="text-3xl font-bold text-gray-900">{user.profile.displayName}</h1>
             {user.plan === 'pro' && (
-              <span className="ml-2 text-xs font-semibold text-white bg-blue-500 px-2 py-1 rounded-full">
+              <span title="This user is a PRO user" className="ml-2 text-xs font-semibold text-white bg-blue-500 px-2 py-1 rounded-full">
                 PRO
+              </span>
+            )}
+            {new Date(user.createdAt) < new Date('2025-09-01') && (
+              <span title="This user has been created within the first month of release of Sounds Social" className="ml-2 text-xs font-semibold text-white bg-gradient-to-r from-yellow-400 to-yellow-600 px-2 py-1 rounded-full">
+                OG
               </span>
             )}
           </div>
