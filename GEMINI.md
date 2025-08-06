@@ -340,7 +340,7 @@ Users can go to "/" to discover new sounds that they haven't heard before.
   * For each block add a description + title
   * Main title for page is "Discover"
 
-# Collab Finder
+### Collab Finder
 
 The user can use a collab finder to find their next collaboration (producer, musicians, vocalists) etc. It's like a tinder for musicians.
 
@@ -360,7 +360,7 @@ The user can use a collab finder to find their next collaboration (producer, mus
 * Add a new NavLink called "Match" to the right of "Hot" and the left of Search which displays the collab finder
 * Style it similarly to the "Battle Pit"
 
-# Feedback for Feedback
+### Feedback for Feedback
 
 Give 2 pieces of feedback for tracks, get "one feedback coin" to request feedbacks from others.
 
@@ -394,3 +394,16 @@ Give 2 pieces of feedback for tracks, get "one feedback coin" to request feedbac
     * Sort the feedbacks by createdAt
     * Display the createdAt timestamp with date-fns: formatDistanceToNow
     * Each feedback is linked to the detail feedback page (more info below)
+
+### Audio Sample Market
+
+Provide a free (for now) sample market that is used by the users to share their sounds with each other.
+
+* Add "isSample" field (default: false, optional: true), bpm (optional, number) to sound collection
+* Add isSample doesn't equal true to the sound publications, so that samples aren't listed in the existing sound lists (hot, explore, discover, following)
+* Add "Is Sample" checkbox to both Sound Add and Edit form (update the Meteor.methods too)
+* If "isSample" is true, display BPM and Key Fields in a section called "Sample Data" in the edit and add form (reuse code if possible)
+* Create new page called "Samples"
+* On the "Samples" page, only show sounds where isSample = true
+* By default sort the samples by "hottest" (most plays in the last 30 days) and display a select dropdown that allows the user to sort by "newest" and "random"
+* Add a filter for BPM
