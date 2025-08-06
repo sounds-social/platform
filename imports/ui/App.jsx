@@ -50,6 +50,7 @@ import Footer from './components/Footer';
 import AudioPlayer from './components/AudioPlayer';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import SidebarComponent from "./components/Sidebar";
 
 // Import AudioPlayerContext
 import { AudioPlayerProvider, useAudioPlayer } from './contexts/AudioPlayerContext';
@@ -91,10 +92,12 @@ export const App = () => {
             {emailSent && <p className="text-sm mt-2">Verification email sent!</p>}
           </div>
         )}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/about" component={About} />
+        <div className="flex max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SidebarComponent />
+          <main className="w-full px-4 sm:px-6 lg:px-8 py-8 !pr-0">
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/about" component={About} />
         <Route path="/sign-in" component={SignIn} />
         <Route path="/sign-up" component={SignUp} />
         <Route path="/forgot-password" component={ForgotPassword} />
@@ -169,7 +172,8 @@ export const App = () => {
         }} />
         <Route component={NotFound} />
       </Switch>
-        </main>
+          </main>
+        </div>
         {currentSound && (
           <AudioPlayer />
         )}

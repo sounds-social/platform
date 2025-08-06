@@ -19,15 +19,6 @@ const Navbar = ({ user }) => {
 
   const handleDropdownClick = () => setIsOpen(false);
 
-  const loggedInLinks = (
-    <>
-      <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Home</NavLink>
-      <NavLink onClick={handleDropdownClick} to="/match" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Match</NavLink>
-      <NavLink onClick={handleDropdownClick} to="/feedback" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Feedback</NavLink>
-      <NavLink onClick={handleDropdownClick} to="/sound/add" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Upload</NavLink>
-    </>
-  );
-
   const loggedOutLinks = (
     <>
       <NavLink exact onClick={handleDropdownClick} to="/" activeStyle={activeLinkStyle} className="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Home</NavLink>
@@ -71,12 +62,9 @@ const Navbar = ({ user }) => {
           <div className="flex items-center">
             <Link onClick={handleDropdownClick} to="/" className="text-xl font-bold text-blue-500">Sounds Social</Link>
             <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline">
+              <div className="ml-24 flex items-baseline">
                 {user ? (
                   <>
-                    <div className="flex items-baseline space-x-4">
-                      {loggedInLinks}
-                    </div>
                     <SearchBar />
                   </>
                 ) : (
@@ -133,7 +121,6 @@ const Navbar = ({ user }) => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {user ? (
               <>
-                {loggedInLinks}
                 <div className="mt-4">
                   <SearchBar />
                 </div>
